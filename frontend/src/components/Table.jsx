@@ -2,8 +2,11 @@ import classNames from 'classnames'
 import React, { useState } from 'react'
 import { IoMdArrowDropdown } from 'react-icons/io'
 import { SiPanasonic } from 'react-icons/si'
+import { useNavigate } from 'react-router-dom';
 
 const Table = ({thead, tbody, searchable}) => {
+    
+    const navigate = useNavigate();
     const [sorting, setSorting] = useState({})
     const [search, setSearch] = useState('')
     const filteredData = tbody.filter(
@@ -54,12 +57,15 @@ const Table = ({thead, tbody, searchable}) => {
                     {filteredData.map((items, key) =>(
                         <tr key={key} className='group'>
                             {items.map((item, key)=>(
-                                <td
-                                    className='p-3 text-sm group-hover:bg-blue-100 group-hover:text-blue-700'
+                                <td 
+                                    onClick={key === 0 ? () =>  navigate(`/hasta/${item.replace(/\s+/g, "-").toLowerCase()}`) : null}
+                                    className={classNames('p-3 text-sm group-hover:bg-blue-100 group-hover:text-blue-700',
+                                        {"cursor-pointer" : key === 0}
+                                    )}
                                     key={key}
                                 >
                                     {Array.isArray(item) ? 
-                                    (<div className='flex gap-x-2.5'>
+                                    (<div className='flex gap-x-2.5 z-40'>
                                         {item}
                                     </div>)
                                     : <p className={classNames('p-2 w-2/4 text-center rounded-full',{

@@ -50,7 +50,7 @@ const LeftNav = ({close , setClose}) => {
           )}>
                 <li>
                   <div className="iocn-link">
-                    <NavLink to={"/"}>
+                    <NavLink to={"/lead"}>
                       <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
                         <IoShareSocial className='w-[20px] h-[20px]'/>
                       </div>                
@@ -72,7 +72,7 @@ const LeftNav = ({close , setClose}) => {
   
                 <li>
                   <div className="iocn-link">
-                    <NavLink to={"/"}>
+                    <NavLink to={"/hasta"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
                       <SlPeople className='w-[20px] h-[20px]'/>
                     </div>   
@@ -93,7 +93,7 @@ const LeftNav = ({close , setClose}) => {
                 </li>
                 <li>
                   <div className="iocn-link">
-                    <NavLink to={"/"}>
+                    <NavLink to={"/takvim"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
                       <SlCalender className='w-[20px] h-[20px]'/>
                     </div>   

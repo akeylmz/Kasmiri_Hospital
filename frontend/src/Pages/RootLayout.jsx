@@ -8,7 +8,7 @@ const RootLayout = () => {
   return (
     <Fragment>
       <LeftNav close={close} setClose={setClose}/>
-      <section className={classNames("home-section transition-all duration-500 ease-in-out",{
+      <section className={classNames("home-section transition-all duration-500 ease-in-out bg-white",{
             "closed": close
         })}>
         <Outlet/>
