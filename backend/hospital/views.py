@@ -8,10 +8,9 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import ItemSerializer, NoteSerializer
-from hospital.models import Item, Note
+from hospital.serializers import ItemSerializer, NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PopulationCardSerializer
+from hospital.models import Item, Note, PatientCard, CommunicationCard, PopulationCard
 from django.contrib.auth.decorators import login_required, user_passes_test
-
 
 class ItemListCreateAPIView(generics.ListCreateAPIView):
     queryset= Item.objects.all()
@@ -21,7 +20,6 @@ class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Item.objects.all()
     serializer_class=ItemSerializer
 
-
 class NoteListCreateAPIView(generics.ListCreateAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
@@ -29,3 +27,27 @@ class NoteListCreateAPIView(generics.ListCreateAPIView):
 class NoteDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
+
+class PatientCardListCreateAPIView(generics.ListCreateAPIView):
+    queryset= PatientCard.objects.all()
+    serializer_class=PatientCardSerializer
+
+class PatientCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= PatientCard.objects.all()
+    serializer_class=PatientCardSerializer
+
+class CommunicationCardListCreateAPIView(generics.ListCreateAPIView):
+    queryset= CommunicationCard.objects.all()
+    serializer_class=CommunicationCardSerializer
+
+class CommunicationCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= CommunicationCard.objects.all()
+    serializer_class=CommunicationCardSerializer
+
+class PopulationCardListCreateAPIView(generics.ListCreateAPIView):
+    queryset= PopulationCard.objects.all()
+    serializer_class=PopulationCardSerializer
+
+class PopulationCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= PopulationCard.objects.all()
+    serializer_class=PopulationCardSerializer
