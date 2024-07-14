@@ -58,7 +58,7 @@ const Table = ({thead, tbody, searchable}) => {
                         <tr key={key} className='group'>
                             {items.map((item, key)=>(
                                 <td 
-                                    onClick={key === 0 ? () =>  navigate(`/hasta/${item.replace(/\s+/g, "-").toLowerCase()}`) : null}
+                                    onClick={key === 0 ? () =>  navigate(`/hasta/${items[5]}`) : null}
                                     className={classNames('p-3 text-sm group-hover:bg-blue-100 group-hover:text-blue-700',
                                         {"cursor-pointer" : key === 0}
                                     )}

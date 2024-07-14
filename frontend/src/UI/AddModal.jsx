@@ -1,4 +1,7 @@
 import React, { useReducer } from 'react'
+import ReactDOM from "react-dom"
+import { useDispatch } from 'react-redux'
+import { addPatient } from '../stores/patient'
 
 
 const reducer= ( state, action) =>{
@@ -42,26 +45,18 @@ const reducer= ( state, action) =>{
 
 }
 
-const AddModal = ( {setModalOpen, setUser, users }) => {
 
-    const [state, dispatch] = useReducer(reducer,{
-        name: '',
-        surname: '',
-        phone: '',
-        mail: '',
-        isTurk: false,
-        location: '',
-        id: ''
-    })
-const submitHandler = e =>{
-    e.preventDefault()
-    setUser([...users, { ...state }]);
-    setModalOpen(false);
+
+
+const Backdrop = ({ setModalOpen }) => {
+    return(
+        <div onClick={()=> setModalOpen((prevstate) => !prevstate)} className='w-full h-full absolute top-0 left-0 bg-[#0000004b] flex justify-center items-center backdrop-blur-sm z-40'> 
+        </div>
+    )        
 }
-
-  return (
-    <div className='w-full h-full absolute top-0 left-0 bg-[#0000004b] flex justify-center items-center backdrop-blur-sm z-50'>        
-        <div className='w-[400px] h-[620px] p-5 bg-white border rounded-lg relative'>
+const ModalOverlay = ({ setModalOpen, submitHandler, dispatch, state }) => {
+    return(
+        <div className='w-[400px] h-[620px] p-5 bg-white border rounded-lg z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
             <p onClick={()=> setModalOpen((prevstate) => !prevstate)} className='text-lg font-bold absolute right-2 top-2 cursor-pointer'>X</p>
             <form onSubmit={submitHandler} className='w-full h-full flex flex-col'>
                 <h3 className='p-3 my-2 text-[20px]'>Hasta Ekle</h3>
@@ -99,7 +94,35 @@ const submitHandler = e =>{
                
             </form>
         </div>
-    </div>
+    )
+}
+
+const AddModal = ( {setModalOpen }) => {
+
+    const dispatchPatient = useDispatch()
+
+    const [state, dispatch] = useReducer(reducer,{
+        name: '',
+        surname: '',
+        phone: '',
+        mail: '',
+        isTurk: false,
+        location: '',
+        id: ''
+    })
+
+    const submitHandler = e =>{
+        e.preventDefault()
+        dispatchPatient(addPatient({ ...state }))
+        setModalOpen(false);
+    }
+
+
+  return (
+    <React.Fragment>
+        {ReactDOM.createPortal(<Backdrop setModalOpen={setModalOpen} />, document.getElementById("backdrop-root"))}
+        {ReactDOM.createPortal(<ModalOverlay setModalOpen={setModalOpen} dispatch={dispatch} submitHandler={submitHandler} state={state} />, document.getElementById("modaloverlay-root"))}
+    </React.Fragment>
   )
 }
 

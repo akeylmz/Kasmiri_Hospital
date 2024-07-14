@@ -3,50 +3,21 @@ import React, { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import Table from '../Table'
 import AddModal from '../../UI/AddModal'
+import { useSelector } from 'react-redux'
+
 
 const Patient = () => {
     
     const [modalOpen, setModalOpen] = useState(false)
 
-    const [users, setUser] = useState([
-        {
-            name: "Ahmet Yusuf",
-            surname: "Kuru",
-            phone: "512 452 56 54",
-            email: "Yusuf@gmail.com",
-            location: "Trabzon",
-            isTurk: true,
-            id: "1253423",
-            situation: "Ödendi"
-        },
-        {
-            name: "Mehmet Enes",
-            surname: "Doğan",
-            phone: "512 452 56 54",
-            email: "Mehmet@gmail.com",
-            location: "Ankara",
-            isTurk: true,
-            id: "124423",
-            situation: "Bekliyor"
-        },
-        {
-            name: "Ahmet Kemal",
-            surname: "Yılmaz",
-            phone: "512 452 56 54",
-            email: "Kemal@gmail.com",
-            location: "Konya",
-            isTurk: true,
-            id: "1234233",
-            situation: "Günü Geçti"
-        }
-    ])
+    const  { patients } = useSelector( state => state.patient)
 
     const deleteHandler = (id) =>{
         setUser((prevUsers) => prevUsers.filter(user => user.id !== id));
     }
   return (
     <div className='w-full h-full'>        
-        {modalOpen && <AddModal setModalOpen={setModalOpen} setUser={setUser} users={users}/>}
+        { modalOpen &&<AddModal setModalOpen={setModalOpen}/>}
         <div className='flex justify-end px-4 my-4 pb-4 border-b border-gray-400'>
             <button 
                 onClick={()=> setModalOpen((prevstate) => !prevstate)}
@@ -66,7 +37,7 @@ const Patient = () => {
                 {name: "İşlmeler", width: 100}
 
                 ]}
-            tbody={users.map((user) =>([
+            tbody={patients.map((user) =>([
                 user.name,
                 user.surname,
                 user.phone,

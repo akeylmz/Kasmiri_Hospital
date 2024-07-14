@@ -15,6 +15,7 @@ import Chat from './components/lead/Chat'
 import PatientLayout from './Pages/PatientLayout'
 import Patient from './components/patient/Patient'
 import PatientDetail from './components/patient/PatientDetail'
+import PatientOverwiev from './components/patient/PatientOverwiev'
 
 
 const router = createBrowserRouter([
@@ -36,7 +37,13 @@ const router = createBrowserRouter([
         element : <PatientLayout /> ,
         children : [
           { path : "/hasta", element : <Patient />},
-          { path : ":patientId", element : <PatientDetail />}
+          { 
+            path : ":patientId",
+            element : <PatientDetail />,
+            children : [
+              { path: "overwiev", element: <PatientOverwiev /> },
+            ]
+          }
         ]
       },
       { path : "/takvim", element: <Calender />},
