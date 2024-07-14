@@ -16,6 +16,10 @@ import PatientLayout from './Pages/PatientLayout'
 import Patient from './components/patient/Patient'
 import PatientDetail from './components/patient/PatientDetail'
 import PatientOverwiev from './components/patient/PatientOverwiev'
+import PatientOther from './components/patient/PatientOther'
+import PatientIDInformation from './components/patient/PatientIDInformation'
+import PatientSenssion from './components/patient/PatientSenssion'
+import PatientFiles from './components/patient/PatientFiles'
 
 
 const router = createBrowserRouter([
@@ -42,6 +46,10 @@ const router = createBrowserRouter([
             element : <PatientDetail />,
             children : [
               { path: "overwiev", element: <PatientOverwiev /> },
+              { path: "other", element: <PatientOther /> },
+              { path: "IDinformation", element: <PatientIDInformation /> },
+              { path: "sessionInformation", element: <PatientSenssion /> },
+              { path: "files", element: <PatientFiles /> },
             ]
           }
         ]

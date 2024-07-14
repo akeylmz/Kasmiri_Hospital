@@ -14,19 +14,19 @@ const SideBar = () => {
                 <Link to="overwiev">GENEL BAKIŞ</Link>
             </li>
             <li>
-                <Link>NUFUS BİLGİLERİ</Link>
+                <Link to="IDinformation" >NUFUS BİLGİLERİ</Link>
             </li>                      
             <li>
-                <Link>SEANS BİLGİLERİ</Link>
+                <Link to="sessionInformation">SEANS BİLGİLERİ</Link>
             </li>            
             <li>
-                <Link>DOSYALAR</Link>
+                <Link to="files">DOSYALAR</Link>
             </li>
             <li>
                 <Link>FATURALAR</Link>
             </li>
             <li>
-                <Link>DİĞER</Link>
+                <Link to="other">DİĞER</Link>
             </li>
             <li>
                 <Link>GEÇMİŞ</Link>

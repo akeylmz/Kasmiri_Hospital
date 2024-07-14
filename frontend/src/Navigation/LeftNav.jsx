@@ -34,7 +34,7 @@ const LeftNav = ({close , setClose}) => {
   
     return (
       <>
-        <div className={classNames("sidebar h-full w-[260px] bg-[#11101d] fixed top-0 left-0 z-10 transition-all ease-in-out duration-500",
+        <div className={classNames("sidebar h-full w-[260px] bg-cyan-500 fixed top-0 left-0 z-10 transition-all ease-in-out duration-500",
             close ? "w-[78px]" : ""
         )}>
           <div className={classNames("h-[60px] w-full flex items-center")}>
@@ -228,11 +228,11 @@ const LeftNav = ({close , setClose}) => {
                   </div>
                 </li>
                 <li>
-              <div className={classNames("py-[12px] fixed bottom-0 w-[260px] flex items-center justify-between bg-[#1d1b31] transition-all ease-in-out duration-500",{
+              <div className={classNames("py-[12px] fixed bottom-0 w-[260px] flex items-center justify-between bg-cyan-600 transition-all ease-in-out duration-500",{
                 "bg-transparent w-[78px]": close
               })}>
                 <div className="flex items-center">
-                  <img className={classNames("h-[52px] w-[52px] object-cover rounded-2xl mr-[14px] ml-[12px] bg-[#1d1b31] transition-all ease-in-out duration-500",{
+                  <img className={classNames("h-[52px] w-[52px] object-cover rounded-2xl mr-[14px] ml-[12px] bg-cyan-700 transition-all ease-in-out duration-500",{
                     "p-[10px]": close
                   })} src="images/profile.jpg" alt="profileImg"/>
                 </div>
