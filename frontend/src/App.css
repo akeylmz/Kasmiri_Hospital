@@ -44,7 +44,9 @@
 .patient-detail-list a{
   @apply inline-block py-5 px-1
 }
-
+::-webkit-scrollbar {
+  width: 0;
+}
 
 
 

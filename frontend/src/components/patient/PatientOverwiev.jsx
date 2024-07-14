@@ -115,13 +115,21 @@ const PatientOverwiev = () => {
             </div>
         </div>
         <div className='w-full h-[48%] flex justify-evenly items-center'>
-            <div className='w-[42%] h-[96%] bg-white rounded-xl shadow-md'>
-                <div className='border-b p-4 flex justify-between items-center'>
+            <div className='w-[42%] h-[96%] bg-white rounded-xl shadow-md overflow-auto'>
+                <div className='border-b p-4 flex justify-between items-center bg-white sticky top-0 left-0'>
                     <span className='text-lg font-semibold text-gray-600'>Notlar</span>
                     <button className='text-blue-500'><CiCirclePlus size={30} strokeWidth={0.5}/></button>
                 </div>
                 <div className='p-4'>
-                    <p className='text-gray-500 font-semibold mb-2'>15.11.2024</p>
+                    <p className='text-gray-500 font-semibold mb-2'>02.06.2023</p>
+                    <p className='text-gray-600 text-lg'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum,o repellat qui a consectetur vel. Tempore nostrum blanditiis molestias reprehenderit eum?</p>
+                </div>
+                <div className='p-4'>
+                    <p className='text-gray-500 font-semibold mb-2'>01.03.2024</p>
+                    <p className='text-gray-600 text-lg'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum,o repellat qui a consectetur vel. Tempore nostrum blanditiis molestias reprehenderit eum?</p>
+                </div>
+                <div className='p-4'>
+                    <p className='text-gray-500 font-semibold mb-2'>23.11.2024</p>
                     <p className='text-gray-600 text-lg'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rerum,o repellat qui a consectetur vel. Tempore nostrum blanditiis molestias reprehenderit eum?</p>
                 </div>
             </div>

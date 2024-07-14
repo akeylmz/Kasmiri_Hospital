@@ -48,7 +48,7 @@ const PatientIDInformation = () => {
         </div>
          </div>
         <div className='bg-white rounded-xl h-[90%] p-6 w-[45%] flex flex-col justify-evenly items-center'>
-        <h3 className='text-xl mt-9 mb-3 font-bold'>Genel Bilgiler</h3>
+        <h3 className='text-xl mt-9 mb-3 font-bold'>Cüzdanın Kayıtlı Olduğu</h3>
             <div className='flex flex-col justify-evenly items-center w-2/4 h-full'>
                 <div className='flex flex-col gap-2 justify-center items-center'>
                     <p className='text-gray-500 font-semibold'>Şehir</p>

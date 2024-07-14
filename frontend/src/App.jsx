@@ -20,6 +20,7 @@ import PatientOther from './components/patient/PatientOther'
 import PatientIDInformation from './components/patient/PatientIDInformation'
 import PatientSenssion from './components/patient/PatientSenssion'
 import PatientFiles from './components/patient/PatientFiles'
+import PatientBill from './components/patient/PatientBill'
 
 
 const router = createBrowserRouter([
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
               { path: "IDinformation", element: <PatientIDInformation /> },
               { path: "sessionInformation", element: <PatientSenssion /> },
               { path: "files", element: <PatientFiles /> },
+              { path: "bill", element: <PatientBill /> },
             ]
           }
         ]

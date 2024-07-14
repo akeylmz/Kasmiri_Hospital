@@ -23,7 +23,7 @@ const SideBar = () => {
                 <Link to="files">DOSYALAR</Link>
             </li>
             <li>
-                <Link>FATURALAR</Link>
+                <Link to="bill">FATURALAR</Link>
             </li>
             <li>
                 <Link to="other">DİĞER</Link>
