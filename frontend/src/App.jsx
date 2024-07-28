@@ -21,6 +21,7 @@ import PatientIDInformation from './components/patient/PatientIDInformation'
 import PatientSenssion from './components/patient/PatientSenssion'
 import PatientFiles from './components/patient/PatientFiles'
 import PatientBill from './components/patient/PatientBill'
+import ChatUserDetail from './components/lead/ChatUserDetail'
 
 
 const router = createBrowserRouter([
