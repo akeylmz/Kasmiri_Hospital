@@ -8,7 +8,9 @@ import { TbReport } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { PiHeartbeatBold } from "react-icons/pi";
 import { SlCalender, SlPeople } from "react-icons/sl";
-import { IoHomeOutline, IoHomeSharp, IoSettingsOutline, IoShareSocial } from 'react-icons/io5';
+import { IoHomeOutline, IoHomeSharp, IoSettingsOutline, IoSettingsSharp, IoShareSocial } from 'react-icons/io5';
+import { FaCalendarAlt, FaChartPie, FaHandshake, FaHeartbeat, FaHospitalUser, FaWarehouse } from "react-icons/fa";
+import { RiBillFill } from "react-icons/ri";
 
 const LeftNav = ({close , setClose}) => {  
     
@@ -59,14 +61,14 @@ const LeftNav = ({close , setClose}) => {
                           "delay-0 opacity-0 pointer-events-none": close,
                           "hidden": hidden
                         }
-                      )}>Lead</span>
+                      )}>Anasayfa</span>
                     </NavLink>
                     <ul className={classNames("sub-menu blank",{
                       "closed": close
                     })}>
                       <li><a className={classNames("link_name",
                         close ? "opacity-0 pointer-events-none" : ""
-                      )} href="#">Lead</a></li>
+                      )} href="#">Anasayfa</a></li>
                     </ul>
                   </div>
                 </li>
@@ -97,7 +99,7 @@ const LeftNav = ({close , setClose}) => {
                   <div className="iocn-link">
                     <NavLink to={"/hasta"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                      <SlPeople className='w-[20px] h-[20px]'/>
+                      <FaHospitalUser className='w-[20px] h-[20px]'/>
                     </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -118,7 +120,7 @@ const LeftNav = ({close , setClose}) => {
                   <div className="iocn-link">
                     <NavLink to={"#"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                      <SlCalender className='w-[20px] h-[20px]'/>
+                      <FaCalendarAlt className='w-[20px] h-[20px]'/>
                     </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -139,7 +141,7 @@ const LeftNav = ({close , setClose}) => {
                   <div className='iocn-link'>
                     <NavLink to={"/"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                        <LiaWarehouseSolid className='w-[20px] h-[20px]'/>
+                        <FaWarehouse className='w-[20px] h-[20px]'/>
                       </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -158,7 +160,7 @@ const LeftNav = ({close , setClose}) => {
                   <div className='iocn-link'>
                     <NavLink to={"/"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                        <PiHeartbeatBold className='w-[20px] h-[20px]'/>
+                        <FaHeartbeat className='w-[20px] h-[20px]'/>
                       </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -177,7 +179,7 @@ const LeftNav = ({close , setClose}) => {
                   <div className="iocn-link">
                     <NavLink to={"/"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                      <LiaFileInvoiceSolid className='w-[20px] h-[20px]'/>
+                      <RiBillFill className='w-[20px] h-[20px]'/>
                     </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -197,7 +199,7 @@ const LeftNav = ({close , setClose}) => {
                   <div className="iocn-link">
                     <NavLink to={"/"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                        <TbReport className='w-[20px] h-[20px]'/>
+                        <FaChartPie className='w-[20px] h-[20px]'/>
                       </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -216,7 +218,7 @@ const LeftNav = ({close , setClose}) => {
                  <div className="iocn-link">
                   <NavLink to={"/"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                        <LiaHandshake  className='w-[20px] h-[20px]'/>
+                        <FaHandshake  className='w-[20px] h-[20px]'/>
                       </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -235,7 +237,7 @@ const LeftNav = ({close , setClose}) => {
                   <div className="iocn-link">
                     <NavLink to={"/"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                        <IoSettingsOutline className='w-[20px] h-[20px]'/>
+                        <IoSettingsSharp className='w-[20px] h-[20px]'/>
                       </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,

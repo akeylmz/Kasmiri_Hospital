@@ -39,10 +39,15 @@ const Chat = () => {
     },
   ])
   return (
-    <div className='flex-1'>
-      <ChatHeader user={user} />
-      <Messages messages={messages} />      
-      <Reply setMessages={setMessages}/>
+    <div className='flex w-full h-full'>
+        <div className='h-full w-[80%]'>
+          <ChatHeader user={user} />
+          <Messages messages={messages} />      
+          <Reply setMessages={setMessages}/>
+        </div>
+        <div className='bg-red-200 h-full w-[20px]'>
+
+        </div>
     </div>
   )
 }
