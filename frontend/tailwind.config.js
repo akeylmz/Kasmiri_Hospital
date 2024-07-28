@@ -40,6 +40,11 @@ export default {
       gridTemplateColumns: {
         "1/5": "1fr 5fr",
       },
+      colors: {
+        tasDark: '#6d4a08',
+        tasDarkSoft: '#855a0a',
+        tasGold: '#f8e590',
+      },
     },
   },
   safelist: [

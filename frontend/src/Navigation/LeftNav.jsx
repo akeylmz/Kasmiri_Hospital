@@ -8,7 +8,7 @@ import { TbReport } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { PiHeartbeatBold } from "react-icons/pi";
 import { SlCalender, SlPeople } from "react-icons/sl";
-import { IoSettingsOutline, IoShareSocial } from 'react-icons/io5';
+import { IoHomeOutline, IoHomeSharp, IoSettingsOutline, IoShareSocial } from 'react-icons/io5';
 
 const LeftNav = ({close , setClose}) => {  
     
@@ -48,6 +48,29 @@ const LeftNav = ({close , setClose}) => {
           <ul className={classNames("nav-links h-full pt-[30px] pb-[150px] overflow-auto no-scrollbar",
             close ? "overflow-visible" : ""
           )}>
+
+              <li>
+                  <div className="iocn-link">
+                    <NavLink to={"/lead"}>
+                      <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
+                        <IoHomeSharp className='w-[20px] h-[20px]'/>
+                      </div>                
+                      <span className={classNames("link_name",{
+                          "delay-0 opacity-0 pointer-events-none": close,
+                          "hidden": hidden
+                        }
+                      )}>Lead</span>
+                    </NavLink>
+                    <ul className={classNames("sub-menu blank",{
+                      "closed": close
+                    })}>
+                      <li><a className={classNames("link_name",
+                        close ? "opacity-0 pointer-events-none" : ""
+                      )} href="#">Lead</a></li>
+                    </ul>
+                  </div>
+                </li>
+
                 <li>
                   <div className="iocn-link">
                     <NavLink to={"/lead"}>
