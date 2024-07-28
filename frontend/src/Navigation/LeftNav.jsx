@@ -93,7 +93,7 @@ const LeftNav = ({close , setClose}) => {
                 </li>
                 <li>
                   <div className="iocn-link">
-                    <NavLink to={"/takvim"}>
+                    <NavLink to={"#"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
                       <SlCalender className='w-[20px] h-[20px]'/>
                     </div>   

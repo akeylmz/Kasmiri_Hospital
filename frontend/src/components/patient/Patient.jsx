@@ -40,9 +40,9 @@ const Patient = () => {
             tbody={patients.map((user) =>([
                 user.name,
                 user.surname,
-                user.phone,
+                user.cep1,
                 user.email,
-                user.location,
+                user.sehir,
                 user.id,
                 // user.situation,
                 [

@@ -22,7 +22,7 @@ const ChatList = () => {
             name: "Mehmet Enes"
           },
           unread: true,
-          lastMessage: "Karnıyarık bozmuş mudur?",
+          lastMessage: "Naber?",
           social: '/images/face.png'
         },
         {

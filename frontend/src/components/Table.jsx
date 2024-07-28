@@ -31,7 +31,7 @@ const Table = ({thead, tbody, searchable}) => {
                         {thead.map((h, key)=>(
                             <th 
                                 width={h?.width}
-                                className='text-left text-sm font-semibold text-gray-700 p-3 border-b'
+                                className='text-left text-sm font-semibold text-gray-700 p-3 pl-9 border-b'
                                 key={key}>
                                     {h.name}
                                     {h.sortable && (
@@ -59,7 +59,7 @@ const Table = ({thead, tbody, searchable}) => {
                             {items.map((item, key)=>(
                                 <td 
                                     onClick={key === 0 ? () =>  navigate(`/hasta/${items[5]}`) : null}
-                                    className={classNames('p-3 text-sm group-hover:bg-blue-100 group-hover:text-blue-700',
+                                    className={classNames('p-3 text-left text-sm group-hover:bg-blue-100 group-hover:text-blue-700',
                                         {"cursor-pointer" : key === 0}
                                     )}
                                     key={key}

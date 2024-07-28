@@ -16,6 +16,10 @@ export default {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        'left-lg': '-10px 0 15px -3px rgba(0, 0, 0, 0.1), -10px 0 6px -2px rgba(0, 0, 0, 0.1)',
+        'right-thin': '2px 0 4px -2px rgba(0, 0, 0, 0.3)',
+      },
       height: {
         'full-110': 'calc(100% - 110px)',
         '20%': '20%',

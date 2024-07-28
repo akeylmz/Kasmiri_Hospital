@@ -52,6 +52,7 @@ const router = createBrowserRouter([
               { path: "sessionInformation", element: <PatientSenssion /> },
               { path: "files", element: <PatientFiles /> },
               { path: "bill", element: <PatientBill /> },
+              { index: true, element: <Navigate to="overwiev" replace /> }
             ]
           }
         ]
