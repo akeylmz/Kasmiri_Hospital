@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 import { NavLink } from "react-router-dom";
 import classNames from 'classnames';
-import React from 'react';
+
 import { BiLogOut } from 'react-icons/bi';
+import { LiaWarehouseSolid, LiaFileInvoiceSolid, LiaHandshake } from "react-icons/lia";
+import { TbReport } from "react-icons/tb";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { IoHomeSharp, IoSettingsSharp, IoShareSocial } from 'react-icons/io5';
-import { FaCalendarAlt, FaChartPie, FaHandshake, FaHeartbeat, FaHospitalUser } from "react-icons/fa";
+import { PiHeartbeatBold } from "react-icons/pi";
+import { SlCalender, SlPeople } from "react-icons/sl";
+import { IoHomeOutline, IoHomeSharp, IoSettingsOutline, IoSettingsSharp, IoShareSocial } from 'react-icons/io5';
+import { FaCalendarAlt, FaChartPie, FaHandshake, FaHeartbeat, FaHospitalUser, FaWarehouse } from "react-icons/fa";
 import { RiBillFill } from "react-icons/ri";
-import { AiOutlineDropbox } from "react-icons/ai";
 
 const LeftNav = ({close , setClose}) => {  
     
@@ -50,7 +53,7 @@ const LeftNav = ({close , setClose}) => {
 
               <li>
                   <div className="iocn-link">
-                    <NavLink to={"/lead"}>
+                    <NavLink to={"/"}>
                       <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
                         <IoHomeSharp className='w-[20px] h-[20px]'/>
                       </div>                
@@ -136,9 +139,9 @@ const LeftNav = ({close , setClose}) => {
                 </li>
                 <li>
                   <div className='iocn-link'>
-                    <NavLink to={"/"}>
+                    <NavLink to={"/stok"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
-                        <AiOutlineDropbox className='w-[20px] h-[20px]'/>
+                        <FaWarehouse className='w-[20px] h-[20px]'/>
                       </div>   
                       <span className={classNames("link_name",{
                           "delay-0 opacity-0 pointer-events-none": close,
@@ -213,7 +216,7 @@ const LeftNav = ({close , setClose}) => {
                 </li>
                 <li>
                  <div className="iocn-link">
-                  <NavLink to={"/"}>
+                  <NavLink to={"/insan-kaynaklari"}>
                     <div className="h-[50px] w-[78px] flex items-center justify-center text-white cursor-pointer transition-all duration-300">
                         <FaHandshake  className='w-[20px] h-[20px]'/>
                       </div>   

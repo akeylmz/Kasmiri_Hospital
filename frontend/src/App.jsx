@@ -1,104 +1,90 @@
-
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import './App.css'
+import RootLayout from './pages/RootLayout'
+import HomePage from './pages/home/HomePage'
+import PatientLayout from './pages/patient/PatientLayout'
+import Patients from './pages/patient/Patients'
+import CompanyStructure from './UI/CompanyStructure '
+import PatientDetail from './pages/patient/patientDetail/PatientDetail'
+import PatientOverwiev from './pages/patient/patientDetail/PatientOverwiev'
+import PatientFiles from './pages/patient/patientDetail/PatientFiles'
+import PatientSenssion from './pages/patient/patientDetail/PatientSenssion'
+import PatientOther from './pages/patient/patientDetail/PatientOther'
+import PatientIDInformation from './pages/patient/patientDetail/PatientIDInformation'
+import PatientBill from './pages/patient/patientDetail/PatientBill'
+import MedicalForm from './MedicalForm'
+import StockLayout from './pages/stock/StockLayout'
+import StockOverwiev from './pages/stock/StockOverwiev'
+import StockProducts from './pages/stock/StockProducts'
+import HrLayout from './pages/hr/HrLayout'
+import HrHierarchy from './pages/hr/HrHierarchy'
+import HrRecruitment from './pages/hr/HrRecruitment'
+import HrPersonnel from './pages/hr/HrPersonnel'
+import HrWorkingHours from './pages/hr/HrWorkingHours'
+import HrLeaveManagement from './pages/hr/HrLeaveManagement'
+import FileUpload from './FileUpload'
+import StockWarehouse from './pages/stock/StockWarehouse'
+import StockOrder from './pages/stock/StockOrder'
+import Calender from './pages/calendar/Calender'
 
-import React from 'react'
-import { Navigate, RouterProvider, createBrowserRouter } from "react-router-dom"
-import HomePage from "./Pages/Home"
-import RootLayout from "./Pages/RootLayout"
-import LoginPage from './Pages/Login'
-import CardPage from './Pages/Card'
-import Calender from './Calender'
-import LeadPage from './Pages/Lead'
-import Inbox from './components/lead/Inbox'
-import InboxLayout from './Pages/InboxLayout'
-import Chat from './components/lead/Chat'
-import PatientLayout from './Pages/PatientLayout'
-import Patient from './components/patient/Patient'
-import PatientDetail from './components/patient/PatientDetail'
-import PatientOverwiev from './components/patient/PatientOverwiev'
-import PatientOther from './components/patient/PatientOther'
-import PatientIDInformation from './components/patient/PatientIDInformation'
-import PatientSenssion from './components/patient/PatientSenssion'
-import PatientFiles from './components/patient/PatientFiles'
-import PatientBill from './components/patient/PatientBill'
-import ChatUserDetail from './components/lead/ChatUserDetail'
+function App() {  
 
+  const router = createBrowserRouter([
+    { path: "/",
+      element: <RootLayout />,
+      children: [
+        {path: "/", element: <FileUpload />},
+        { path : "/calendar", element: <Calender />},
+        { path : "/patients", 
+          element : <PatientLayout /> ,
+          children : [
+            { path: "/patients", element: <Patients /> },
+            { path : ":patientId", 
+              element: <PatientDetail />,
+              children: [
+                { path: "overwiev", element: <PatientOverwiev /> },
+                { path: "other", element: <PatientOther /> },
+                { path: "IDinformation", element: <PatientIDInformation /> },
+                { path: "sessionInformation", element: <PatientSenssion /> },
+                { path: "files", element: <PatientFiles /> },
+                { path: "bill", element: <PatientBill /> },
+                { index: true, element: <Navigate to="overwiev" replace /> }
+              ]
+            },
+            
+          ]
+        },
+        { path: "/stock",
+          element: <StockLayout />,
+          children: [
+            { path: "overwiev", element: <StockOverwiev />},
+            { path: "products", element: <StockProducts />},
+            { path: "warehouse", element: <StockWarehouse />},
+            { path: "orders", element: <StockOrder />},
+            { index: true, element: <Navigate to="overwiev" replace /> }
+          ]
+        },
+        { path: "/human-resources",
+          element: <HrLayout />,
+          children: [
+            { path: "hierarchy", element: <HrHierarchy />},
+            { path: "personnel", element: <HrPersonnel />},
+            { path: "working-hours", element: <HrWorkingHours />},
+            { path: "leave-management", element: <HrLeaveManagement />},
+            { path: "recruitment", element: <HrRecruitment />},
+            { index: true, element: <Navigate to="hierarchy" replace /> }
+          ]
+        },
+        
+      ]
+    }
+  ])
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <RootLayout />,
-    children:[
-      { path : "/", element: <HomePage />},
-      
-      { 
-        path: "/lead", 
-        element: <InboxLayout />,
-        children: [
-          { path: "/lead", element: <Inbox /> },
-          { path: ":chatId", element: <Chat /> },
-        ]
-      },
-      { path : "/hasta", 
-        element : <PatientLayout /> ,
-        children : [
-          { path : "/hasta", element : <Patient />},
-          { 
-            path : ":patientId",
-            element : <PatientDetail />,
-            children : [
-              { path: "overwiev", element: <PatientOverwiev /> },
-              { path: "other", element: <PatientOther /> },
-              { path: "IDinformation", element: <PatientIDInformation /> },
-              { path: "sessionInformation", element: <PatientSenssion /> },
-              { path: "files", element: <PatientFiles /> },
-              { path: "bill", element: <PatientBill /> },
-              { index: true, element: <Navigate to="overwiev" replace /> }
-            ]
-          }
-        ]
-      },
-      { path : "/takvim", element: <Calender />},
-      { path : "/stok", element: <CardPage />},
-      { path : "/e-nabiz", element: <CardPage />},
-      { path : "/fatura", element: <CardPage />},
-      { path : "/raporlama", element: <CardPage />},
-      { path : "/insan-kaynaklari", element: <CardPage />},
-      { path : "/ayarlar", element: <CardPage />},
-      { path : "/hasta-detay/", element: <CardPage />},
-    ]
-  },
-  { path : "/login", element: <LoginPage />},
-])
-
-const App = () => {
   return (
     <>
-      <RouterProvider router={router} />
+     <RouterProvider router={router} />
     </>
   )
 }
 
 export default App
-
-
-
-
-
-
-
-
-
-
-  // useEffect(() => {
-  //   axios.get('http://127.0.0.1:8000/api/items/')
-  //     .then(response => {
-  //       setData(response.data);
-  //       console.log(response.data)
-  //     })
-  //     .catch(error => {
-  //       console.error('There was an error!', error);
-  //     });
-  // }, []);
-
-

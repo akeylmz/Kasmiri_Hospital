@@ -1,46 +1,21 @@
 @tailwind base;
-
-@layer base {
-  * {
-    @apply m-0 p-0 box-border font-poppins;
-  }
-}
 @tailwind components;
 @tailwind utilities;
 
+body {
+  @apply font-sans;
+}
 
-
-@layer utilities {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
+::-webkit-scrollbar {
+    width: 0;
   }
-}
-
-.modal-input-group div{
-  @apply w-2/4
-}
-.spancheckbox label input[type="checkbox"]:checked ~ span{
-  @apply bg-blue-600 text-white border-white
-}
-
-
-
-.patient-modal-form > div.input-group{
-  @apply flex justify-evenly
-}
-.patient-modal-form > div.input-group > div{
-  @apply flex-col flex w-[43%] gap-1
-}
-.patient-modal-form > div.input-group > div label{
-  @apply pl-3 text-gray-600 font-semibold 
-}
-.patient-modal-form > div.input-group > div input{
-  @apply outline-none border rounded shadow-md
-}
-
-.modal-section ul li{
-  @apply flex items-center justify-center text-green-600 w-[170px] h-[50px] rounded-l-xl text-xl font-semibold hover:bg-white cursor-pointer
-}
-.modal-section ul li span{
-  @apply select-none
-}
+  
+.patient-detail-list li{
+    @apply text-center text-gray-600 font-semibold text-lg hover:text-cyan-700 cursor-pointer hover:scale-105 transition-all duration-100
+  }
+  .patient-detail-list a{
+    @apply inline-block py-5 px-1
+  }
+  .add-modal select, .add-modal input{
+    @apply outline-none
+  }
