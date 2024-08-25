@@ -136,7 +136,8 @@ const StockWarehouse = () => {
                         row.stock
                     ])}
                     searchable={true}
-                    tableTitle={"SİPARİŞLER"}            
+                    tableTitle={"SİPARİŞLER"}  
+                    modal={'stock'}          
                 />
             </motion.div>
         </div>
