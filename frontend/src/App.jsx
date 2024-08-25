@@ -33,7 +33,7 @@ function App() {
     { path: "/",
       element: <RootLayout />,
       children: [
-        {path: "/", element: <FileUpload />},
+        {path: "/", element: <HomePage />},
         { path : "/calendar", element: <Calender />},
         { path : "/patients", 
           element : <PatientLayout /> ,

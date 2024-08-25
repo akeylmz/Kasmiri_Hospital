@@ -11,7 +11,7 @@ const HrWorkingHours = () => {
         { name: 'Paydos', sortable: true },
         { name: 'Çalışma Günleri', sortable: true },
         { name: 'Haftalık Çalışma', sortable: true },
-        { name: 'Aksiyon', width: 50 },
+        { name: '', width: 80 },
       ];
       const tbody = [
         {

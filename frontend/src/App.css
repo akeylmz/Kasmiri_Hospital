@@ -37,3 +37,5 @@
 .stock-list li{
     @apply w-full py-5 text-center  text-lg hover:bg-slate-100/15 cursor-pointer rounded-xl
 }
+
+

@@ -89,7 +89,7 @@ const HrPersonnel = () => {
         { name: 'E-Posta', sortable: true },
         { name: 'İletişim' },
         { name: 'Departman', sortable: true },
-        { name: 'Aksiyon', width: 50 }, // İşlemler sütunu için genişlik
+        { name: '', width: 80 }, // İşlemler sütunu için genişlik
       ];
 
   return (
