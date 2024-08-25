@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from hospital.models import Item, Note, PatientCard, CommunicationCard, PopulationCard
 from django.db.models import Max, Count
+from datetime import datetime
 
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -76,15 +77,32 @@ class PatientCardSerializer(serializers.ModelSerializer):
         model = PatientCard
         fields = '__all__'
 
+    
     def create(self, validated_data):
-        return PatientCard.objects.create(**validated_data)
+        # Bugünün tarihi
+        today = datetime.today()
 
+        # Bugüne ait tüm PatientCard kayıtlarını al
+        today_patient_count = PatientCard.objects.filter(
+            created_at__year=today.year,
+            created_at__month=today.month,
+            created_at__day=today.day
+        ).count()
+
+        # O gün için kaçıncı hasta olduğunu belirle
+        new_patient_number = f"{today.strftime('%d%m%Y')}{today_patient_count + 1:02d}"
+
+        # Patient number'ı validated_data'ya ekle
+        validated_data['patient_number'] = new_patient_number
+
+        # Yeni PatientCard kaydı oluştur
+        return PatientCard.objects.create(**validated_data)
+    
     def update(self, instance, validated_data):
-        instance.patient_number = validated_data.get('patient_number', instance.patient_number)
-        instance.file_number = validated_data.get('file_number', instance.file_number)
         instance.national_id = validated_data.get('national_id', instance.national_id)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.patient_image = validated_data.get('patient_image', instance.patient_image)
         instance.place_of_birth = validated_data.get('place_of_birth', instance.place_of_birth)
         instance.date_of_birth = validated_data.get('date_of_birth', instance.date_of_birth)
         instance.gender = validated_data.get('gender', instance.gender)
@@ -92,16 +110,36 @@ class PatientCardSerializer(serializers.ModelSerializer):
         instance.mother_name = validated_data.get('mother_name', instance.mother_name)
         instance.father_name = validated_data.get('father_name', instance.father_name)
         instance.patient_type = validated_data.get('patient_type', instance.patient_type)
-        instance.kinship_type = validated_data.get('kinship_type', instance.kinship_type)
         instance.insurance_info = validated_data.get('insurance_info', instance.insurance_info)
-        instance.insured_information = validated_data.get('insured_information', instance.insured_information)
-        instance.complementary_insurance_info = validated_data.get('complementary_insurance_info', instance.complementary_insurance_info)
-        instance.referring_info = validated_data.get('referring_info', instance.referring_info)
-        instance.is_foreign_patient = validated_data.get('is_foreign_patient', instance.is_foreign_patient)
-        instance.is_vip = validated_data.get('is_vip', instance.is_vip)
+        instance.instagram_username = validated_data.get('instagram_username', instance.instagram_username)
+        instance.mobile_phone1 = validated_data.get('mobile_phone1', instance.mobile_phone1)
+        instance.mobile_phone2 = validated_data.get('mobile_phone2', instance.mobile_phone2)
+        instance.email = validated_data.get('email', instance.email)
+        instance.country = validated_data.get('country', instance.country)
+        instance.city = validated_data.get('city', instance.city)
+        instance.address = validated_data.get('address', instance.address)
+        instance.seans_number = validated_data.get('seans_number', instance.seans_number)
+        instance.device_name = validated_data.get('device_name', instance.device_name)
+        instance.seans_days = validated_data.get('seans_days', instance.seans_days)
+        instance.education_status = validated_data.get('education_status', instance.education_status)
+        instance.occupation = validated_data.get('occupation', instance.occupation)
+        instance.current_employer = validated_data.get('current_employer', instance.current_employer)
+        instance.marital_status = validated_data.get('marital_status', instance.marital_status)
+        instance.children_count = validated_data.get('children_count', instance.children_count)
+        instance.referee = validated_data.get('referee', instance.referee)
+        instance.institution_type = validated_data.get('institution_type', instance.institution_type)
+        instance.applied_department = validated_data.get('applied_department', instance.applied_department)
+        instance.applied_operation = validated_data.get('applied_operation', instance.applied_operation)
+        instance.complaints = validated_data.get('complaints', instance.complaints)
+        instance.medications = validated_data.get('medications', instance.medications)
+        instance.existing_conditions = validated_data.get('existing_conditions', instance.existing_conditions)
+        instance.smoker = validated_data.get('smoker', instance.smoker)
+        instance.past_surgeries = validated_data.get('past_surgeries', instance.past_surgeries)
+        instance.allergies = validated_data.get('allergies', instance.allergies)
+        instance.post_surgery_address = validated_data.get('post_surgery_address', instance.post_surgery_address)
         
         instance.save()
-        return instance   
+        return instance
 
 class PopulationCardSerializer(serializers.ModelSerializer):
     class Meta:
