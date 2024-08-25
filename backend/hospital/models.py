@@ -3,14 +3,6 @@ from django.forms import ValidationError
 from django.utils import timezone
 
 # Create your models here.
-
-class Item(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return self.name
     
 class Note(models.Model):
     note = models.CharField(max_length=255, verbose_name="Note")
@@ -80,16 +72,19 @@ class PatientCard(models.Model):
     post_surgery_address = models.CharField(max_length=255, blank=True, null=True)  # Ameliyat sonrası kalınacak adres
 
     def __str__(self):
-        return f"{self.occupation} at {self.current_employer} - {self.applied_department}"
-
-
-    def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.national_id})"
 
     class Meta:
         verbose_name = "Patient Card"
         verbose_name_plural = "Patient Cards"
         ordering = ['last_name', 'first_name']
+
+class Stock(models.Model):
+    stock_name = models.CharField(max_length=100, blank=True, null=True)
+    stock_number = models.IntegerField(default=0)
+    stock_image = models.ImageField(upload_to='images/stock_images/')
+    def __str__(self):
+        return f"{self.stock_name}"
 
 class CommunicationCard(models.Model):
     patient = models.OneToOneField(PatientCard, on_delete=models.CASCADE, related_name='communication_card')

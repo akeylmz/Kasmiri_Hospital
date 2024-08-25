@@ -1,23 +1,9 @@
 from rest_framework import serializers
-from hospital.models import Item, Note, PatientCard, CommunicationCard, PopulationCard
+from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock
 from django.db.models import Max, Count
 from datetime import datetime
 
-class ItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Item
-        fields = '__all__'
 
-    def create(self, validated_data):
-        return Item.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        instance.description = validated_data.get('description', instance.description)
-        instance.price = validated_data.get('price', instance.price)
-       
-        instance.save()
-        return instance
 
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -166,5 +152,23 @@ class PopulationCardSerializer(serializers.ModelSerializer):
         instance.family_serial_number = validated_data.get('family_serial_number', instance.family_serial_number)
         instance.serial_number = validated_data.get('serial_number', instance.serial_number)
         
+        instance.save()
+        return instance
+
+class StockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Stock
+        fields = '__all__'
+
+    def create(self, validated_data):
+        # Yeni Stock kaydı oluştur
+        return Stock.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        # Mevcut Stock kaydını güncelle
+        instance.stock_name = validated_data.get('stock_name', instance.stock_name)
+        instance.stock_number = validated_data.get('stock_number', instance.stock_number)
+        instance.stock_image = validated_data.get('stock_image', instance.stock_image)
+
         instance.save()
         return instance
