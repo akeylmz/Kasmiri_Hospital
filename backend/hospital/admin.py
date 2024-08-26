@@ -1,4 +1,5 @@
 from django.contrib import admin
-from.models import Item
+from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock
 # Register your models here.
-admin.site.register(Item)
+admin.site.register(PatientCard)
+admin.site.register(Stock)

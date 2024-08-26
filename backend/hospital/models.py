@@ -1,15 +1,8 @@
 from django.db import models
 from django.forms import ValidationError
+from django.utils import timezone
 
 # Create your models here.
-
-class Item(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return self.name
     
 class Note(models.Model):
     note = models.CharField(max_length=255, verbose_name="Note")
@@ -37,11 +30,12 @@ class Note(models.Model):
         super().save(*args, **kwargs)
 
 class PatientCard(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
     patient_number = models.CharField(max_length=50, unique=True, blank=True, null=True)
-    file_number = models.CharField(max_length=50, unique=True, blank=True, null=True)
     national_id = models.CharField(max_length=11, unique=True, blank=True, null=True, db_index=True)
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
+    patient_image = models.ImageField(upload_to='images/patient_images/')
     place_of_birth = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     gender = models.CharField(max_length=10, blank=True, null=True)
@@ -49,13 +43,33 @@ class PatientCard(models.Model):
     mother_name = models.CharField(max_length=100, blank=True, null=True)
     father_name = models.CharField(max_length=100, blank=True, null=True)
     patient_type = models.CharField(max_length=50, blank=True, null=True)
-    kinship_type = models.CharField(max_length=50, blank=True, null=True)
-    insurance_info = models.CharField(max_length=200, blank=True, null=True)
-    insured_information= models.CharField(max_length=200, blank=True, null=True)
-    complementary_insurance_info = models.CharField(max_length=200, blank=True, null=True)
-    referring_info = models.CharField(max_length=200, blank=True, null=True)
-    is_foreign_patient = models.BooleanField(default=False)
-    is_vip = models.BooleanField(default=False)
+    insurance_info = models.CharField(max_length=40, blank=True, null=True)
+    instagram_username = models.CharField(max_length=200, blank=True, null=True)  
+    mobile_phone1 = models.CharField(max_length=20, blank=True, null=True)
+    mobile_phone2 = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    seans_number = models.IntegerField(blank=True, null=True)
+    device_name = models.CharField(max_length=255, blank=True, null=True)
+    seans_days = models.CharField(max_length=255, blank=True, null=True)
+    education_status = models.CharField(max_length=20,blank=True, null=True)
+    occupation = models.CharField(max_length=100,blank=True, null=True)
+    current_employer = models.CharField(max_length=100,blank=True, null=True)
+    marital_status = models.CharField(max_length=10,blank=True, null=True)
+    children_count = models.PositiveIntegerField(blank=True, null=True)
+    referee = models.CharField(max_length=100,blank=True, null=True)
+    institution_type = models.CharField(max_length=10,blank=True, null=True)
+    applied_department = models.CharField(max_length=100,blank=True, null=True)
+    applied_operation = models.CharField(max_length=100,blank=True, null=True)
+    complaints = models.TextField(blank=True, null=True)
+    medications = models.TextField(blank=True, null=True)  # Sürekli kullanılan ilaçlar
+    existing_conditions = models.TextField(blank=True, null=True)  # Mevcut hastalıklar
+    smoker = models.BooleanField(default=False)  # Sigara kullanımı
+    past_surgeries = models.TextField(blank=True, null=True)  # Geçmiş operasyonlar
+    allergies = models.TextField(blank=True, null=True)  # Alerjiler
+    post_surgery_address = models.CharField(max_length=255, blank=True, null=True)  # Ameliyat sonrası kalınacak adres
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.national_id})"
@@ -65,14 +79,18 @@ class PatientCard(models.Model):
         verbose_name_plural = "Patient Cards"
         ordering = ['last_name', 'first_name']
 
+class Stock(models.Model):
+    stock_name = models.CharField(max_length=100, blank=True, null=True)
+    stock_number = models.IntegerField(default=0)
+    stock_image = models.ImageField(upload_to='images/stock_images/')
+    def __str__(self):
+        return f"{self.stock_name}"
+
 class CommunicationCard(models.Model):
     patient = models.OneToOneField(PatientCard, on_delete=models.CASCADE, related_name='communication_card')
     address_type = models.CharField(max_length=100, blank=True, null=True)
-    address = models.CharField(max_length=255, blank=True, null=True)
     external_door_no = models.CharField(max_length=10, blank=True, null=True)
     internal_door_no = models.CharField(max_length=10, blank=True, null=True)
-    country = models.CharField(max_length=100, blank=True, null=True)
-    city = models.CharField(max_length=100, blank=True, null=True)
     district = models.CharField(max_length=100, blank=True, null=True)
     subdistrict = models.CharField(max_length=100, blank=True, null=True)
     village = models.CharField(max_length=100, blank=True, null=True)
@@ -80,10 +98,7 @@ class CommunicationCard(models.Model):
     street = models.CharField(max_length=100, blank=True, null=True)
     home_phone = models.CharField(max_length=20, blank=True, null=True)
     work_phone = models.CharField(max_length=20, blank=True, null=True)
-    mobile_phone1 = models.CharField(max_length=20, blank=True, null=True)
-    mobile_phone2 = models.CharField(max_length=20, blank=True, null=True)
     fax = models.CharField(max_length=20, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
     heard_about_us = models.CharField(max_length=255, blank=True, null=True)
     card_issued = models.BooleanField(default=False)
     want_to_be_informed_by_email = models.BooleanField(default=False)

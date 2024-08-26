@@ -8,17 +8,9 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import ItemSerializer, NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PopulationCardSerializer
-from hospital.models import Item, Note, PatientCard, CommunicationCard, PopulationCard
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, PopulationCardSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock
 from django.contrib.auth.decorators import login_required, user_passes_test
-
-class ItemListCreateAPIView(generics.ListCreateAPIView):
-    queryset= Item.objects.all()
-    serializer_class=ItemSerializer
-
-class ItemDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset= Item.objects.all()
-    serializer_class=ItemSerializer
 
 class NoteListCreateAPIView(generics.ListCreateAPIView):
     queryset= Note.objects.all()
@@ -51,3 +43,11 @@ class PopulationCardListCreateAPIView(generics.ListCreateAPIView):
 class PopulationCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PopulationCard.objects.all()
     serializer_class=PopulationCardSerializer
+
+class StockListCreateAPIView(generics.ListCreateAPIView):
+    queryset= Stock.objects.all()
+    serializer_class=StockSerializer
+
+class StockDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= Stock.objects.all()
+    serializer_class=StockSerializer
