@@ -1,28 +1,20 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const SideBar = () => {
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+const SideBar = ({ patient }) => {
     const { t } = useTranslation();
-    const { patients } = useSelector(state => state.patient);
-    const { patientId } = useParams();
-
-    var patient;
-
-    patients.forEach(element => {
-        console.log(element);
-        if (element.tc == patientId) {
-            patient = element;
-        }
-    });
+    
 
     return (
         <div className='h-full w-[15%] border-r shadow-md'>
             <div className='flex flex-col items-center py-8'>
-                <img src={patient.image} className='w-[100px] h-[100px] rounded-full object-cover' alt={`${patient.name} ${patient.surname}`} />
-                <span className='pt-3 pb-1 text-gray-700 text-lg font-semibold'>{patient.name} {patient.surname}</span>
-                <span className='text-gray-600'>ID: {patient.id}</span>
+                <img src={patient.patient_image} className='w-[100px] h-[100px] rounded-full object-cover' alt={`${patient.first_name} ${patient.last_name}`} />
+                <span className='pt-3 pb-1 text-gray-700 text-lg font-semibold'>{patient.first_name} {patient.last_name}</span>
+                <span className='text-gray-600'>ID: {patient.national_id}</span>
             </div>
             <ul className='patient-detail-list w-full'>
                 <li>
@@ -41,16 +33,16 @@ const SideBar = () => {
                     <Link to="bill">{t("bills")}</Link>
                 </li>
                 <li>
-                    <Link to="other">{t("test_results")}</Link>
+                    <Link to="">{t("test_results")}</Link>
                 </li>
                 <li>
-                    <Link to="history">{t("history")}</Link>
+                    <Link to="">{t("history")}</Link>
                 </li>
                 <li>
-                    <Link to="photos">{t("photos")}</Link>
+                    <Link to="">{t("photos")}</Link>
                 </li>
                 <li>
-                    <Link to="create_epicrisis">{t("create_epicrisis")}</Link>
+                    <Link to="">{t("create_epicrisis")}</Link>
                 </li>
             </ul>
         </div>

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { createModal } from '../components/Utils/Modal';
 import { t } from 'i18next';
 
-const TableComp = ({ thead, tbody, searchable, tableTitle, modal }) => {
+const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState({});
   const [search, setSearch] = useState('');
@@ -68,7 +68,7 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal }) => {
         <div className='w-full flex-1 overflow-hidden'>
           {/* Masaüstü (Desktop) Görünüm */}
           <div className="overflow-auto h-full w-full">
-            <table className='w-full h-full border-collapse table-fixed'>
+            <table className='w-full max-h-full border-collapse table-fixed'>
               <thead>
                 <tr>
                   {thead.map((h, key) => (
@@ -79,7 +79,8 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal }) => {
                       style={{
                         padding: '8px',
                         fontSize: '0.875rem', // Yazı boyutunu küçült
-                        lineHeight: '1.2rem', // Satır yüksekliğini ayarla
+                        lineHeight: '1.2rem', // Satır yüksekliğini ayarla   
+                        display: h.name === "none" ? 'none' : 'table-cell',       
                       }}
                     >
                       <div className={`flex items-center 
@@ -119,11 +120,10 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal }) => {
                       'bg-white': rowIndex % 2 === 0,
                       'bg-slate-100': rowIndex % 2 !== 0,
                     })}
-                    style={{ height: 'auto' }}
                   >
                     {items.map((item, colIndex) => (
                       <td
-                        onClick={colIndex === 0 ? () => navigate(`/patients/${items[5]}`) : null}
+                        onClick={colIndex === 0 && detail ? () => navigate(`/patients/${items[7]}`) : null}
                         className={classNames(
                           'text-left text-sm border-b border-slate-300/50',
                           { 'cursor-pointer': colIndex === 0 }
@@ -136,6 +136,7 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal }) => {
                           whiteSpace: 'nowrap', // Taşmayı önle
                           overflow: 'hidden',
                           textOverflow: 'ellipsis', // Uzun metinler için ellipsis uygula
+                          display: colIndex === detail ? 'none' : 'table-cell',
                         }}
                       >
                         {Array.isArray(item) && typeof item[1] === 'string' ? (

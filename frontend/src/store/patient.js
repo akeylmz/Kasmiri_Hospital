@@ -2,17 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     patients: [
-        { id: 1, image: 'https://via.placeholder.com/40', name: 'Selim', surname: 'GÜRSES', email: 'selim@domain.com', contact: '05369863247', location: 'Trabzon', tc: '36587774125' },
-        { id: 2, image: 'https://via.placeholder.com/40', name: 'Cemre', surname: 'YALÇINSOY', email: 'cemre@domain.com', contact: '05426987832', location: 'İstanbul', tc: '36985214785' },
-        { id: 3, image: 'https://via.placeholder.com/40', name: 'Seçkin', surname: 'SEYMEN', email: 'seckin@domain.com', contact: '05318521496', location: 'Bursa', tc: '25471554789' },
-        { id: 4, image: 'https://via.placeholder.com/40', name: 'Ahmet', surname: 'KAPAKÇI', email: 'ahmet@domain.com', contact: '05336547893', location: 'İzmit', tc: '78965554123' },
-        { id: 5, image: 'https://via.placeholder.com/40', name: 'Yalçın', surname: 'SELİMOĞLU', email: 'yalcin@domain.com', contact: '05465989832', location: 'Kocaeli', tc: '885145' },
-        { id: 6, image: 'https://via.placeholder.com/40', name: 'Nazan', surname: 'SATIŞOĞLU', email: 'nazan@domain.com', contact: '05556985478', location: 'Aydın', tc: '123123' },
-        { id: 7, image: 'https://via.placeholder.com/40', name: 'Alper', surname: 'ÜNLÜ', email: 'alper@domain.com', contact: '05052587413', location: 'Bursa', tc: '9854877745' },
-        { id: 8, image: 'https://via.placeholder.com/40', name: 'Aylin', surname: 'GÜMÜŞÇÜ', email: 'aylin@domain.com', contact: '05398541229', location: 'İzmir', tc: '99845754558' },
-        { id: 9, image: 'https://via.placeholder.com/40', name: 'Selin', surname: 'TAŞ', email: 'selin@domain.com', contact: '05422366558', location: 'Ankara', tc: '258741236546' },
-        { id: 10, image: 'https://via.placeholder.com/40', name: 'BUĞRA', surname: 'YAĞUŞ', email: 'bugra@domain.com', contact: '05321456958', location: 'Fransa', tc: '987456321456' },
-    ]
+        // Example: { id: 1, patient_image: 'https://via.placeholder.com/40', first_name: 'Selim', last_name: 'GÜRSES', email: 'selim@domain.com', mobile_phone1: '05369863247', city: 'Trabzon', national_id: '36587774125' },
+    ],
+    patient: null,
 }
 
 const patientsSlice = createSlice({
@@ -22,54 +14,63 @@ const patientsSlice = createSlice({
         addPatient: (state, action) => {
             const newPatient = {
                 id: state.patients.length + 1, // Yeni hasta için id oluşturma
-                image: 'https://via.placeholder.com/40', // Varsayılan bir resim ekleme
+                patient_image: 'https://via.placeholder.com/40', // Varsayılan bir resim ekleme
                 age: action.payload.age,
-                patientCode: action.payload.patientCode,
-                name: action.payload.name,
-                surname: action.payload.surname,
+                patient_number: action.payload.patientCode,
+                first_name: action.payload.first_name,
+                last_name: action.payload.last_name,
                 email: action.payload.email || '', // Eğer email boşsa boş string ekle
-                contact: action.payload.phone1 || '', // İletişim bilgisi boşsa varsayılan boş string
-                location: action.payload.city || '', // Lokasyon olarak şehir bilgisi
-                tc: action.payload.tcKimlikNo || action.payload.pasaportNo || '', // TC Kimlik No veya Pasaport No
+                mobile_phone1: action.payload.mobile_phone1 || '', // İletişim bilgisi boşsa varsayılan boş string
+                city: action.payload.city || '', // Lokasyon olarak şehir bilgisi
+                national_id: action.payload.national_id || action.payload.pasaportNo || '', // TC Kimlik No veya Pasaport No
                 gender: action.payload.gender || '', 
                 nationality: action.payload.nationality || '', 
-                motherName: action.payload.motherName || '', 
-                fatherName: action.payload.fatherName || '', 
-                phone2: action.payload.phone2 || '', 
-                instagramName: action.payload.instagramName || '', 
-                patientType: action.payload.patientType || '', 
+                mother_name: action.payload.mother_name || '', 
+                father_name: action.payload.father_name || '', 
+                mobile_phone2: action.payload.mobile_phone2 || '', 
+                instagram_username: action.payload.instagram_username || '', 
+                patient_type: action.payload.patient_type || '', 
                 country: action.payload.country || '', 
                 address: action.payload.address || '', 
-                birthDate: action.payload.birthDate || '', 
-                birthPlace: action.payload.birthPlace || '', 
-                session: action.payload.session || '', 
-                deviceName: action.payload.deviceName || '', 
-                selectedDays: action.payload.selectedDays || [], 
-                profession: action.payload.profession || '', 
-                workplace: action.payload.workplace || '', 
-                maritalStatus: action.payload.maritalStatus || '', 
-                referral: action.payload.referral || '', 
-                currentDiseases: action.payload.currentDiseases || '', 
+                date_of_birth: action.payload.date_of_birth || '', 
+                place_of_birth: action.payload.place_of_birth || '', 
+                seans_number: action.payload.session || '', 
+                device_name: action.payload.device_name || '', 
+                seans_days: action.payload.selectedDays || [], 
+                occupation: action.payload.profession || '', 
+                current_employer: action.payload.workplace || '', 
+                marital_status: action.payload.marital_status || '', 
+                referee: action.payload.referral || '', 
+                existing_conditions: action.payload.currentDiseases || '', 
                 medications: action.payload.medications || '', 
-                operations: action.payload.operations || '', 
+                past_surgeries: action.payload.operations || '', 
                 allergies: action.payload.allergies || '', 
-                complaint: action.payload.complaint || '', 
-                childrenCount: action.payload.childrenCount || '', 
-                smoke: action.payload.smoke || '', 
-                consultationDate: action.payload.consultationDate || '', 
-                sharingPermission: action.payload.sharingPermission || '', 
-                dateOfRepatriation: action.payload.dateOfRepatriation || '', 
-                organisationType: action.payload.organisationType || '', 
-                department: action.payload.department || '', 
-                procedure: action.payload.procedure || '', 
+                complaints: action.payload.complaint || '', 
+                children_count: action.payload.childrenCount || '', 
+                smoker: action.payload.smoke || '', 
+                consultation_date: action.payload.consultationDate || '', 
+                sharing_permission: action.payload.sharingPermission || '', 
+                post_surgery_address: action.payload.dateOfRepatriation || '', 
+                institution_type: action.payload.organisationType || '', 
+                applied_department: action.payload.department || '', 
+                applied_operation: action.payload.procedure || '', 
             };
             state.patients = [
                 newPatient,
                 ...state.patients
             ];
+        },
+        setPatient: (state, action) => {
+            state.patients = action.payload;
+        },
+        setPatientt: (state, action) => {
+            state.patient = action.payload;
+        },
+        clearPatientt: (state) => {
+            state.patient = null;
         }
     }
 })
 
-export const { addPatient } = patientsSlice.actions;
+export const { addPatient, setPatient, setPatientt, clearPatientt } = patientsSlice.actions;
 export default patientsSlice.reducer;

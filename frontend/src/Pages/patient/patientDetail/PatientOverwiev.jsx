@@ -6,19 +6,11 @@ import { useTranslation } from 'react-i18next';
 
 const PatientOverwiev = () => {
     const { t } = useTranslation();
-    const { patients } = useSelector(state => state.patient);
-    const { patientId } = useParams();
+    const { patient } = useSelector(state => state.patient);
 
-    let patient;
-
-    patients.forEach(element => {
-        if (element.tc === patientId || element.id.toString() === patientId) {
-            patient = element;
-        }
-    });
-
+    
     if (!patient) {
-        return <div>{t("patient_not_found")}</div>;
+        return <div>{"Bir sorun oluştu..."}</div>;
     }
 
     return (
@@ -26,12 +18,12 @@ const PatientOverwiev = () => {
             <div className='w-full h-[49%] flex justify-evenly items-center'>
                 <div className='w-[42%] h-[96%] p-3 pl-0 bg-white rounded-xl shadow-md flex'>
                     <div className='border-r w-[45%] h-full flex flex-col items-center'>
-                        <img src={patient.image} className='w-[90%] h-[70%] rounded-lg object-cover' alt={`${patient.name} ${patient.surname}`} />
-                        <p className='py-3 text-xl font-semibold text-gray-700'>{patient.name} {patient.surname}</p>
+                        <img src={patient.patient_image} className='w-[90%] h-[70%] rounded-lg object-cover' alt={`${patient.first_name} ${patient.last_name}`} />
+                        <p className='py-3 text-xl font-semibold text-gray-700'>{patient.first_name} {patient.last_name}</p>
                         <div className='flex w-full justify-evenly mt-1'>
                             <div className='flex flex-col items-center gap-1'>
                                 <span className='text-gray-500'>{t("birth_date")}</span>
-                                <span className='font-semibold text-gray-700'>{patient.birthDate}</span>
+                                <span className='font-semibold text-gray-700'>{patient.date_of_birth}</span>
                             </div>
                             <div className='flex flex-col items-center gap-1'>
                                 <span className='text-gray-500'>{t("age")}</span>
@@ -42,15 +34,15 @@ const PatientOverwiev = () => {
                     <div className='w-[55%] h-full flex flex-col gap-5 justify-evenly items-center'>
                         <div className='flex flex-col gap-1 items-center'>
                             <p className='text-lg text-gray-500'>{t("patient_code")}</p>
-                            <p className='font-semibold text-lg text-gray-700'>{patient.patientCode || '-'}</p>
+                            <p className='font-semibold text-lg text-gray-700'>{patient.patient_number || '-'}</p>
                         </div>
                         <div className='flex flex-col gap-1 items-center'>
                             <p className='text-lg text-gray-500'>{t("tc_passport_number")}</p>
-                            <p className='font-semibold text-lg text-gray-700'>{patient.tc || patient.pasaportNo}</p>
+                            <p className='font-semibold text-lg text-gray-700'>{patient.national_id}</p>
                         </div>
                         <div className='flex flex-col gap-1 items-center'>
                             <p className='text-lg text-gray-500'>{t("birth_place")}</p>
-                            <p className='font-semibold text-lg text-gray-700'>{patient.birthPlace}</p>
+                            <p className='font-semibold text-lg text-gray-700'>{patient.place_of_birth}</p>
                         </div>
                         <div className='flex flex-col gap-1 items-center'>
                             <p className='text-lg text-gray-500'>{t("gender_nationality")}</p>
@@ -58,7 +50,7 @@ const PatientOverwiev = () => {
                         </div>
                         <div className='flex flex-col gap-1 items-center'>
                             <p className='text-lg text-gray-500'>{t("mother_father_name")}</p>
-                            <p className='font-semibold text-lg text-gray-700'>{patient.motherName} / {patient.fatherName}</p>
+                            <p className='font-semibold text-lg text-gray-700'>{patient.mother_name} / {patient.father_name}</p>
                         </div>
                     </div>
                 </div>
@@ -67,17 +59,17 @@ const PatientOverwiev = () => {
                         <div className='flex gap-2'>
                             <div className='flex flex-col items-center justify-center w-[50%]'>
                                 <p className='text-gray-500 font-semibold'>{t("phone_1")}</p>
-                                <p className='text-gray-700 font-semibold text-lg'>{patient.contact}</p>
+                                <p className='text-gray-700 font-semibold text-lg'>{patient.mobile_phone1}</p>
                             </div>
                             <div className='flex flex-col items-center justify-center w-[50%]'>
                                 <p className='text-gray-500 font-semibold'>{t("instagram")}</p>
-                                <p className='text-gray-700 font-semibold text-lg'>{patient.instagramName}</p>
+                                <p className='text-gray-700 font-semibold text-lg'>{patient.instagram_username}</p>
                             </div>
                         </div>
                         <div className='flex gap-2'>
                             <div className='flex flex-col items-center justify-center w-[50%]'>
                                 <p className='text-gray-500 font-semibold'>{t("phone_2")}</p>
-                                <p className='text-gray-700 font-semibold text-lg'>{patient.phone2}</p>
+                                <p className='text-gray-700 font-semibold text-lg'>{patient.mobile_phone2}</p>
                             </div>
                             <div className='flex flex-col items-center justify-center w-[50%]'>
                                 <p className='text-gray-500 font-semibold'>{t("email")}</p>
@@ -93,7 +85,7 @@ const PatientOverwiev = () => {
                             </div>
                             <div className='flex flex-col justify-center items-center w-[50%] gap-1'>
                                 <p className='text-gray-500 font-semibold'>{t("city")}</p>
-                                <p className='text-gray-700 text-sm font-semibold'>{patient.location}</p>
+                                <p className='text-gray-700 text-sm font-semibold'>{patient.city}</p>
                             </div>
                         </div>
                         <div className='flex justify-between items-center'>
@@ -153,19 +145,19 @@ const PatientOverwiev = () => {
                         <div className='w-[45%] flex flex-col items-center border-r pr-5 gap-5'>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("patient_type")}</p>
-                                <p className='text-gray-700 font-semibold text-lg text-center'>{patient.patientType}</p>
+                                <p className='text-gray-700 font-semibold text-lg text-center'>{patient.patient_type}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("marital_status")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.maritalStatus}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.marital_status}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("has_given_birth")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.childrenCount > 0 ? t("yes") : t("no")}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.children_count > 0 ? t("yes") : t("no")}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("current_diseases")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.currentDiseases || t("none")}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.existing_conditions || t("none")}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("medications")}</p>
@@ -179,27 +171,27 @@ const PatientOverwiev = () => {
                         <div className='w-[45%] pl-5 flex flex-col items-center gap-5'>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("referral")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.referral || '-'}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.referee || '-'}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("profession")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.profession || '-'}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.occupation || '-'}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("workplace")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.workplace || '-'}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.current_employer || '-'}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("procedure")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.procedure || '-'}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.applied_operation || '-'}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("smokes")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.smoke ? t("yes") : t("no")}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.smoker ? t("yes") : t("no")}</p>
                             </div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("operations")}</p>
-                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.operations || '-'}</p>
+                                <p className='text-gray-700 font-semibold w-full text-center'>{patient.past_surgeries || '-'}</p>
                             </div>
                         </div>
                     </div>

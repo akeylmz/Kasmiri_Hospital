@@ -42,13 +42,13 @@ function App() {
             { path : ":patientId", 
               element: <PatientDetail />,
               children: [
-                { path: "overwiev", element: <PatientOverwiev /> },
+                { path: "overview", element: <PatientOverwiev /> },
                 { path: "other", element: <PatientOther /> },
                 { path: "IDinformation", element: <PatientIDInformation /> },
                 { path: "sessionInformation", element: <PatientSenssion /> },
                 { path: "files", element: <PatientFiles /> },
                 { path: "bill", element: <PatientBill /> },
-                { index: true, element: <Navigate to="overwiev" replace /> }
+                { index: true, element: <Navigate to="overview" replace /> }
               ]
             },
             
