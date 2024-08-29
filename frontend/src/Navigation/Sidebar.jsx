@@ -14,8 +14,11 @@ export default function Sidebar({ children, setExpanded, expanded }) {
   return (
     <aside className={`h-screen transition-all`}>
       <nav className="h-full flex flex-col bg-cyan-600 border-r border-cyan-600 shadow-sm">
-        <div className="p-4 pb-2 flex justify-between items-center border-b border-neutral-200">
-          <p className="font-semibold text-xl text-white">TAŞ CRM</p>
+        <div className="p-4 pb-2 flex justify-between items-center border-b border-neutral-200  " >
+          <p className={`font-semibold text-xl text-white ${
+              expanded ? "visible" : "hidden"
+            }`}>
+            TAŞ CRM</p>
           {/* <img
             src="https://img.logoipsum.com/243.svg"
             className={`overflow-hidden transition-all ${
@@ -105,10 +108,11 @@ export function SidebarItem({ icon, text, active, alert, path }) {
       {!expanded && (
         <div
           className={`
-          absolute left-full rounded-md px-2 py-1 ml-6
-          bg-cyan-600 text-white text-sm
+          absolute left-full rounded-md px-3 py-2 ml-6
+          bg-cyan-600 text-white 
           invisible opacity-20 -translate-x-3 transition-all
           group-hover:visible group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap
+          z-50
       `}
         >
           {text}
