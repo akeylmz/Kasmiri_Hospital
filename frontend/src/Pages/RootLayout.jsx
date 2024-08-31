@@ -33,7 +33,7 @@ const RootLayout = () => {
             !expanded ? "!w-16" : ""
         }`}>
             <Sidebar expanded={expanded} setExpanded={setExpanded}>
-            <SidebarItem icon={<MessageSquareMore size={20} />} text={"Lead"} active={location.pathname === "/"} path={"/"} />
+            <SidebarItem icon={<MessageSquareMore size={20} />} text={"Lead"} active={location.pathname === "/lead"} path={"/lead"} />
                 <SidebarItem icon={<Users size={20} />} text={t("patients")} active={location.pathname === "/patients"} path={"/patients"} />
                 <SidebarItem icon={<CalendarDays size={20} />} text={t('calendar')} active={location.pathname === "/calendar"} path={"/calendar"} />
                 <SidebarItem icon={<Package2 size={20} />} text={t('stock')} active={location.pathname === "/stock"} path={"/stock"} />

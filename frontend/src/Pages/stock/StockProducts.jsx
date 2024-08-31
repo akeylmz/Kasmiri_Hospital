@@ -162,7 +162,8 @@ const StockProducts = () => {
             row.actions
             ])}
             searchable={true}
-            tableTitle= {"ÜRÜNLER"}            
+            tableTitle= {"ÜRÜNLER"} 
+            modal={'product'}           
         />
     </motion.div>
   )

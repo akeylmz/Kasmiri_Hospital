@@ -26,6 +26,9 @@ import FileUpload from './FileUpload'
 import StockWarehouse from './pages/stock/StockWarehouse'
 import StockOrder from './pages/stock/StockOrder'
 import Calender from './pages/calendar/Calender'
+import { Inbox } from 'lucide-react'
+import Chat from './components/lead/Chat'
+import InboxLayout from './components/lead/InboxLayout'
 
 function App() {  
 
@@ -39,6 +42,7 @@ function App() {
           element : <PatientLayout /> ,
           children : [
             { path: "/patients", element: <Patients /> },
+           
             { path : ":patientId", 
               element: <PatientDetail />,
               children: [
@@ -52,6 +56,15 @@ function App() {
               ]
             },
             
+          ]
+        },
+        { 
+          path: "/lead", 
+          element: <InboxLayout />,
+          children: [
+            { path: "/lead", element: <Inbox /> },
+            { path: ":chatId", element: <Chat /> },
+            { index: true, element: <Chat to=":chatId" replace /> }
           ]
         },
         { path: "/stock",

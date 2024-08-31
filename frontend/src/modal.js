@@ -1,5 +1,6 @@
 
 import PatientAddModal from "./components/modals/PatientAddModal";
+import ProductAddModal from "./components/modals/ProductAddModal";
 import StockAddModal from "./components/modals/StockAddModal";
 
 const modals = [
@@ -10,6 +11,10 @@ const modals = [
     {
         name: "stock",
         element: StockAddModal
+    },
+    {
+        name: "product",
+        element: ProductAddModal
     }
 ]
 
