@@ -9,7 +9,7 @@ const StockLayout = () => {
         { label: 'ÜRÜNLER', active: false, url: 'products' },
         { label: 'DEPOLAR', active: false, url: 'warehouse' },
         { label: 'SİPARİŞLER', active: false, url: 'orders' },
-        { label: 'İSTATİSTİK', active: false, url: '' },       
+        { label: 'İSTATİSTİK', active: false, url: 'statistics' },       
       ];
 
   return (

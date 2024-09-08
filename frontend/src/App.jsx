@@ -29,6 +29,7 @@ import Calender from './pages/calendar/Calender'
 import { Inbox } from 'lucide-react'
 import Chat from './components/lead/Chat'
 import InboxLayout from './components/lead/InboxLayout'
+import StockStatistics from './pages/stock/StockStatistics'
 
 function App() {  
 
@@ -74,6 +75,7 @@ function App() {
             { path: "products", element: <StockProducts />},
             { path: "warehouse", element: <StockWarehouse />},
             { path: "orders", element: <StockOrder />},
+            { path: "statistics", element: <StockStatistics />},
             { index: true, element: <Navigate to="overwiev" replace /> }
           ]
         },

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { createModal } from '../components/Utils/Modal';
 import { t } from 'i18next';
 
-const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail }) => {
+const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState({});
   const [search, setSearch] = useState('');
@@ -69,7 +69,7 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail }) => {
           {/* Masaüstü (Desktop) Görünüm */}
           <div className="overflow-auto h-full w-full">
             <table className='w-full max-h-full border-collapse table-fixed'>
-              <thead>
+              <thead className='sticky top-0 bg-white'>
                 <tr>
                   {thead.map((h, key) => (
                     <th
@@ -192,7 +192,7 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail }) => {
           </div>
         </div>
 
-        <div className="w-full flex justify-between items-center mt-4">
+        {page && <div className="w-full flex justify-between items-center mt-4">
           <div></div>
           <div className="flex space-x-2">
             <button className="bg-cyan-500 text-white px-3 py-1 rounded-md shadow text-xs">1</button>
@@ -204,6 +204,7 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail }) => {
             <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">7</button>
           </div>
         </div>
+        }
       </div>
     </div>
   );
