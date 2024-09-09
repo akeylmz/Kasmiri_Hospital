@@ -90,14 +90,17 @@ const tbody2 = [
             />
 
             </div>
-            <div className='w-[49%] h-[97%] bg-slate-200 rounded-3xl'>
-                <ResponsiveContainer width="100%" height="100%">
+            <div className='w-[49%] h-[97%] bg-white rounded-3xl'>
+              <div className='w-full h-[10%]'>
+                  <p className='text-xl font-semibold ml-3 p-5 text-[#038ea7]'>AYIN KAR/ZARAR ANALİZİ</p>
+              </div>
+                <ResponsiveContainer width="100%" height="90%">
                   <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis  shape={false} />
-                    <Tooltip />
-                    <Bar dataKey="alinan" fill="#07b6d5" radius={[20, 20, 0, 0]} name="Alınan Adet" />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="name" tickLine={false} axisLine={false} />
+                    <YAxis tickLine={false} axisLine={false}  />
+                    <Tooltip content={ <CustomTooltip /> } />
+                    <Bar dataKey="alinan" fill="#07b6d5" radius={[20, 20, 0, 0]} name="Alınan Adet" shape={<CustomBar />} />
                   </BarChart>
                 </ResponsiveContainer>
             </div>
@@ -121,5 +124,59 @@ const tbody2 = [
     </div>
   );
 }
+
+function CustomTooltip ({active, payload, label}){
+  if (active) {
+    console.log(payload);
+    const { alinan, satilan, stokta } = payload[0].payload;
+    return(
+      <div className='bg-[#17a5c8] rounded-2xl  p-5 drop-shadow-lg'>
+        <h4 className='text-white mb-2 text-lg font-semibold'>{label}</h4>
+        <div className=' flex gap-x-4'>
+          <div className='bg-white py-2 px-4 rounded-2xl'>
+            <p className='font-semibold text-sm text-center'>ALINDI</p>
+            <p className='text-2xl font-semibold text-[#17b2c8] text-center'>{alinan}</p>
+            <p className='font-semibold text-sm text-center'>ADET</p>
+          </div>
+          <div className='bg-white py-2 px-4 rounded-2xl text-center'>
+            <p className='font-semibold text-sm text-center'>SATILDI</p>
+            <p className='text-2xl font-semibold text-[#17b2c8] text-center'>{satilan}</p>
+            <p className='font-semibold text-sm text-center'>ADET</p>
+          </div>
+          <div className='bg-white py-2 px-4 rounded-2xl'>
+            <p className='font-semibold text-sm text-center'>STOKTA</p>
+            <p className='text-2xl font-semibold text-[#17b2c8] text-center'>{stokta}</p>
+            <p className='font-semibold text-sm text-center'>ADET</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  return null
+}
+
+const CustomBar = (props) => {
+  const { x, y, width, height, fill, satilan, alinan } = props;
+
+  const satilanHeight = (satilan / alinan) * height; 
+  const satilanPercentage = ((satilan / alinan) * 100).toFixed(1);
+
+  return (
+    <g>
+    <rect x={x} y={y} width={width} height={height} fill="#d3d3d3" rx="10" ry="10" />    
+    <rect x={x} y={y + height - satilanHeight} width={width} height={satilanHeight} fill={fill} />    
+    <text    
+      style={{ fontSize: '22px', fontWeight: '600', fill: '#fff' }}
+      x={x + width / 2} 
+      y={y + height / 2} 
+      textAnchor="middle"
+      dominantBaseline="middle"
+      transform={`rotate(-90, ${x + width / 2}, ${y + height / 2})`} 
+    >
+      {satilanPercentage} %
+    </text>
+  </g>
+  );
+};
 
 export default StockStatistics;
