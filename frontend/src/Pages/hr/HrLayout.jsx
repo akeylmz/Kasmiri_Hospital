@@ -10,7 +10,14 @@ const HrLayout = () => {
             { label: 'İzin Yönetimi', active: true, url: 'leave-management' },
             { label: 'Çalışma Saatleri', active: false, url: 'working-hours' },
         ] },
-        { label: 'İŞE ALIM', active: false, url: 'recruitment' },       
+        { label: 'İŞE ALIM', active: false, url: 'recruitment' },   
+        { label: 'KPI', active: false, url: 'KPI-personnel',submenu: [
+            { label: 'Çalışan', active: true, url: 'KPI-personnel' },
+            { label: 'Yönetim', active: false, url: 'KPI-management' },
+            { label: 'Kontrol Listesi', active: false, url: 'KPI-checklist' },
+            { label: 'Görevler', active: false, url: 'KPI-quests' },
+            { label: 'Detay', active: false, url: 'KPI-detail' },
+        ] },    
       ];
 
   return (

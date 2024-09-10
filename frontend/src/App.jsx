@@ -30,6 +30,11 @@ import { Inbox } from 'lucide-react'
 import Chat from './components/lead/Chat'
 import InboxLayout from './components/lead/InboxLayout'
 import StockStatistics from './pages/stock/StockStatistics'
+import HrSummaryFile from './pages/hr/HrSummaryFile'
+import HrManagement from './pages/hr/HrManagement'
+import HrChecklist from './pages/hr/HrChecklist'
+import HrQuests from './pages/hr/HrQuests'
+import HrDetail from './pages/hr/HrDetail'
 
 function App() {  
 
@@ -87,6 +92,11 @@ function App() {
             { path: "working-hours", element: <HrWorkingHours />},
             { path: "leave-management", element: <HrLeaveManagement />},
             { path: "recruitment", element: <HrRecruitment />},
+            { path: "KPI-personnel", element: <HrSummaryFile />},
+            { path: "KPI-management", element: <HrManagement />},
+            { path: "KPI-checklist", element: <HrChecklist />},
+            { path: "KPI-quests", element: <HrQuests />},
+            { path: "KPI-detail", element: <HrDetail />},
             { index: true, element: <Navigate to="hierarchy" replace /> }
           ]
         },
