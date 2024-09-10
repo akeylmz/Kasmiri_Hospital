@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createModal } from '../components/Utils/Modal';
 import { t } from 'i18next';
+import { TiArrowBack } from "react-icons/ti";
 
-const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page }) => {
+const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, backButton }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState({});
   const [search, setSearch] = useState('');
@@ -29,9 +30,10 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page }
   return (
     <div className='w-full h-full flex flex-col bg-gray-200 rounded-xl'>
       <div className='w-full h-full p-6 bg-white shadow-lg rounded-xl flex flex-col relative'>
-        <div className='flex justify-between items-center mb-4'>
-          <h2 className='text-xl font-semibold text-cyan-600'>{tableTitle}</h2>
-          <div className='flex space-x-3'>
+        <div className='flex  items-center mb-4'>
+          {backButton && <button onClick={()=> navigate("/human-resources/KPI-management")}  className='border-2 border-cyan-600 rounded-full'><TiArrowBack size={35} color='#0891b2' /></button>}
+          <h2 className='text-xl ml-4 font-semibold text-cyan-600'>{tableTitle}</h2>
+          <div className='flex space-x-3 ml-auto'>
             <button 
               className="p-2 rounded-full bg-transparent text-gray-400 hover:text-gray-500">
               <FolderGit2 className="w-4 h-4" />

@@ -1,7 +1,10 @@
 import React from 'react'
 import TableComp from '../../UI/TableComp';
+import { useNavigate } from 'react-router-dom';
 
 const HrQuests = () => {
+
+  const navigate = useNavigate()
 
   const thead = [
     { name: 'Görev Yeri', sortable: true },
@@ -16,7 +19,9 @@ const HrQuests = () => {
       stock: 'Seçkin SEYMEN, Arslan ŞAHİN, Busenaz Ekici',
       expiryDate: 'Pzt. - Pz.',
       actions: (
-        <button key="details-1" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button
+        onClick={()=> navigate("/KPI-personnel")}
+         key="details-1" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -26,7 +31,7 @@ const HrQuests = () => {
       stock: 'Seçkin SEYMEN, Busenaz Ekici',
       expiryDate: 'Pzt. - Cmts.',
       actions: (
-        <button key="details-2" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-2" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -36,7 +41,7 @@ const HrQuests = () => {
       stock: 'Arslan Şahin, Sude KAZAN',
       expiryDate: 'Pzt. - Cmts.',
       actions: (
-        <button key="details-3" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-3" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -46,7 +51,7 @@ const HrQuests = () => {
       stock: 'Adem AKSU, İdil AKSU',
       expiryDate: 'Pzts. - Cmts.',
       actions: (
-        <button key="details-4" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-4" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -56,7 +61,7 @@ const HrQuests = () => {
       stock: 'Hatice ŞAHİN, Öznur BİLGEÇ',
       expiryDate: 'Pzts. - Cum.',
       actions: (
-        <button key="details-5" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-5" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -66,7 +71,7 @@ const HrQuests = () => {
       stock: 'Hakkı T.SALİM, Hüseyin TABURCU',
       expiryDate: 'Pzts. - Pz.',
       actions: (
-        <button key="details-6" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-6" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -76,7 +81,7 @@ const HrQuests = () => {
       stock: 'Seçkin SEYMEN, Hatice SEVİLEN',
       expiryDate: ' Pzts. - Cmts.',
       actions: (
-        <button key="details-7" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-7" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -86,7 +91,7 @@ const HrQuests = () => {
       stock: 'Selim KAYMAKÇI, Sevgin BİÇİCİ',
       expiryDate: 'Pzts. - Cum.',
       actions: (
-        <button key="details-8" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-8" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -96,7 +101,7 @@ const HrQuests = () => {
       stock: 'Halime ŞAHİN',
       expiryDate: 'Pzts. - Cmts.',
       actions: (
-        <button key="details-9" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-9" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -106,7 +111,7 @@ const HrQuests = () => {
       stock: 'Seçkin SEYMEN, Arslan ŞAHİN',
       expiryDate: 'Pzts. - Pz.',
       actions: (
-        <button key="details-10" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-10" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -116,7 +121,7 @@ const HrQuests = () => {
       stock: 'Tuğçe TANEM, Arslan ŞAHİN',
       expiryDate: 'Sal. - Cmts.',
       actions: (
-        <button key="details-11" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+        <button onClick={()=> navigate("/KPI-personnel")} key="details-11" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
           &gt;
         </button>
       )
@@ -125,6 +130,7 @@ const HrQuests = () => {
   
   return (
     <div>
+      
     <TableComp
             thead={thead}
             tbody={tbody.map(row => [

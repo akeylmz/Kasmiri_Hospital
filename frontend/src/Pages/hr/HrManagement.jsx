@@ -1,25 +1,46 @@
 import React from 'react'
 import TableComp from '../../UI/TableComp';
+import { useNavigate } from 'react-router-dom';
 
 const HrManagement = () => {
 
+   const navigate = useNavigate()
+
     const tableData = [
         {
-          gorevYeri: 'Vezne - Hasta Karşılama',
+          gorevYeri: (
+            <button              
+              onClick={() => navigate("/KPI-checklist")}
+            >
+              Vezne - Hasta Karşılama
+            </button>
+          ),
           yoneticiler: ['Seçkin SEYMEN', 'Arslan ŞAHİN', 'Busenaz EKİCİ'],
           mesaiHaftasi: 'Pzts. - Pz.',
           sonKontrol: 'Seçkin SEYMEN',
           kontrolDurumu: 'Kontrol Edilmedi',
         },
         {
-          gorevYeri: 'Ameliyathane Hemşiresi',
+          gorevYeri: (
+            <button              
+              onClick={() => navigate("/KPI-checklist")}
+            >
+              Ameliyathane Hemşiresi
+            </button>
+          ),
           yoneticiler: ['Arslan ŞAHİN', 'Sude KAZAN'],
           mesaiHaftasi: 'Pzts. - Cmts.',
           sonKontrol: 'Arslan ŞAHİN',
           kontrolDurumu: '9 Eylül 19:41',
         },
         {
-          gorevYeri: 'Hasta Bakımı',
+          gorevYeri: (
+            <button              
+              onClick={() => navigate("/KPI-checklist")}
+            >
+              Hasta Bakımı
+            </button>
+          ),
           yoneticiler: ['Elif DOĞAN', 'Ali KAYA'],
           mesaiHaftasi: 'Salı - Pazar',
           sonKontrol: 'Elif DOĞAN',
@@ -67,8 +88,6 @@ const HrManagement = () => {
   ])}
   searchable={true}
   tableTitle="Görev Kontrol"
-  modal={'newTaskModal'}
-  detail={4}
 />
     </div>
   )

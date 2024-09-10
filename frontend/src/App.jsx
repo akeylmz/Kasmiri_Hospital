@@ -84,6 +84,8 @@ function App() {
             { index: true, element: <Navigate to="overwiev" replace /> }
           ]
         },
+        { path: "KPI-personnel", element: <HrSummaryFile />},
+        { path: "KPI-checklist", element: <HrChecklist />},
         { path: "/human-resources",
           element: <HrLayout />,
           children: [
@@ -91,10 +93,9 @@ function App() {
             { path: "personnel", element: <HrPersonnel />},
             { path: "working-hours", element: <HrWorkingHours />},
             { path: "leave-management", element: <HrLeaveManagement />},
-            { path: "recruitment", element: <HrRecruitment />},
-            { path: "KPI-personnel", element: <HrSummaryFile />},
+            { path: "recruitment", element: <HrRecruitment />},            
             { path: "KPI-management", element: <HrManagement />},
-            { path: "KPI-checklist", element: <HrChecklist />},
+            
             { path: "KPI-quests", element: <HrQuests />},
             { path: "KPI-detail", element: <HrDetail />},
             { index: true, element: <Navigate to="hierarchy" replace /> }

@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { IoChevronBack } from 'react-icons/io5';
+import { TiArrowBack } from "react-icons/ti";
+import { useNavigate } from 'react-router-dom';
 
 const HrSummaryFile = () => {
   // Accordion için her sekmenin açık mı kapalı mı olduğunu kontrol eden state'ler
@@ -23,8 +26,19 @@ const HrSummaryFile = () => {
   const toggleMilitary = () => setIsMilitaryOpen(!isMilitaryOpen);
   const toggleWork = () => setIsWorkOpen(!isWorkOpen);
 
+  const navigate = useNavigate();
+
   return (
     <div className="p-5 h-full overflow-scroll">
+      <div className='w-full h-[100px] py-3 '>          
+          <div className='bg-cyan-600 p-3 rounded-2xl flex items-center'>
+          <button onClick={()=> navigate("/human-resources/KPI-quests")}  className='border-2 border-white rounded-full' ><TiArrowBack size={35} color='white' /></button>
+            <div className='pl-4'>
+              <p className='text-white ml-4 text-lg font-semibold'>DİDEM TAŞ</p>
+              <p className='text-white ml-6 '>Muhasebe</p>
+            </div>
+          </div>
+      </div>
       {/* Genel Bilgiler */}
       <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl">
         <button 
