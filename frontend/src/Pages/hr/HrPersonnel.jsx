@@ -98,6 +98,7 @@ const HrPersonnel = () => {
         animate={{opacity:1}}
         className='w-full h-full flex flex-col items-center justify-evenly'
     >
+      
         <TableComp
             thead={thead}
             tbody={tbody.map(row => [
