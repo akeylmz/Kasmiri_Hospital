@@ -81,8 +81,13 @@ class PatientCard(models.Model):
 
 class Stock(models.Model):
     stock_name = models.CharField(max_length=100, blank=True, null=True)
-    stock_number = models.IntegerField(default=0)
-    stock_image = models.ImageField(upload_to='images/stock_images/')
+    stock_buyed = models.IntegerField(default=0)
+    stock_haved = models.IntegerField(default=0)
+    stock_ut = models.DateField(blank=True, null=True)
+    stock_skt = models.DateField(blank=True, null=True)
+    stock_wharehouse = models.CharField(max_length=100, blank=True, null=True)
+    stock_pozition = models.CharField(max_length=100, blank=True, null=True)
+    stcok_group = models.CharField(max_length=100, blank=True, null=True)
     def __str__(self):
         return f"{self.stock_name}"
 

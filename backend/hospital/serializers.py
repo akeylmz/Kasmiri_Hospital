@@ -167,8 +167,13 @@ class StockSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         # Mevcut Stock kaydını güncelle
         instance.stock_name = validated_data.get('stock_name', instance.stock_name)
-        instance.stock_number = validated_data.get('stock_number', instance.stock_number)
-        instance.stock_image = validated_data.get('stock_image', instance.stock_image)
+        instance.stock_buyed = validated_data.get('stock_buyed', instance.stock_buyed)
+        instance.stock_haved = validated_data.get('stock_haved', instance.stock_haved)
+        instance.stock_ut = validated_data.get('stock_ut', instance.stock_ut)
+        instance.stock_skt = validated_data.get('stock_skt', instance.stock_skt)
+        instance.stock_wharehouse = validated_data.get('stock_wharehouse', instance.stock_wharehouse)
+        instance.stock_pozition = validated_data.get('stock_pozition', instance.stock_pozition)
+        instance.stcok_group = validated_data.get('stcok_group', instance.stcok_group)
 
         instance.save()
         return instance
