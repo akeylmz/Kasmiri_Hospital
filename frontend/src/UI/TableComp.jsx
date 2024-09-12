@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import { createModal } from '../components/Utils/Modal';
 import { t } from 'i18next';
 import { TiArrowBack } from "react-icons/ti";
+import { FaSortAmountDown } from "react-icons/fa";
 
-const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, backButton }) => {
+const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, backButton, billing }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState({});
   const [search, setSearch] = useState('');
@@ -34,6 +35,11 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, 
           {backButton && <button onClick={()=> navigate("/human-resources/KPI-management")}  className='border-2 border-cyan-600 rounded-full'><TiArrowBack size={35} color='#0891b2' /></button>}
           <h2 className='text-xl ml-4 font-semibold text-cyan-600'>{tableTitle}</h2>
           <div className='flex space-x-3 ml-auto'>
+            {billing && <div className='flex gap-x-5 mr-20'>
+                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />Tutara Göre</button>
+                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />Depertmana Göre</button>
+                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />Tarihe Göre</button>
+              </div>}
             <button 
               className="p-2 rounded-full bg-transparent text-gray-400 hover:text-gray-500">
               <FolderGit2 className="w-4 h-4" />

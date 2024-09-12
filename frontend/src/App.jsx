@@ -35,6 +35,7 @@ import HrManagement from './pages/hr/HrManagement'
 import HrChecklist from './pages/hr/HrChecklist'
 import HrQuests from './pages/hr/HrQuests'
 import HrDetail from './pages/hr/HrDetail'
+import Billing from './pages/billing/Billing'
 
 function App() {  
 
@@ -101,6 +102,7 @@ function App() {
             { index: true, element: <Navigate to="hierarchy" replace /> }
           ]
         },
+        { path: "billing", element: <Billing />},
         
       ]
     }
