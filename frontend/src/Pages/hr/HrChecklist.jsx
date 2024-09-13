@@ -20,7 +20,7 @@ const HrChecklist = () => {
         ["Mesai Sonu", "18:30", "18:00", <input placeholder='Saat Giriniz' type="text" className="outline-none py-3 border border-gray-400 rounded-2xl px-2 w-[50%]" />, "", "", ""],
       ];
   return (
-    <div className='w-full h-full'>
+    <div className='w-full h-full p-4'>
         <TableComp
             thead={thead}
             tbody={tbody}
