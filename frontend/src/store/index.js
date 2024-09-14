@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import patient from "./patient";
 import modal from "./modal";
-import CalendarSlice from "./CalendarSlice";
+import CalendarSlice from "./calendarSlice";
 
 
 const store = configureStore({

@@ -13,12 +13,12 @@ const PatientDetail = () => {
   const dispatch = useDispatch();
   const {patientId} = useParams()
   const  { patients } = useSelector( state => state.patient)
-  const { data: patient, error } = useSWR(`http://127.0.0.1:8000/api/patientcard/${patientId}/`, fetcher);
+  // const { data: patient, error } = useSWR(`http://127.0.0.1:8000/api/patientcard/${patientId}/`, fetcher);
 
     console.log("---");
-    console.log(patient);
+    //console.log(patient);
     console.log("---");
-
+    const patient = patients[0]
     useEffect(() => {
       if (patient) {
           dispatch(setPatientt(patient)); 
@@ -27,8 +27,8 @@ const PatientDetail = () => {
     
 
 
-    if (error) return <div>Failed to load patient information</div>;
-    if (!patient) return <div>Loading...</div>;
+    // if (error) return <div>Failed to load patient information</div>;
+    // if (!patient) return <div>Loading...</div>;
   return (
     <>
       <SubSideBar patient={patient}/>

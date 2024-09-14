@@ -34,7 +34,7 @@ const HrSummaryFile = () => {
           <div className='bg-cyan-600 p-3 rounded-2xl flex items-center'>
           <button onClick={()=> navigate("/human-resources/KPI-quests")}  className='border-2 border-white rounded-full' ><TiArrowBack size={35} color='white' /></button>
             <div className='pl-4'>
-              <p className='text-white ml-4 text-lg font-semibold'>DİDEM TAŞ</p>
+              <p className='text-white ml-4 text-lg font-semibold'>MEHMET ENES DOĞAN</p>
               <p className='text-white ml-6 '>Muhasebe</p>
             </div>
           </div>
@@ -59,8 +59,8 @@ const HrSummaryFile = () => {
                     <img className='rounded-full w-[150px] h-[150px]' src="/img/profile1.jpg" alt="" />
                     <div className='flex flex-col gap-y-3'>
                         <div className=' flex flex-col gap-y-1'>
-                            <p className='text-sm text-gray-500 font-semibold'>#D.TAS</p>
-                            <p className='text-xl font-semibold '>Didem TAŞ</p>
+                            <p className='text-sm text-gray-500 font-semibold'>#M.DGN</p>
+                            <p className='text-xl font-semibold '>Mehmet Enes DOĞAN</p>
                             <p className='text-xs text-gray-500'>VKS DANIŞMALIK - NİLÜFER ŞUBESİ</p>
                             <p className='text-cyan-500 font-semibold'>RADYOLOJİ - <span className='text-gray-400'>RAPORTÖR</span></p>
                         </div>

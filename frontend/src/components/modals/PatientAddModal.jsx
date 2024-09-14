@@ -128,27 +128,27 @@ const PatientAddModal = () => {
     formDataObj.append('post_surgery_address', formData.post_surgery_address);
 
     try {
-        // FormData ile POST isteği gönder
-        const response = await fetch(url, {
-            method: 'POST',
-            body: formDataObj,
-        });
+        // // FormData ile POST isteği gönder
+        // const response = await fetch(url, {
+        //     method: 'POST',
+        //     body: formDataObj,
+        // });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('API Hatası:', errorData);
-            throw new Error('API isteği başarısız oldu');
-        }
+        // if (!response.ok) {
+        //     const errorData = await response.json();
+        //     console.error('API Hatası:', errorData);
+        //     throw new Error('API isteği başarısız oldu');
+        // }
 
-        const newPatient = await response.json();
+        // const newPatient = await response.json();
 
-        // SWR cache'ini güncelle
-        mutate(url, (currentPatients) => {
-            return [newPatient, ...currentPatients];
-        }, false);
+        // // SWR cache'ini güncelle
+        // mutate(url, (currentPatients) => {
+        //     return [newPatient, ...currentPatients];
+        // }, false);
 
-        // Redux store'a yeni hastayı ekle
-        dispatch(addPatient(newPatient));
+        // // Redux store'a yeni hastayı ekle
+        // dispatch(addPatient(newPatient));
 
         // Modal'ı kapat
         destroyModal();

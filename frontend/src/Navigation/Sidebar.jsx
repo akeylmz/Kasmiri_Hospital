@@ -55,8 +55,8 @@ export default function Sidebar({ children, setExpanded, expanded }) {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold text-white">John Doe</h4>
-              <span className="text-xs text-gray-200">johndoe@gmail.com</span>
+              <h4 className="font-semibold text-white">Süleyman TAŞ</h4>
+              <span className="text-xs text-gray-200">s.tas@gmail.com</span>
             </div>
             <MoreVertical size={20} color="white" />
           </div>

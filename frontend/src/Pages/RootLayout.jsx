@@ -37,11 +37,11 @@ const RootLayout = () => {
                 <SidebarItem icon={<Users size={20} />} text={t("patients")} active={location.pathname === "/patients"} path={"/patients"} />
                 <SidebarItem icon={<CalendarDays size={20} />} text={t('calendar')} active={location.pathname === "/calendar"} path={"/calendar"} />
                 <SidebarItem icon={<Package2 size={20} />} text={t('stock')} active={location.pathname === "/stock"} path={"/stock"} />
-                <SidebarItem icon={<HeartPulse size={20} />} text={"E-Nabız"} active={location.pathname === "/enabiz"} />
+                <SidebarItem icon={<HeartPulse size={20} />} text={"E-Nabız"} active={location.pathname === "/enabiz"} path={"/e-nabiz"}/>
                 <SidebarItem icon={<ReceiptText size={20} />} text={t('invoice')} active={location.pathname === "/billing"} path={"/billing"}/>
-                <SidebarItem icon={<FileText size={20} />} text={t('reports')} active={location.pathname === "/reporting"}  />
+                <SidebarItem icon={<FileText size={20} />} text={t('reports')} active={location.pathname === "/reporting"} path={"reporting"} />
                 <SidebarItem icon={<Handshake size={20} />} text={t('HR')} active={location.pathname === "/hr"} path={"/human-resources"} />
-                <SidebarItem icon={<Settings size={20} />} text={t('settings')} active={location.pathname === "/settings"}  />
+                <SidebarItem icon={<Settings size={20} />} text={t('settings')} active={location.pathname === "/settings"} path={"settings"} />
             </Sidebar>
         </div>
        

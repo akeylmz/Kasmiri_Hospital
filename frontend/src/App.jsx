@@ -26,7 +26,7 @@ import FileUpload from './FileUpload'
 import StockWarehouse from './pages/stock/StockWarehouse'
 import StockOrder from './pages/stock/StockOrder'
 import Calender from './pages/calendar/Calender'
-import { Inbox } from 'lucide-react'
+import { Inbox, Settings } from 'lucide-react'
 import Chat from './components/lead/Chat'
 import InboxLayout from './components/lead/InboxLayout'
 import StockStatistics from './pages/stock/StockStatistics'
@@ -36,6 +36,9 @@ import HrChecklist from './pages/hr/HrChecklist'
 import HrQuests from './pages/hr/HrQuests'
 import HrDetail from './pages/hr/HrDetail'
 import Billing from './pages/billing/Billing'
+import ENabiz from './pages/ENabiz'
+import Reports from './pages/Reports'
+import SettingsPage from './pages/SettingsPage'
 
 function App() {  
 
@@ -103,7 +106,9 @@ function App() {
           ]
         },
         { path: "billing", element: <Billing />},
-        
+        { path: "e-nabiz", element: <ENabiz />},
+        { path: "reporting", element: <Reports />},
+        { path: "settings", element: <SettingsPage />},
       ]
     }
   ])

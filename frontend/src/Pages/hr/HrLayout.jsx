@@ -20,7 +20,7 @@ const HrLayout = () => {
   return (
     <div className='flex flex-col w-full h-full items-center justify-evenly bg-slate-100'>
         <div className='w-[95%] h-[14%] flex '>
-            <TopMenu tabs={tabs} submenu={false} />
+            <TopMenu tabs={tabs} submenu={false} basePath={"/human-resources"} />
         </div>
         <div className='w-[95%] h-[82%]'>
             <Outlet />
