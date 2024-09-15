@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setSmallCalendarMonth, setDaySelected, setLabels, updateFilteredEvents } from "../../store/CalendarSlice";
+import { setSmallCalendarMonth, setDaySelected, setLabels, updateFilteredEvents } from "../../store/calendarSlice";
 import dayjs from "dayjs";
 import { getMonth } from "../../util";
 import { useTranslation } from "react-i18next";

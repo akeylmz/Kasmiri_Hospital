@@ -1,7 +1,7 @@
 import React from "react";
 import plusImg from "../../assets/plus.svg";
 import { useDispatch } from "react-redux";
-import { setShowEventModal } from "../../store/CalendarSlice"; // slice yolunuza dikkat edin
+import { setShowEventModal } from "../../store/calendarSlice"; // slice yolunuza dikkat edin
 import { useTranslation } from "react-i18next"; 
 
 export default function CreateEventButton() {

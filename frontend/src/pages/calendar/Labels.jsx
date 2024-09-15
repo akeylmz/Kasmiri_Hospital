@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { updateLabel } from "../../store/CalendarSlice";
+import { updateLabel } from "../../store/calendarSlice";
 import { useTranslation } from "react-i18next";
 
 export default function Labels() {

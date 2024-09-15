@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setDaySelected, setShowEventModal, setSelectedEvent } from "../../store/CalendarSlice";
+import { setDaySelected, setShowEventModal, setSelectedEvent } from "../../store/calendarSlice";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 

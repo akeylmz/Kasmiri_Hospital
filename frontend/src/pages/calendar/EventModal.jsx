@@ -7,7 +7,7 @@ import {
   updateEvent,
   deleteEvent,
   setSelectedEvent,
-} from "../../store/CalendarSlice";
+} from "../../store/calendarSlice";
 import { useTranslation } from "react-i18next";
 
 const labelsClasses = [
