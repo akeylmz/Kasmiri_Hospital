@@ -1,8 +1,11 @@
 import React from 'react'
 import { motion } from 'framer-motion';
 import TableComp from '../../UI/TableComp';
+import { useNavigate } from 'react-router-dom';
 
 const HrPersonnel = () => {
+
+  const navigate = useNavigate()
 
     const tbody = [
         {
@@ -11,7 +14,7 @@ const HrPersonnel = () => {
           contact: '05369863247',
           department: 'Yönetici',
           actions: (
-            <button key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
+            <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
               &gt;
             </button>
           )
@@ -22,7 +25,7 @@ const HrPersonnel = () => {
           contact: '05426987832',
           department: 'Yönetici',
           actions: (
-            <button key="details-2" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
+            <button onClick={()=> navigate("/KPI-personnel")} key="details-2" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
               &gt;
             </button>
           )
@@ -44,7 +47,7 @@ const HrPersonnel = () => {
           contact: '05336547893',
           department: 'Muhasebe',
           actions: (
-            <button key="details-4" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
+            <button onClick={()=> navigate("/KPI-personnel")} key="details-4" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
               &gt;
             </button>
           )
@@ -55,7 +58,7 @@ const HrPersonnel = () => {
           contact: '05465989832',
           department: 'Muhasebe',
           actions: (
-            <button key="details-5" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
+            <button onClick={()=> navigate("/KPI-personnel")} key="details-5" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
               &gt;
             </button>
           )
@@ -66,7 +69,7 @@ const HrPersonnel = () => {
           contact: '05556985478',
           department: 'Pazarlama',
           actions: (
-            <button key="details-6" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
+            <button onClick={()=> navigate("/KPI-personnel")} key="details-6" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
               &gt;
             </button>
           )
@@ -77,7 +80,7 @@ const HrPersonnel = () => {
           contact: '05052587413',
           department: 'Pazarlama',
           actions: (
-            <button key="details-7" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
+            <button onClick={()=> navigate("/KPI-personnel")} key="details-7" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
               &gt;
             </button>
           )
