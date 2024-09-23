@@ -156,6 +156,7 @@ const Billing = () => {
             searchable={true}
             tableTitle= {"FATURA LİSTESİ"}
             billing={true}
+            modal={"invoice-modal"}
         />  
     </motion.div>
   )

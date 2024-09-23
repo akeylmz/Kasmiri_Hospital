@@ -7,6 +7,7 @@ const HrQuests = () => {
   const navigate = useNavigate()
 
   const thead = [
+    { name: 'Görevli', sortable: true },
     { name: 'Görev Yeri', sortable: true },
     { name: 'Yöneticiler', sortable: true },
     { name: 'Mesai Haftası', sortable: true },
@@ -15,6 +16,7 @@ const HrQuests = () => {
 
   const tbody = [
     {
+      name: "Seçkin SEYMEN",
       productName: 'Vezne - Hasta Karşılama',
       stock: 'Seçkin SEYMEN, Arslan ŞAHİN, Busenaz Ekici',
       expiryDate: 'Pzt. - Pz.',
@@ -27,6 +29,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Busenaz EKİCİ",
       productName: 'Ameliyathane Personeli',
       stock: 'Seçkin SEYMEN, Busenaz Ekici',
       expiryDate: 'Pzt. - Cmts.',
@@ -37,6 +40,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Sude KAZAN",
       productName: 'Ameliyathane Hemşiresi',
       stock: 'Arslan Şahin, Sude KAZAN',
       expiryDate: 'Pzt. - Cmts.',
@@ -47,6 +51,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "İdik AKSU",
       productName: 'Anestezi Teknikleri',
       stock: 'Adem AKSU, İdil AKSU',
       expiryDate: 'Pzts. - Cmts.',
@@ -57,6 +62,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Hatice SAHİN",
       productName: 'Güzellik Birimi',
       stock: 'Hatice ŞAHİN, Öznur BİLGEÇ',
       expiryDate: 'Pzts. - Cum.',
@@ -67,6 +73,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Seçkin SEYMEN",
       productName: 'canberk',
       stock: 'Hakkı T.SALİM, Hüseyin TABURCU',
       expiryDate: 'Pzts. - Pz.',
@@ -77,6 +84,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Hatice SEVİLEN",
       productName: 'Temizlik Görevlisi',
       stock: 'Seçkin SEYMEN, Hatice SEVİLEN',
       expiryDate: ' Pzts. - Cmts.',
@@ -87,6 +95,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Seçkin SEYMEN",
       productName: 'Laborant',
       stock: 'Selim KAYMAKÇI, Sevgin BİÇİCİ',
       expiryDate: 'Pzts. - Cum.',
@@ -97,6 +106,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Halime ŞAHİN",
       productName: 'Radyoloji',
       stock: 'Halime ŞAHİN',
       expiryDate: 'Pzts. - Cmts.',
@@ -107,6 +117,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Seçkin SEYMEN",
       productName: 'Öznur',
       stock: 'Seçkin SEYMEN, Arslan ŞAHİN',
       expiryDate: 'Pzts. - Pz.',
@@ -117,6 +128,7 @@ const HrQuests = () => {
       )
     },
     {
+      name: "Arslan ŞAHİN",
       productName: 'Satın Alma',
       stock: 'Tuğçe TANEM, Arslan ŞAHİN',
       expiryDate: 'Sal. - Cmts.',
@@ -134,13 +146,14 @@ const HrQuests = () => {
     <TableComp
             thead={thead}
             tbody={tbody.map(row => [
+            row.name,
             row.productName,
             row.stock,
             row.expiryDate,
             row.actions
             ])}
             searchable={true}
-            tableTitle= {"GÖREVLER"}      
+            tableTitle= {"GÖREVLER"}        
         /> 
     </div>
   )

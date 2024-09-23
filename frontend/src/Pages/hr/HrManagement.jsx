@@ -1,6 +1,7 @@
 import React from 'react'
 import TableComp from '../../UI/TableComp';
 import { useNavigate } from 'react-router-dom';
+import { createModal } from '../../components/Utils/Modal';
 
 const HrManagement = () => {
 
@@ -8,9 +9,10 @@ const HrManagement = () => {
 
     const tableData = [
         {
+          name: "Seçkin SEYMEN",
           gorevYeri: (
             <button              
-              onClick={() => navigate("/KPI-checklist")}
+              onClick={() => createModal("worker-check")}
             >
               Vezne - Hasta Karşılama
             </button>
@@ -21,9 +23,11 @@ const HrManagement = () => {
           kontrolDurumu: 'Kontrol Edilmedi',
         },
         {
+          name: "Arslan ŞAHİN",
           gorevYeri: (
-            <button              
-              onClick={() => navigate("/KPI-checklist")}
+            <button      
+              onClick={() => createModal("worker-check")}        
+              // onClick={() => navigate("/KPI-checklist")}
             >
               Ameliyathane Hemşiresi
             </button>
@@ -33,10 +37,11 @@ const HrManagement = () => {
           sonKontrol: 'Arslan ŞAHİN',
           kontrolDurumu: '9 Eylül 19:41',
         },
-        {
+        {          
+          name: "Ali KAYA",
           gorevYeri: (
             <button              
-              onClick={() => navigate("/KPI-checklist")}
+            onClick={() => createModal("worker-check")}
             >
               Hasta Bakımı
             </button>
@@ -60,6 +65,7 @@ const HrManagement = () => {
     <div>
         <TableComp
   thead={[
+    { name: 'Görevli', sortable: true },
     { name: 'Görev Yeri', sortable: true },
     { name: 'Yöneticiler', sortable: true },
     { name: 'Mesai Haftası', sortable: true },
@@ -67,6 +73,7 @@ const HrManagement = () => {
     { name: 'none' }, // Gizli sütunlar için
   ]}
   tbody={tableData.map((item) => [
+    item.name,
     item.gorevYeri,
     item.yoneticiler.join(", "), // Yöneticiler virgülle ayrılmış olarak gelecek
     item.mesaiHaftasi,
@@ -88,6 +95,7 @@ const HrManagement = () => {
   ])}
   searchable={true}
   tableTitle="Görev Kontrol"
+  modal={"worker-quest"}
 />
     </div>
   )

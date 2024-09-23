@@ -393,8 +393,24 @@ const PatientAddModal = () => {
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Hastanın Bölümü</label>
+                <input
+                  type="text"
+                  name="city"
+                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Doktor Adı</label>
+                <input
+                  type="text"
+                  name="city"
+                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                />
+              </div>
 
-              <div className="col-span-2">
+              <div className="col-span-3">
                 <label className="block text-sm font-medium text-gray-500">İkametgah Adresi</label>
                 <input
                   type="text"
@@ -427,6 +443,23 @@ const PatientAddModal = () => {
                   name="device_name"
                   value={formData.device_name}
                   onChange={handleInputChange}
+                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Seans Tarihi</label>
+                <input
+                  type="date"
+                  name="device_name"
+                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-500">Seans Saati</label>
+                <input
+                  type="time"
+                  name="device_name"
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>

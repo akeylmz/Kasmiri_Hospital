@@ -39,6 +39,7 @@ import Billing from './pages/billing/Billing'
 import ENabiz from './pages/ENabiz'
 import Reports from './pages/Reports'
 import SettingsPage from './pages/SettingsPage'
+import Deneme from './UI/Deneme'
 
 function App() {  
 
@@ -109,6 +110,7 @@ function App() {
         { path: "e-nabiz", element: <ENabiz />},
         { path: "reporting", element: <Reports />},
         { path: "settings", element: <SettingsPage />},
+        { path: "deneme", element: <Deneme />},
       ]
     }
   ])
