@@ -5,6 +5,7 @@ const initialState = {
         {
             id: 1,
             patient_image: 'https://via.placeholder.com/40',
+            ilgilenenDoktor: "Süleyman Taş",
             first_name: 'Selim',
             last_name: 'GÜRSES',
             email: 'selim@domain.com',

@@ -54,6 +54,7 @@ const Patients = () => {
                 <TableComp
             thead={[
                 { name: t('name'), sortable: true },
+                { name: "İlgilenen Doktor", sortable: true },
                 { name: t('surname'), sortable: true },
                 { name: t('phone') },
                 { name: t('email'), sortable: true },
@@ -62,13 +63,15 @@ const Patients = () => {
                 { name: t('actions'), action: true},
                 { name: "none"},
             ]}
-            tbody={patients.map((user) => [
-                [<img src={user.patient_image} alt={`${user.first_name} avatar`} className="w-10 h-10 rounded-full" />, user.first_name],
-                user.last_name,
+            tbody={patients.map((user) => [                
+                [<img src={user.patient_image} alt={`${user.first_name} avatar`} className="w-10 h-10 rounded-full" />, user.first_name],                
+                user.last_name,        
+                user.ilgilenenDoktor,       
                 user.mobile_phone1, 
                 user.email,
-                user.city, 
-                user.national_id || '',    
+                user.city,                 
+                user.national_id || '',   
+                user.id , 
                 [
                     <button key="edit" className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
                         {t('edit')}
@@ -77,7 +80,7 @@ const Patients = () => {
                         {t('delete')}
                     </button>
                 ] ,
-                user.id         
+                         
                
             ])}
             searchable={true}

@@ -1,10 +1,12 @@
 
+import BodroAddModal from "./components/modals/BodroAddModal";
 import InvoiceModal from "./components/modals/InvoiceModal";
 import PatientAddModal from "./components/modals/PatientAddModal";
 import ProductAddModal from "./components/modals/ProductAddModal";
 import StockAddModal from "./components/modals/StockAddModal";
 import WorkerCheck from "./components/modals/WorkerCheck";
 import WorkerQuest from "./components/modals/WorkerQuest";
+import YabancıModal from "./components/modals/YabancıModal";
 
 const modals = [
     {
@@ -30,6 +32,14 @@ const modals = [
     {
         name: "invoice-modal",
         element: InvoiceModal
+    },
+    {
+        name: "bodro-modal",
+        element: BodroAddModal
+    },
+    {
+        name: "yabancı-modal",
+        element: YabancıModal
     }
 ]
 

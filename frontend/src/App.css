@@ -39,3 +39,42 @@
 }
 
 
+/* styles.css veya ilgili stil dosyanıza ekleyin */
+.scrollbar-custom {
+    overflow: auto;
+    width: 1640px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dikey Scrollbar */
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px; /* Dikey Scrollbar genişliği */
+  }
+  
+  /* Dikey Scrollbar Thumbs */
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background-color: #06b6d4; /* Dikey kaydırma çubuğu rengi */
+    border-radius: 10px; /* Köşeleri yuvarlaştır */
+  }
+  
+  /* Dikey Scrollbar Track */
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: #e5e7eb; /* Dikey kaydırma çubuğunun arka plan rengi */
+  }
+  
+  /* Yatay Scrollbar */
+  .scrollbar-custom::-webkit-scrollbar:horizontal {
+    height: 8px; /* Yatay Scrollbar yüksekliği */
+  }
+  
+  /* Yatay Scrollbar Thumbs */
+  .scrollbar-custom::-webkit-scrollbar-thumb:horizontal {
+    background-color: #06b6d4; /* Yatay kaydırma çubuğu rengi */
+    border-radius: 10px; /* Köşeleri yuvarlaştır */
+  }
+  
+  /* Yatay Scrollbar Track */
+  .scrollbar-custom::-webkit-scrollbar-track:horizontal {
+    background: #e5e7eb; /* Yatay kaydırma çubuğunun arka plan rengi */
+  }

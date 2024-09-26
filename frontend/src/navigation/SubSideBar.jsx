@@ -36,7 +36,7 @@ const SideBar = ({ patient }) => {
                     <Link to="">{t("test_results")}</Link>
                 </li>
                 <li>
-                    <Link to="">{t("history")}</Link>
+                    <Link to="poll">Anket</Link>
                 </li>
                 <li>
                     <Link to="">{t("photos")}</Link>

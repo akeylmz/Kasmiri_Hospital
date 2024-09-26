@@ -40,6 +40,8 @@ import ENabiz from './pages/ENabiz'
 import Reports from './pages/Reports'
 import SettingsPage from './pages/SettingsPage'
 import Deneme from './UI/Deneme'
+import Anket from './pages/Anket'
+import Bodro from './pages/Bodro'
 
 function App() {  
 
@@ -63,6 +65,7 @@ function App() {
                 { path: "sessionInformation", element: <PatientSenssion /> },
                 { path: "files", element: <PatientFiles /> },
                 { path: "bill", element: <PatientBill /> },
+                { path: "poll", element: <Anket />},
                 { index: true, element: <Navigate to="overview" replace /> }
               ]
             },
@@ -110,7 +113,8 @@ function App() {
         { path: "e-nabiz", element: <ENabiz />},
         { path: "reporting", element: <Reports />},
         { path: "settings", element: <SettingsPage />},
-        { path: "deneme", element: <Deneme />},
+        { path: "bodro", element: <Bodro />},   
+        { path: "deneme", element: <Deneme />},        
       ]
     }
   ])

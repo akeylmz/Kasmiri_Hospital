@@ -2,11 +2,24 @@ import React, { useState } from "react";
 import { t } from "i18next";
 import { Check, ArrowRight, ArrowLeft } from "lucide-react";
 import { useDispatch } from "react-redux";
-import { destroyModal } from "../Utils/Modal";
+import { createModal, destroyModal } from "../Utils/Modal";
 import { addPatient } from "../../store/patient";
 import { mutate } from "swr";
 
 const PatientAddModal = () => {
+
+
+  const [isCitizen, setIsCitizen] = useState(true); // T.C. vatandaşı olduğunu varsayıyoruz
+
+  const handleCheckboxChange = () => {
+    setIsCitizen(!isCitizen);
+    if(isCitizen){
+      createModal("yabancı-modal")
+    }
+  };
+
+
+
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     patient_number: "",
@@ -44,7 +57,7 @@ const PatientAddModal = () => {
     complaints: "",
     medications: "",
     existing_conditions: "",
-    smoker: false,
+    smoker: "",
     past_surgeries: "",
     allergies: "",
     post_surgery_address: "",
@@ -241,14 +254,25 @@ const PatientAddModal = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">TC Kimlik No</label>
-                <input
-                  type="text"
-                  name="national_id"
-                  value={formData.national_id}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                />
+                  <label className="flex items-center text-sm font-medium text-gray-500">
+                    TC No 
+                    <input 
+                      className="ml-8 mr-2" 
+                      type="checkbox" 
+                      checked={!isCitizen} // Checkbox, vatandaşı değilim durumunda işaretli olacak
+                      onChange={handleCheckboxChange} 
+                    /> 
+                    <span>T.C. Vatandaşı değilim</span>
+                  </label>
+                  
+                  <input
+                    type="text"
+                    name="national_id"
+                    value={formData.national_id}
+                    onChange={handleInputChange}
+                    disabled={!isCitizen} // Vatandaşı değilse input devre dışı kalır
+                    className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                  />
               </div>
 
               <div>
