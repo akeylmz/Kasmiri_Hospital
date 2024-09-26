@@ -7,7 +7,7 @@ import { t } from 'i18next';
 import { TiArrowBack } from "react-icons/ti";
 import { FaSortAmountDown } from "react-icons/fa";
 
-const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, backButton, billing }) => {
+const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, backButton, billing, scroll }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState({});
   const [search, setSearch] = useState('');
@@ -75,8 +75,8 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, 
 
         <div className='w-full flex-1 overflow-hidden'>
           {/* Masaüstü (Desktop) Görünüm */}
-          <div className="overflow-auto h-full w-full">
-            <table className='w-full max-h-full border-collapse table-fixed'>
+          <div className={`overflow-auto h-full  ${scroll ? 'w-[1620px] pr-[63px] scrollbar-custom' : 'w-full '}`}>
+            <table className={`border-collapse table-fixed max-h-full ${scroll ? 'w-[2500px]' : 'w-full '}`}>
               <thead className='sticky top-0 bg-white'>
                 <tr>
                   {thead.map((h, key) => (

@@ -43,6 +43,12 @@ const initialState = {
             institution_type: 'Public Hospital',
             applied_department: 'Orthopedics',
             applied_operation: 'Back Surgery',
+            hastaBolumu: 'Ortopedi', // Hasta bölümü
+            kayitAcan: 'Süleyman Taş', // Kayıt açan
+            onaylayanDoktor: 'Dr. Öz', // Onaylayan doktor
+            girisTarih: '2024-09-14 10:00', // Giriş saat/tarih
+            taburcuTarih: '2024-09-20 15:00', // Taburcu olduğu saat/tarih
+            sigorta: 'SGK', // Sigorta bilgisi
         }
     ],
     patient: null,

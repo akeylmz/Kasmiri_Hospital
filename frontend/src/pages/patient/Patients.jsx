@@ -54,12 +54,18 @@ const Patients = () => {
                 <TableComp
             thead={[
                 { name: t('name'), sortable: true },
-                { name: "İlgilenen Doktor", sortable: true },
+                { name: "İlgilenen Doktor", sortable: true },                
                 { name: t('surname'), sortable: true },
                 { name: t('phone') },
                 { name: t('email'), sortable: true },
                 { name: t('location'), sortable: true },
                 { name: t('tcPassport') },
+                { name: "Hasta bölümü", sortable: true },
+                { name: "Kayıt açan", sortable: true },
+                { name: "Onaylayan doktor", sortable: true },
+                { name: "Giriş saat/tarih", sortable: true },
+                { name: "Taburcu olduğu saat/tarih", sortable: true },
+                { name: "Sigorta", sortable: true },
                 { name: t('actions'), action: true},
                 { name: "none"},
             ]}
@@ -72,6 +78,13 @@ const Patients = () => {
                 user.city,                 
                 user.national_id || '',   
                 user.id , 
+                user.hastaBolumu || '', // Hasta bölümü
+                        user.kayitAcan || '',   // Kayıt açan
+                        user.onaylayanDoktor || '', // Onaylayan doktor
+                        user.girisTarih || '',   // Giriş saat/tarih
+                        user.taburcuTarih || '', // Taburcu olduğu saat/tarih
+                        user.sigorta || '',       // Sigorta
+                
                 [
                     <button key="edit" className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
                         {t('edit')}
@@ -87,6 +100,7 @@ const Patients = () => {
             tableTitle={t('patientList')}
             modal={'patient'}
             detail={7}
+            scroll={true}
             />
            </div>
         </motion.div>
