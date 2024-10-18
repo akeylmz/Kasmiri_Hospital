@@ -106,7 +106,7 @@ const PatientAddModal = () => {
     formDataObj.append('national_id', formData.national_id);
     formDataObj.append('patient_image', formData.patient_image);
     formDataObj.append('place_of_birth', formData.place_of_birth);
-    formDataObj.append('date_of_birth', formattedDateOfBirth); // Doğum tarihini düzenliyoruz
+    formDataObj.append('date_of_birth', formattedDateOfBirth);
     formDataObj.append('gender', formData.gender);
     formDataObj.append('nationality', formData.nationality);
     formDataObj.append('mother_name', formData.mother_name);
@@ -120,14 +120,14 @@ const PatientAddModal = () => {
     formDataObj.append('country', formData.country);
     formDataObj.append('city', formData.city);
     formDataObj.append('address', formData.address);
-    formDataObj.append('seans_number', validSeansNumber); // Geçerli tamsayı olarak gönderiyoruz
+    formDataObj.append('seans_number', validSeansNumber); 
     formDataObj.append('device_name', formData.device_name);
     formDataObj.append('seans_days', formData.seans_days);
     formDataObj.append('education_status', formData.education_status);
     formDataObj.append('occupation', formData.occupation);
     formDataObj.append('current_employer', formData.current_employer);
     formDataObj.append('marital_status', formData.marital_status);
-    formDataObj.append('children_count', validChildrenCount); // Geçerli tamsayı olarak gönderiyoruz
+    formDataObj.append('children_count', validChildrenCount); 
     formDataObj.append('referee', formData.referee);
     formDataObj.append('institution_type', formData.institution_type);
     formDataObj.append('applied_department', formData.applied_department);
@@ -141,27 +141,27 @@ const PatientAddModal = () => {
     formDataObj.append('post_surgery_address', formData.post_surgery_address);
 
     try {
-        // // FormData ile POST isteği gönder
-        // const response = await fetch(url, {
-        //     method: 'POST',
-        //     body: formDataObj,
-        // });
+        // FormData ile POST isteği gönder
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formDataObj,
+        });
 
-        // if (!response.ok) {
-        //     const errorData = await response.json();
-        //     console.error('API Hatası:', errorData);
-        //     throw new Error('API isteği başarısız oldu');
-        // }
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('API Hatası:', errorData);
+            throw new Error('API isteği başarısız oldu');
+        }
 
-        // const newPatient = await response.json();
+        const newPatient = await response.json();
 
-        // // SWR cache'ini güncelle
-        // mutate(url, (currentPatients) => {
-        //     return [newPatient, ...currentPatients];
-        // }, false);
+        // SWR cache'ini güncelle
+        mutate(url, (currentPatients) => {
+            return [newPatient, ...currentPatients];
+        }, false);
 
-        // // Redux store'a yeni hastayı ekle
-        // dispatch(addPatient(newPatient));
+        // Redux store'a yeni hastayı ekle
+        dispatch(addPatient(newPatient));
 
         // Modal'ı kapat
         destroyModal();

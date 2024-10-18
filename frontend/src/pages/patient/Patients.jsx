@@ -15,19 +15,21 @@ const Patients = () => {
     const { t } = useTranslation();
 
     const dispatch = useDispatch();
-    //const { data, error } = useSWR('http://127.0.0.1:8000/api/patientcard/', fetcher);
+    const { data, error } = useSWR('http://127.0.0.1:8000/api/patientcard/', fetcher);
     const  { patients } = useSelector( state => state.patient);
-    // console.log(patients);
+     console.log(patients);
     
-    // useEffect(() => {
-    //     if (data) {
-    //         console.log(data)
-    //         dispatch(setPatient(data)); 
-    //     }
-    // }, [data, dispatch]);
+     useEffect(() => {
+        console.log();
+        
+         if (data) {
+             console.log(data)
+             dispatch(setPatient(data)); 
+         }
+     }, [data, dispatch]);
 
-    // if (error) return <div>Failed to load patients</div>;
-    // if (!data) return <div>Loading...</div>;
+     if (error) return <div>Failed to load patients</div>;
+     if (!data) return <div>Loading...</div>;
 
    
     

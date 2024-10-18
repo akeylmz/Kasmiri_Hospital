@@ -1,56 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    patients: [
-        {
-            id: 1,
-            patient_image: 'https://via.placeholder.com/40',
-            ilgilenenDoktor: "Süleyman Taş",
-            first_name: 'Selim',
-            last_name: 'GÜRSES',
-            email: 'selim@domain.com',
-            mobile_phone1: '05369863247',
-            city: 'Trabzon',
-            national_id: '36587774125',
-            gender: 'Male',
-            nationality: 'Turkish',
-            mother_name: 'Fatma',
-            father_name: 'Ahmet',
-            mobile_phone2: '',
-            instagram_username: 'selimgurses',
-            patient_type: 'Outpatient',
-            country: 'Turkey',
-            address: 'Trabzon, Turkey',
-            date_of_birth: '1985-05-10',
-            place_of_birth: 'Trabzon',
-            seans_number: 2,
-            device_name: 'MRI',
-            seans_days: ['Monday', 'Wednesday'],
-            occupation: 'Engineer',
-            current_employer: 'Tech Corp',
-            marital_status: 'Married',
-            referee: 'Dr. Öz',
-            existing_conditions: 'None',
-            medications: 'None',
-            past_surgeries: 'Appendectomy',
-            allergies: 'None',
-            complaints: 'Back pain',
-            children_count: 2,
-            smoker: 'No',
-            consultation_date: '2024-09-14',
-            sharing_permission: 'Yes',
-            post_surgery_address: 'Trabzon, Turkey',
-            institution_type: 'Public Hospital',
-            applied_department: 'Orthopedics',
-            applied_operation: 'Back Surgery',
-            hastaBolumu: 'Ortopedi', // Hasta bölümü
-            kayitAcan: 'Süleyman Taş', // Kayıt açan
-            onaylayanDoktor: 'Dr. Öz', // Onaylayan doktor
-            girisTarih: '2024-09-14 10:00', // Giriş saat/tarih
-            taburcuTarih: '2024-09-20 15:00', // Taburcu olduğu saat/tarih
-            sigorta: 'SGK', // Sigorta bilgisi
-        }
-    ],
+    patients: [],
     patient: null,
 }
 
@@ -60,16 +11,16 @@ const patientsSlice = createSlice({
     reducers: {
         addPatient: (state, action) => {
             const newPatient = {
-                id: state.patients.length + 1, // Yeni hasta için id oluşturma
-                patient_image: 'https://via.placeholder.com/40', // Varsayılan bir resim ekleme
+                id: state.patients.length + 1, 
+                patient_image: 'https://via.placeholder.com/40', 
                 age: action.payload.age,
                 patient_number: action.payload.patientCode,
                 first_name: action.payload.first_name,
                 last_name: action.payload.last_name,
-                email: action.payload.email || '', // Eğer email boşsa boş string ekle
-                mobile_phone1: action.payload.mobile_phone1 || '', // İletişim bilgisi boşsa varsayılan boş string
-                city: action.payload.city || '', // Lokasyon olarak şehir bilgisi
-                national_id: action.payload.national_id || action.payload.pasaportNo || '', // TC Kimlik No veya Pasaport No
+                email: action.payload.email || '', 
+                mobile_phone1: action.payload.mobile_phone1 || '',
+                city: action.payload.city || '', 
+                national_id: action.payload.national_id || action.payload.pasaportNo || '',
                 gender: action.payload.gender || '', 
                 nationality: action.payload.nationality || '', 
                 mother_name: action.payload.mother_name || '', 
