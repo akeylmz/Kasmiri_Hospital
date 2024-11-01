@@ -138,12 +138,12 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, 
                         )}
                         key={colIndex}
                         style={{
-                          padding: '8px', // Padding'i azalt
-                          fontSize: '0.875rem', // Yazı boyutunu küçült
-                          lineHeight: '1.2rem', // Satır yüksekliğini ayarla
-                          whiteSpace: 'nowrap', // Taşmayı önle
+                          padding: '8px', 
+                          fontSize: '0.875rem', 
+                          lineHeight: '1.2rem', 
+                          whiteSpace: 'nowrap', 
                           overflow: 'hidden',
-                          textOverflow: 'ellipsis', // Uzun metinler için ellipsis uygula
+                          textOverflow: 'ellipsis', 
                           display: colIndex === detail ? 'none' : 'table-cell',
                         }}
                       >
