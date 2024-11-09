@@ -1,11 +1,36 @@
 import React from 'react';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement } from 'chart.js';
-
+import { UnipileClient } from "unipile-node-sdk"
 // ChartJS ayarları
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement);
 
 const Reports = () => {
+  
+  // SDK setup
+const chat_id = "zZEl51soV4OqmEEJcBoAHw"
+const BASE_URL = `https://api9.unipile.com:13920`
+const ACCESS_TOKEN = "4KfpVYrT.GaXc9QHSbaeYeyMN0fe9IWpe88eGWOt8DMPkUwDtgbI="
+// Inputs
+  
+  const test = async () => {
+    try {
+      const client = new UnipileClient(BASE_URL, ACCESS_TOKEN)  
+      const response = await client.messaging.getAllChats()
+      const response2 = await client.messaging.getChat(chat_id)
+      console.log(response);
+      console.log(response2);
+      
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  test()
+  
+  
+  
+  
   // Grafik verileri
   const surgeryData = {
     labels: ['Saç', 'Diş', 'Plastik Cerrahi'],

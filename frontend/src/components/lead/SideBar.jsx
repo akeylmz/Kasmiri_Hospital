@@ -11,19 +11,19 @@ const SideBar = () => {
       <header className='h-[100px] border-b boder-gray-300 flex flex-col items-center justify-center'>
         <select className='border w-full h-2/4   py-2 px-4 bg-white text-gray-600 focus:outline-none '>
           <option value="instagram" className="flex items-center">
-            <FaInstagram className="inline-block mr-2 text-pink-600" /> Instagram
+             Instagram
           </option>
           <option value="whatsapp" className="flex items-center">
-            <FaWhatsapp className="inline-block mr-2 text-green-500" /> WhatsApp
+             WhatsApp
           </option>
           <option value="messenger" className="flex items-center">
-            <FaFacebookMessenger className="inline-block mr-2 text-blue-600" /> Messenger
+             Messenger
           </option>
           <option value="telegram" className="flex items-center">
-            <FaTelegramPlane className="inline-block mr-2 text-blue-500" /> Telegram
+             Telegram
           </option>
           <option value="twitter" className="flex items-center">
-            <FaTwitter className="inline-block mr-2 text-blue-400" /> Twitter
+             Twitter
           </option>
         </select>
         <input type="search" placeholder='Ara...' className='w-full h-2/4 outline-none px-4 border border-gray-200 ' />

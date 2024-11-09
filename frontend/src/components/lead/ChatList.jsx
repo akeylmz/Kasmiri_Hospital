@@ -1,85 +1,52 @@
-import React from 'react'
-import { NavLink, useParams } from 'react-router-dom'
-import classNames from 'classnames';
-import { FaInstagram } from "react-icons/fa";
-import { IoLogoWhatsapp } from 'react-icons/io';
+import React, { useEffect, useRef, useState } from 'react'
+import { UnipileClient } from "unipile-node-sdk"
+import ChatRetrive from './ChatRetrive';
 
 const ChatList = () => {
-    const {chatId} = useParams()
-    console.log(chatId);
-    const chats = [
-        {
-          id: 1,
-          user: {
-            avatar:  <div
-            style={{
-              background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)',
-              borderRadius: '50%',
-              padding: '5px',
-              display: 'inline-block',
-            }}
-          >
-            <FaInstagram size={25} color="white" />
-          </div>,
-            name: "Ahmet Yusuf Kuru"
-          },
-          unread: true,
-          lastMessage: "a.yusuf.kuru",
-          social: '/img/insta.png',
-          count: 5
-        },
-        {
-          id: 2,
-          user: {
-            avatar: <IoLogoWhatsapp size={35} color='blue' />,
-            name: "Mehmet Enes"
-          },
-          unread: true,
-          lastMessage: "0546 125 44 33",
-          social: '/img/face.png',
-          count: 2
-        },
-        {
-          id: 3,
-          user: {
-            avatar: <IoLogoWhatsapp size={35} color='blue' />,
-            name: "0567 534 64 23"
-          },
-          lastMessage: "0567 534 64 23",
-           social: '/img/insta.png',
-           count: 0
-        }
-      ]
+
+// SDK setup
+const chat_id = "zZEl51soV4OqmEEJcBoAHw"
+const BASE_URL = `https://api9.unipile.com:13920`
+const ACCESS_TOKEN = "4KfpVYrT.GaXc9QHSbaeYeyMN0fe9IWpe88eGWOt8DMPkUwDtgbI="
+// Inputs
+const [chats1, setChats] = useState([])
+const previousResponse = useRef(null);
+
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const client = new UnipileClient(BASE_URL, ACCESS_TOKEN)  
+      const allChats = await client.messaging.getAllChats()
+
+      if (JSON.stringify(allChats) !== JSON.stringify(previousResponse.current)) {
+        setChats(allChats);            
+        previousResponse.current = allChats
+      }
+      setChats(allChats.items)
+    } catch (error) {
+      console.log(error)
+    }
+  };
+
+  fetchData();
+  const interval = setInterval(fetchData, 2000);
+  return () => clearInterval(interval);
+}, [])
+
+
+    
   return (
-    <section className='h-[calc(100%-60px)] overflow-auto py-3'>
+    <section className='h-[calc(100%-100px)] overflow-auto py-3'>
           <header className='flex items-center justify-between px-5 mb-1'>
             <h6 className='text-base font-semibold'>Messages</h6>
             <button className='text-blue-600 text-sm font-semibold'>7 request</button>
           </header>
-          {chats.map(chat => (
-            <NavLink 
-              className={classNames({
-                "h-[72px] flex items-center gap-x-4 hover:bg-zinc-50 px-5" : true,
-                "font-semibold" : chat?.unread,
-                "!bg-[#efefef]" : +chatId === chat.id
-              })}
-              key={chat.id} 
-              to={`/lead/${chat.id}`}
-            >
-              {/* <img src={chat.user.avatar} className='w-14 h-14 rounded-full object-cover' /> */}
-              {chat.user.avatar}
-              <div>
-                <h6 className='text-sm'>{chat.user.name}</h6>
-                <p className={`text-sm ${!chat?.unread && "text-[#8e8e8e]"}`}>
-                  {chat.lastMessage}
-                </p>
-              </div>
-              {chat.count > 0 && <div className='ml-auto px-3 py-1 bg-blue-500 rounded-full'>
-                <p className='text-white'>{chat.count}</p>
-              </div>}
-              {/* <img src={chat.user.social} className='w-14 h-14 rounded-full object-cover' /> */}
-            </NavLink>
-          ))}
+          
+         {chats1
+         .filter(chat => chat.provider_id !== "status@broadcast")
+         .map((chat)=>(
+            <ChatRetrive key={chat.id} chat={chat} />
+         ))}
       </section>
   )
 }

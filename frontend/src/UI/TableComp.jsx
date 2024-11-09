@@ -6,6 +6,7 @@ import { createModal } from '../components/Utils/Modal';
 import { t } from 'i18next';
 import { TiArrowBack } from "react-icons/ti";
 import { FaSortAmountDown } from "react-icons/fa";
+import PaginationBar from './pagination/PaginationBar';
 
 const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, backButton, billing, scroll }) => {
   const navigate = useNavigate();
@@ -200,16 +201,17 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, 
           </div>
         </div>
 
-        {page && <div className="w-full flex justify-between items-center mt-4">
+        {page && <div className="w-full flex justify-between items-center ">
           <div></div>
           <div className="flex space-x-2">
-            <button className="bg-cyan-500 text-white px-3 py-1 rounded-md shadow text-xs">1</button>
+            <PaginationBar />
+            {/* <button className="bg-cyan-500 text-white px-3 py-1 rounded-md shadow text-xs">1</button>
             <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">2</button>
             <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">3</button>
             <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">4</button>
             <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">5</button>
             <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">6</button>
-            <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">7</button>
+            <button className="bg-white border border-gray-300 text-gray-500 px-3 py-1 rounded-md text-xs">7</button> */}
           </div>
         </div>
         }

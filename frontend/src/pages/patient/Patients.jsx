@@ -7,9 +7,19 @@ import { createModal } from '../../components/Utils/Modal';
 
 
 const Patients = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
     const { t } = useTranslation();
     const [deletePatient ] = useDeletePatientMutation()
-    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery();
+    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({ page: currentPage, limit: itemsPerPage });
+    console.log(patients);
+    //console.log(Math.ceil(patients.length / 10));
+    useEffect(() => {
+        if (patients) {
+            console.log("Fetched patients data:", patients);
+        }
+    }, [patients]);
+    
 
     const [firstLoad, setFirstLoad] = useState(false);
     const [editToggle, setEditToggle] = useState(false);
@@ -96,6 +106,7 @@ const Patients = () => {
             modal={'patient'}
             detail={7}
             scroll={true}
+            page={true}
             />
            </div>
         </motion.div>

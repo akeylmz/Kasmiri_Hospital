@@ -34,7 +34,7 @@ const HrSummaryFile = () => {
     <div className="p-5 h-full overflow-scroll">
       <div className='w-full h-[100px] py-3 '>          
           <div className='bg-cyan-600 p-3 rounded-2xl flex items-center'>
-          <button onClick={()=> navigate("/human-resources/KPI-quests")}  className='border-2 border-white rounded-full' ><TiArrowBack size={35} color='white' /></button>
+          <button onClick={()=> navigate("/human-resources/personnel")}  className='border-2 border-white rounded-full' ><TiArrowBack size={35} color='white' /></button>
             <div className='pl-4'>
               <p className='text-white ml-4 text-lg font-semibold'>MEHMET ENES DOĞAN</p>
               <p className='text-white ml-6 '>Muhasebe</p>
