@@ -1,10 +1,20 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { useGetPatientIdQuery } from '../../../store/patient2';
 
 
 const PatientIDInformation = () => {
    
-    const { patient } = useSelector(state => state.patient);
+    const {patientId} = useParams()
+    const { data: patient, isLoading } = useGetPatientIdQuery(patientId, {
+        skip: !patientId,
+    });
+
+    if (!patient) {
+        return <div>{"Bir sorun oluştu..."}</div>;
+    }else if (isLoading){
+        return <div>Veri Yükleniyor</div>
+    }
 
     return (
         <div className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>

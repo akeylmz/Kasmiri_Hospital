@@ -1,16 +1,21 @@
 import React from 'react';
 import { CiCirclePlus } from "react-icons/ci";
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useGetPatientIdQuery } from '../../../store/patient2';
 
 const PatientOverwiev = () => {
     const { t } = useTranslation();
-    const { patient } = useSelector(state => state.patient);
+    const {patientId} = useParams()
+    const { data: patient, isLoading } = useGetPatientIdQuery(patientId, {
+        skip: !patientId,
+    });
 
     
     if (!patient) {
         return <div>{"Bir sorun oluştu..."}</div>;
+    }else if (isLoading){
+        return <div>Veri Yükleniyor</div>
     }
 
     return (

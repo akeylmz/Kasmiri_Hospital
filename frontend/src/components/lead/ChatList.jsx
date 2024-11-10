@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { UnipileClient } from "unipile-node-sdk"
-import ChatRetrive from './ChatRetrive';
+import ChatRetrive from './ChatRetrive'
 
 const ChatList = () => {
 
@@ -10,7 +10,7 @@ const BASE_URL = `https://api9.unipile.com:13920`
 const ACCESS_TOKEN = "4KfpVYrT.GaXc9QHSbaeYeyMN0fe9IWpe88eGWOt8DMPkUwDtgbI="
 // Inputs
 const [chats1, setChats] = useState([])
-const previousResponse = useRef(null);
+const previousResponse = useRef(null)
 
 useEffect(() => {
   const fetchData = async () => {
@@ -29,8 +29,8 @@ useEffect(() => {
   };
 
   fetchData();
-  const interval = setInterval(fetchData, 2000);
-  return () => clearInterval(interval);
+  const interval = setInterval(fetchData, 2000)
+  return () => clearInterval(interval)
 }, [])
 
 
