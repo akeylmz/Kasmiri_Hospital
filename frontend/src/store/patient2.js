@@ -29,11 +29,25 @@ const patientAPI = createApi({
                 url: `patientcard/${patientId}/`,
                 method: 'DELETE',
             })
+        }),
+
+        // --------- STOCK -------------
+        
+        getStockOrders: builder.query({
+            query: () => "stock"
         })
+        
+
     }),
     keepUnusedDataFor: 30,
     refetchOnMountOrArgChange: 5
 });
 
-export const { useGetPatientsQuery, useGetPatientIdQuery, useCreatePatientMutation, useUpdatePatientMutation, useDeletePatientMutation } = patientAPI; 
+export const {  useGetPatientsQuery, 
+                useGetPatientIdQuery,
+                useCreatePatientMutation,
+                useUpdatePatientMutation,
+                useDeletePatientMutation,
+                useGetStockOrdersQuery
+           } = patientAPI; 
 export default patientAPI;
