@@ -1,8 +1,14 @@
 import React from 'react';
 import TableComp from '../../UI/TableComp';
 import { motion } from 'framer-motion';
+import { useGetStockOrdersQuery } from '../../store/patient2';
 
 const StockOrder = () => {
+
+    
+    const {data} = useGetStockOrdersQuery()
+    console.log(data);
+    
 
     const thead = [
         { name: 'ÜRÜN', sortable: true },
@@ -79,6 +85,8 @@ const StockOrder = () => {
             status: <span className="status red">Red</span>
         }
     ];
+
+
   return (
     <motion.div 
         initial={{opacity:0}}   
@@ -95,7 +103,8 @@ const StockOrder = () => {
                 row.status
             ])}
             searchable={true}
-            tableTitle={"SATIN ALMA TALEPLERİ"}            
+            tableTitle={"SATIN ALMA TALEPLERİ"}   
+            modal={"stockOrder"}        
         />
     </motion.div>
   )
