@@ -2,6 +2,7 @@
 
 from django.urls import path
 from . import views
+from .views import StockSummaryView
 
 urlpatterns = [
     path('notes/', views.NoteListCreateAPIView.as_view(), name='item-list'),
@@ -17,5 +18,7 @@ urlpatterns = [
     path('stock/<int:pk>/', views.StockDetailAPIView.as_view(), name='stock-detail'),
     path('order/', views.OrderListCreateAPIView.as_view(), name='order-list'),
     path('order/<int:pk>/', views.OrderDetailAPIView.as_view(), name='order-detail'),
+    path('stock-summary/', StockSummaryView.as_view(), name='stock-summary'),
 
+    path('webhook/', views.webhook, name='webhook'),
 ]
