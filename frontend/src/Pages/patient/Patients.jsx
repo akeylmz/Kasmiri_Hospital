@@ -1,49 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import TableComp from '../../UI/TableComp';
-import { useDispatch, useSelector } from 'react-redux';
-import TopMenu from '../../UI/TopMenu';
-import useSWR from "swr"
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { setPatient } from '../../store/patient';
+import { useDeletePatientMutation, useGetPatientIdQuery, useGetPatientsQuery } from '../../store/patient2';
+import { createModal } from '../../components/Utils/Modal';
 
-
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
 
 const Patients = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
     const { t } = useTranslation();
-
-    const dispatch = useDispatch();
-    //const { data, error } = useSWR('http://127.0.0.1:8000/api/patientcard/', fetcher);
-    const  { patients } = useSelector( state => state.patient);
-    // console.log(patients);
+    const [deletePatient ] = useDeletePatientMutation()
+    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({ page: currentPage, limit: itemsPerPage });
+    console.log(patients);
+    //console.log(Math.ceil(patients.length / 10));
+    useEffect(() => {
+        if (patients) {
+            console.log("Fetched patients data:", patients);
+        }
+    }, [patients]);
     
-    // useEffect(() => {
-    //     if (data) {
-    //         console.log(data)
-    //         dispatch(setPatient(data)); 
-    //     }
-    // }, [data, dispatch]);
 
-    // if (error) return <div>Failed to load patients</div>;
-    // if (!data) return <div>Loading...</div>;
+    const [firstLoad, setFirstLoad] = useState(false);
+    const [editToggle, setEditToggle] = useState(false);
+    const [selectedPatientId, setSelectedPatientId] = useState(null);
+    const { data: patient, isLoading: patientLoading } = useGetPatientIdQuery(selectedPatientId, {
+        skip: !selectedPatientId,
+    });
+    useEffect(() => {
+        if (!isLoading && firstLoad && patient) { 
+            createModal("patient", patient, true);
+            setFirstLoad(false)
+        }
+    }, [patient, patientLoading, editToggle]);
+  
+     if (error) return <div>Failed to load patients</div>
+     if (isLoading) return <div>Loading...</div>
 
-   
-    
-    const tabs = [
-        { label: t('generalOverview'), active: false },
-        { label: t('products'), active: true, submenu: [
-            { label: 'İzin Yönetimi', active: true },
-            { label: 'Çalışma Saatleri', active: false },
-        ] },
-        { label: t('statistics'), active: false },
-    ];
-
-
-   
-    
-    
     return (
         <motion.div
             initial={{opacity:0}}   
@@ -78,18 +71,30 @@ const Patients = () => {
                 user.city,                 
                 user.national_id || '',   
                 user.id , 
-                user.hastaBolumu || '', // Hasta bölümü
-                        user.kayitAcan || '',   // Kayıt açan
-                        user.onaylayanDoktor || '', // Onaylayan doktor
-                        user.girisTarih || '',   // Giriş saat/tarih
-                        user.taburcuTarih || '', // Taburcu olduğu saat/tarih
-                        user.sigorta || '',       // Sigorta
-                
+                user.hastaBolumu || '',
+                user.kayitAcan || '',   
+                user.onaylayanDoktor || '', 
+                user.girisTarih || '',  
+                user.taburcuTarih || '', 
+                user.sigorta || '',                   
                 [
-                    <button key="edit" className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
+                    <button 
+                        key="edit" 
+                        onClick={() => {    
+                            setFirstLoad(true)                              
+                            setSelectedPatientId(user.id)  
+                            setTimeout(()=>{setEditToggle(prev => !prev)}, 200)                   
+                        }}
+                        className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
                         {t('edit')}
                     </button>,
-                    <button key="delete" onClick={() => deleteHandler(user.id)} className='h-8 px-4 flex items-center rounded bg-orange-500 text-white'>
+                    <button 
+                        key="delete" 
+                        onClick={async () => { 
+                            await deletePatient(user.id) 
+                            refetch()
+                        }}
+                        className='h-8 px-4 flex items-center rounded bg-orange-500 text-white'>
                         {t('delete')}
                     </button>
                 ] ,
@@ -101,6 +106,7 @@ const Patients = () => {
             modal={'patient'}
             detail={7}
             scroll={true}
+            page={true}
             />
            </div>
         </motion.div>
