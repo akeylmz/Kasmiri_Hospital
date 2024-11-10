@@ -1,9 +1,7 @@
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock
+from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order
 from django.db.models import Max, Count
 from datetime import datetime
-
-
 
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -174,6 +172,28 @@ class StockSerializer(serializers.ModelSerializer):
         instance.stock_wharehouse = validated_data.get('stock_wharehouse', instance.stock_wharehouse)
         instance.stock_pozition = validated_data.get('stock_pozition', instance.stock_pozition)
         instance.stcok_group = validated_data.get('stcok_group', instance.stcok_group)
+
+        instance.save()
+        return instance
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+    def create(self, validated_data):
+        # Yeni Stock kaydı oluştur
+        return Order.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        # Mevcut Stock kaydını güncelle
+        instance.order_name = validated_data.get('order_name', instance.order_name)
+        instance.order_number = validated_data.get('order_number', instance.order_number)
+        instance.order_wharehouse = validated_data.get('order_wharehouse', instance.order_wharehouse)
+        instance.order_pozition = validated_data.get('order_pozition', instance.order_pozition)
+        instance.order_group = validated_data.get('order_group', instance.order_group)
+        instance.order_startdate = validated_data.get('order_startdate', instance.order_startdate)
+        instance.order_finishdate = validated_data.get('order_finishdate', instance.order_finishdate)
 
         instance.save()
         return instance

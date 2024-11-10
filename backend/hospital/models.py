@@ -24,7 +24,7 @@ class Note(models.Model):
     def clean(self):
         if self.finish_clock <= self.start_clock:
             raise ValidationError("Bitiş saati, başlangıç saatinden sonra olmalıdır.")
-
+ 
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
@@ -81,8 +81,8 @@ class PatientCard(models.Model):
 
 class Stock(models.Model):
     stock_name = models.CharField(max_length=100, blank=True, null=True)
-    stock_buyed = models.IntegerField(default=0)
-    stock_haved = models.IntegerField(default=0)
+    stock_buyed = models.IntegerField(default=0, blank=True, null=True)
+    stock_haved = models.IntegerField(default=0, blank=True, null=True)
     stock_ut = models.DateField(blank=True, null=True)
     stock_skt = models.DateField(blank=True, null=True)
     stock_wharehouse = models.CharField(max_length=100, blank=True, null=True)
@@ -90,6 +90,17 @@ class Stock(models.Model):
     stcok_group = models.CharField(max_length=100, blank=True, null=True)
     def __str__(self):
         return f"{self.stock_name}"
+    
+class Order(models.Model):
+    order_name = models.CharField(max_length=100, blank=True, null=True)
+    order_number = models.IntegerField(default=0, blank=True, null=True)
+    order_wharehouse = models.CharField(max_length=100, blank=True, null=True)
+    order_pozition = models.CharField(max_length=100, blank=True, null=True)
+    order_group = models.CharField(max_length=100, blank=True, null=True)
+    order_startdate = models.DateField(default=timezone.now)
+    order_finishdate = models.DateField(blank=True, null=True)
+    def __str__(self):
+        return f"{self.order_name}"
 
 class CommunicationCard(models.Model):
     patient = models.OneToOneField(PatientCard, on_delete=models.CASCADE, related_name='communication_card')

@@ -15,4 +15,7 @@ urlpatterns = [
 
     path('stock/', views.StockListCreateAPIView.as_view(), name='stock-list'),
     path('stock/<int:pk>/', views.StockDetailAPIView.as_view(), name='stock-detail'),
+    path('order/', views.OrderListCreateAPIView.as_view(), name='order-list'),
+    path('order/<int:pk>/', views.OrderDetailAPIView.as_view(), name='order-detail'),
+
 ]
