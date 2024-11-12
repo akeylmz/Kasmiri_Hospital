@@ -99,6 +99,7 @@ class Order(models.Model):
     order_group = models.CharField(max_length=100, blank=True, null=True)
     order_startdate = models.DateField(default=timezone.now)
     order_finishdate = models.DateField(blank=True, null=True)
+    order_stuation= models.CharField(max_length=31, blank=True, null=True)
     def __str__(self):
         return f"{self.order_name}"
 
