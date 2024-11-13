@@ -4,6 +4,7 @@ import InvoiceModal from "./components/modals/InvoiceModal";
 import PatientAddModal from "./components/modals/PatientAddModal";
 import ProductAddModal from "./components/modals/ProductAddModal";
 import StockAddModal from "./components/modals/StockAddModal";
+import StockOrderModal from "./components/modals/StockOrderModal";
 import WorkerCheck from "./components/modals/WorkerCheck";
 import WorkerQuest from "./components/modals/WorkerQuest";
 import YabancıModal from "./components/modals/YabancıModal";
@@ -40,6 +41,10 @@ const modals = [
     {
         name: "yabancı-modal",
         element: YabancıModal
+    },
+    {
+        name: "stockOrder",
+        element: StockOrderModal
     }
 ]
 

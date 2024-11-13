@@ -1,16 +1,22 @@
 import React from 'react'
-import TableComp from '../../UI/TableComp'
+import TableComp2 from '../../UI/TableComp2'
 import { motion } from 'framer-motion'
+import { useGetAllStocksQuery } from '../../store/patient2'
 
 const StockProducts = () => {
 
+  const { data = [], isLoading } = useGetAllStocksQuery()
+  console.log(data)
+  
     const thead = [
-        { name: 'Ürün Adı', sortable: true },
-        { name: 'Stok', sortable: true },
-        { name: 'S.K.T', sortable: true },
+        { name: 'Ürün Adı', sortable: true},
+        { name: 'Stok', sortable: true},
+        { name: 'S.K.T', sortable: true},
         { name: 'Ürün Grubu', sortable: true },
-        { name: '', width: 50 }, // İşlemler sütunu, simge için küçük bir genişlik
+        { name: 'Depo', sortable: true},
+        // { name: '', width: 50 }, 
       ];
+
 
       const tbody = [
         {
@@ -152,18 +158,21 @@ const StockProducts = () => {
         initial={{opacity:0}}   
         animate={{opacity:1}}
         className="w-[95%] h-[99%]">
-        <TableComp
+        <TableComp2
             thead={thead}
-            tbody={tbody.map(row => [
-            row.productName,
-            row.stock,
-            row.expiryDate,
-            row.productGroup,
-            row.actions
+            tbody={data.map(row => [
+            row.stock_name || '',
+            row.stock_haved || '',
+            row.stock_skt || '',
+            row.stcok_group || '',
+            row.stock_wharehouse || '',
+            // <button key="details-12" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+            //   &gt;
+            // </button>
             ])}
             searchable={true}
-            tableTitle= {"ÜRÜNLER"} 
-            modal={'product'}           
+            tableTitle= {"ÜRÜNLER"}  
+            billing={false}
         />
     </motion.div>
   )

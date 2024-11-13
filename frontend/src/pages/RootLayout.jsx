@@ -46,7 +46,7 @@ const RootLayout = () => {
         </div>
        
         <div         
-         className={`h-full w-full transition-all duration-200 bg-slate-100 ${
+         className={`h-full transition-all duration-200 bg-slate-100 ${
             expanded ? "w-[88%]" : "w-[calc(100%-68px)]"
         }`}>
             <Outlet />

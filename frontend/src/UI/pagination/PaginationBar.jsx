@@ -9,7 +9,6 @@ export default function PaginationBar( {pageCount2, resoult, activePage2}) {
   const [ activePage, setActivePage] = useState(1)
   const pages = getPagination(activePage, pageCount)
 
-  console.log(pages);
   
 
   return (

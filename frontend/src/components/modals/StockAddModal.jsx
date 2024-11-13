@@ -1,27 +1,65 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { destroyModal } from '../Utils/Modal';
+import { useFormik } from 'formik';
+import { Check } from 'lucide-react';
+import { useCreateStockMutation, useGetStockOrdersByIDQuery } from '../../store/patient2';
 
-const StockAddModal = () => {
-  const [requests, setRequests] = useState([{ id: 1, productName: '', skt: '', depot: '', unit: '', quantity: 3 }]);
+const StockAddModal = ({data: ID}) => {
 
-  const handleAddRequest = () => {
-    setRequests([...requests, { id: requests.length + 1, productName: '', skt: '', depot: '', unit: '', quantity: 3 }]);
-  };
+  const {data} = useGetStockOrdersByIDQuery(ID)
+  const [ createStock ] = useCreateStockMutation()
 
-  const handleChange = (id, field, value) => {
-    const updatedRequests = requests.map(request =>
-      request.id === id ? { ...request, [field]: value } : request
-    );
-    setRequests(updatedRequests);
-  };
+  // console.log(data)
 
-  const handleSubmit = () => {
-    console.log('Talepler:', requests);
-  };
+  const submit = async (values, actions) => {
+    //  console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+    
+    try {
+      const formData = new FormData();
+      Object.keys(values).forEach((key) => {
+        formData.append(key, values[key])
+      })
+      await createStock(formData).unwrap()
+      actions.resetForm()
+      destroyModal()
+      // refetch()
+    } catch (error) {
+      console.log(error)      
+    }
+  }
+  
+  const {values, errors, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
+    initialValues: {
+      stock_name: '',
+      stock_buyed: '',
+      stock_haved: '',
+      stock_wharehouse: '',
+      stock_pozition: '',
+      stcok_group: '',
+      stock_ut: '',
+      stock_skt: '',
+    },
+    onSubmit: submit,
+  })
+
+  useEffect(() => {
+    if (data) {
+      setValues({
+        stock_name: data.order_name || '',
+        stock_buyed: data.order_number || '',
+        stock_haved: data.order_number || '',
+        stock_wharehouse: data.order_wharehouse || '',
+        stock_pozition: data.order_pozition || '',
+        stcok_group: data.order_group || '',
+        stock_ut: '',
+        stock_skt: '',
+      });
+    }
+  }, [data]);
 
   return (
-    <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[1200px]">
-      <div className="bg-white rounded-lg p-6 w-full ">
+    <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[500px]">
+      <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 w-full ">
         <div className="flex justify-between items-center pb-3 border-b mb-5 border-gray-200">
           <h2 className="text-lg font-semibold text-cyan-500">ÜRÜN TALEBİ OLUŞTUR</h2>
           <button
@@ -44,72 +82,37 @@ const StockAddModal = () => {
             </svg>
           </button>
         </div>
-        {requests.map((request, index) => (
-          <div key={index} className="grid grid-cols-7 gap-2 mb-4">
-            <select
-              className="col-span-2 border text-sm border-gray-300 bg-neutral-100 rounded-2xl outline-none px-2"
-              value={request.productName}
-              onChange={(e) => handleChange(request.id, 'productName', e.target.value)}
-            >
-              <option>Ürün Adı</option>
-              {/* Diğer ürün seçenekleri buraya eklenebilir */}
-            </select>
-            <select
-              className="border text-sm border-gray-300 bg-neutral-100 rounded-2xl outline-none px-2 py-1"
-              value={request.skt}
-              onChange={(e) => handleChange(request.id, 'skt', e.target.value)}
-            >
-              <option>SKT</option>
-              {/* Diğer SKT seçenekleri buraya eklenebilir */}
-            </select>
-            <select
-              className="col-span-2 border text-sm border-gray-300 bg-neutral-100 rounded-2xl outline-none px-2 py-1"
-              value={request.depot}
-              onChange={(e) => handleChange(request.id, 'depot', e.target.value)}
-            >
-              <option>Talep Edilecek Depo</option>
-              {/* Diğer depo seçenekleri buraya eklenebilir */}
-            </select>
-            <select
-              className="border text-sm border-gray-300 bg-neutral-100 rounded-2xl outline-none px-2 py-1"
-              value={request.unit}
-              onChange={(e) => handleChange(request.id, 'unit', e.target.value)}
-            >
-              <option>Birim</option>
-              {/* Diğer birim seçenekleri buraya eklenebilir */}
-            </select>
-            <div className="flex items-center justify-center border px-2 py-2 border-gray-300 bg-neutral-100 rounded-2xl outline-none">
-              <button
-                className="border border-gray-300 rounded px-2"
-                onClick={() => handleChange(request.id, 'quantity', Math.max(1, request.quantity - 1))}
-              >
-                -
-              </button>
-              <span className="text-sm px-2">{request.quantity} Adet</span>
-              <button
-                className="border border-gray-300 rounded px-2"
-                onClick={() => handleChange(request.id, 'quantity', request.quantity + 1)}
-              >
-                +
-              </button>
-            </div>
+        
+        <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-500">Üretim Tarihi</label>
+            <input
+              type="date"
+              name="stock_ut"
+              value={values.stock_ut}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+            />
           </div>
-        ))}
-        <button
-          className="text-cyan-600 w-full border rounded-2xl py-2 bg-sky-50 border-dotted border-cyan-500 hover:bg-sky-100 mb-4"
-          onClick={handleAddRequest}
-        >
-          + DAHA ÇOK ÜRÜN TALEP ET
-        </button>
-        <div className='w-full flex items-center justify-center'>
-            <button
-            className="bg-green-500 hover:bg-green-600 w-[200px] text-white rounded px-6 py-2"
-            onClick={handleSubmit}
-            >
-            TALEP ET
-            </button>
+          <div>
+            <label className="block text-sm font-medium text-gray-500">Son Kullanım Tarihi</label>
+            <input
+              type="date"
+              name="stock_skt"
+              value={values.stock_skt}
+              onChange={handleChange}
+              className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+            />
+          </div>
         </div>
-      </div>
+        <button
+          type="submit"
+          className="mx-auto bg-cyan-500 flex items-center justify-around text-white rounded-md px-10 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+        >
+          <Check className="mr-1" size={20} />
+          Kaydet
+        </button>
+      </form>
     </div>
   );
 };
