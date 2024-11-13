@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TableComp2 from '../../UI/TableComp2';
 import { motion } from 'framer-motion';
 import { useGetStockOrdersQuery } from '../../store/patient2';
@@ -8,9 +8,10 @@ import { createModal } from '../../components/Utils/Modal';
 
 const StockOrder = () => {
 
-    
-    const {data, isLoading} = useGetStockOrdersQuery()
+    const [ activePage, setActivePage] = useState(1)
+    const {data, isLoading} = useGetStockOrdersQuery({page: activePage})
     console.log(data);
+    console.log(activePage);
     
 
     const thead = [
@@ -36,7 +37,7 @@ const StockOrder = () => {
         className="w-full h-[99%]">
         <TableComp2
             thead={thead}
-            tbody={data.map(order => [
+            tbody={data.results.map(order => [
                 // <button ><ImBoxRemove size={20} color='#0093ad' /></button>,
                 order?.order_name || "",
                 order?.order_number || "",
@@ -55,7 +56,10 @@ const StockOrder = () => {
             ])}
             searchable={true}
             tableTitle={"SATIN ALMA TALEPLERİ"}   
-            modal={"stockOrder"}        
+            modal={"stockOrder"} 
+            page={data.count}  
+            activePage={activePage} 
+            setActivePage={setActivePage}     
         />
     </motion.div>
   )

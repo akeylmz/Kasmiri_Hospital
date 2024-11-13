@@ -5,7 +5,7 @@ const patientAPI = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api' }),
     endpoints: (builder) => ({
         getPatients: builder.query({
-            query: () => `patientcard/`,
+            query: ({ page = 1 }) => `patientcard/?page=${page}`,
         }),
         getPatientId: builder.query({
              query: (selectedPatientId) => `patientcard/${selectedPatientId}`
@@ -34,7 +34,7 @@ const patientAPI = createApi({
         // --------- STOCK ORDER -------------
         
         getStockOrders: builder.query({
-            query: () => "order"
+            query: ({ page = 1 }) => `order/?page=${page}`
         }),
         getStockOrdersByID: builder.query({
             query: (ID) =>`order/${ID}/`
@@ -50,7 +50,7 @@ const patientAPI = createApi({
         // --------- STOCK -------------
         
         getAllStocks: builder.query({
-            query: () => "stock"
+            query: ({ page = 1} ) => `stock/?page=${page}`
         }),
         createStock: builder.mutation({
             query: (newStock) => ({

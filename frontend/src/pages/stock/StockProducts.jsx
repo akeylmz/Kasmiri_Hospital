@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TableComp2 from '../../UI/TableComp2'
 import { motion } from 'framer-motion'
 import { useGetAllStocksQuery } from '../../store/patient2'
 
 const StockProducts = () => {
 
-  const { data = [], isLoading } = useGetAllStocksQuery()
+  const [activePage, setActivePage] = useState(1)
+  const { data, isLoading } = useGetAllStocksQuery({ page: activePage })
   console.log(data)
   
     const thead = [
@@ -152,6 +153,10 @@ const StockProducts = () => {
           )
         },
       ];
+
+      if(isLoading) {
+        return <div>Yükleniyor...</div>
+    }
       
   return (
     <motion.div 
@@ -160,19 +165,22 @@ const StockProducts = () => {
         className="w-[95%] h-[99%]">
         <TableComp2
             thead={thead}
-            tbody={data.map(row => [
+            tbody={data.results.map(row => [
             row.stock_name || '',
             row.stock_haved || '',
             row.stock_skt || '',
             row.stcok_group || '',
             row.stock_wharehouse || '',
-            // <button key="details-12" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
-            //   &gt;
-            // </button>
+            <button key="details-12" className="h-[30px] px-[9px] flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+              &gt;
+            </button>
             ])}
             searchable={true}
             tableTitle= {"ÜRÜNLER"}  
             billing={false}
+            page={data.count}
+            activePage={activePage}
+            setActivePage={setActivePage}
         />
     </motion.div>
   )

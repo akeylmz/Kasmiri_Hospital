@@ -4,9 +4,8 @@ import PageButton from './pageButton';
 import { useState } from 'react';
 
 
-export default function PaginationBar( {pageCount2, resoult, activePage2}) {
-  const pageCount = 20;
-  const [ activePage, setActivePage] = useState(1)
+export default function PaginationBar( {page, resoult, activePage, setActivePage}) {
+  const pageCount = Math.ceil(page / 10) 
   const pages = getPagination(activePage, pageCount)
 
   

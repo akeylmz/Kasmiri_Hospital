@@ -8,7 +8,9 @@ import { TiArrowBack } from "react-icons/ti";
 import { FaSortAmountDown } from "react-icons/fa";
 import PaginationBar from './pagination/PaginationBar';
 
-const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backButton, billing, scroll, printDiv }) => {
+const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backButton, billing, scroll, printDiv,
+  setActivePage, activePage
+ }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState({});
   const [search, setSearch] = useState('');
@@ -129,7 +131,7 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
                 {filteredData.map((items, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    className={classNames('group hover:bg-slate-200', {
+                    className={classNames('group hover:bg-slate-200 min-h-14', {
                       'bg-white': rowIndex % 2 === 0,
                       'bg-slate-100': rowIndex % 2 !== 0,
                     })}
@@ -152,10 +154,10 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
           </div>
         </div>
 
-        {page && 
+        {page > 10 && 
           <div className="w-full flex justify-end items-center ">          
             <div className="flex space-x-2">
-              <PaginationBar />
+              <PaginationBar setActivePage={setActivePage} activePage={activePage} page={page} />
             </div>
           </div>
         }

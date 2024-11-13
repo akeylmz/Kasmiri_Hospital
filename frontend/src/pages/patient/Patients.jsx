@@ -10,12 +10,16 @@ import { useNavigate } from 'react-router-dom';
 
 const Patients = () => {
     const [currentPage, setCurrentPage] = useState(1);
+   
     const navigate = useNavigate()
     const [itemsPerPage] = useState(10);
     const { t } = useTranslation();
     const [deletePatient ] = useDeletePatientMutation()
-    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery();
-    // console.log(patients);
+    const [ activePage, setActivePage] = useState(1)
+    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage});
+    console.log(patients);
+    console.log(activePage);
+    
     //console.log(Math.ceil(patients.length / 10));
     useEffect(() => {
         if (patients) {
@@ -30,6 +34,7 @@ const Patients = () => {
     const { data: patient, isLoading: patientLoading } = useGetPatientIdQuery(selectedPatientId, {
         skip: !selectedPatientId,
     });
+    
     useEffect(() => {
         if (!isLoading && firstLoad && patient) { 
             createModal("patient", patient, true, selectedPatientId);
@@ -65,7 +70,7 @@ const Patients = () => {
                 { name: t('actions'), action: true},
                 { name: "none"},
             ]}
-            tbody={patients.map((user) => [        
+            tbody={patients.results.map((user) => [        
                 <button 
                     type='button' 
                     onClick={ () => navigate(`/patients/${user.id}`) }
@@ -109,11 +114,13 @@ const Patients = () => {
                          
                
             ])}
-            searchable={true}
-            tableTitle={t('patientList')}
-            modal={'patient'}
-            scroll={true}
-            page={true}
+            searchable = {true}
+            tableTitle = {t('patientList')}
+            modal = {'patient'}
+            scroll = {true}
+            page = {patients.count}
+            activePage = {activePage}
+            setActivePage = {setActivePage}
             />
            </div>
         </motion.div>

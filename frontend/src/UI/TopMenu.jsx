@@ -9,7 +9,7 @@ const TopMenu = ({ tabs, submenu }) => {
 
   useEffect(() => {
     const activeTab = location.pathname;
-    console.log(activeTab);
+    // console.log(activeTab);
 
     // Ana sekmeyi kontrol et
     if (activeTab === "/human-resources/hierarchy") {
@@ -83,7 +83,7 @@ const TopMenu = ({ tabs, submenu }) => {
               to={tab.url} 
               onClick={() => handleTabClick(index)}
               className={classNames(
-                'relative z-10 py-3 block px-8 text-gray-700 rounded-none font-semibold',
+                'relative z-10 py-3 block px-8 text-gray-700 rounded-none font-semibold text-nowrap',
                 index === activeIndex ? 'bg-cyan-600 rounded-b-none rounded-t-2xl text-white' : 'bg-slate-100',
                 subTabs.length === 0 && index === activeIndex ? '!rounded-2xl' : '',
                 subTabs.length > 0 && index === activeIndex - 1 ? '! !rounded-br-2xl' : '',
@@ -98,7 +98,7 @@ const TopMenu = ({ tabs, submenu }) => {
           <div className="relative bg-cyan-600">
             <button
               className={classNames(
-                'relative py-3 px-8 text-transparent bg-slate-100 rounded-bl-2xl font-semibold cursor-default',
+                'relative py-3 px-8 text-transparent bg-slate-100 rounded-bl-2xl font-semibold text-nowrap cursor-default',
                 tabs.length - 1 !== activeIndex ? '!rounded-none' : '',
               )}
             >
