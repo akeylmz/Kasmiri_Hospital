@@ -14,7 +14,8 @@ from hospital.serializers import  NoteSerializer, PatientCardSerializer, Communi
 from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order
 from django.contrib.auth.decorators import login_required, user_passes_test
 
-import time
+from asgiref.sync import async_to_sync
+from channels.layers import get_channel_layer
 from django.db.models import Sum
 
 def webhook(request):
@@ -27,6 +28,16 @@ def webhook(request):
         message_data = payload.get('data', {})
         message_content = message_data.get('message', {}).get('content')
         
+        # WebSocket kanalına gönder
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            "message_group",
+            {
+                "type": "send_message",
+                "message": message_content,
+            }
+        )
+        
         # Veritabanına kaydetme veya başka işlemler
         print(f"New message received: {message_content}")
         print(f"New payload received: {payload}")
@@ -36,7 +47,6 @@ def webhook(request):
     
     # Eğer POST isteği değilse
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
-
 
 class StockSummaryView(APIView):
     def get(self, request):
