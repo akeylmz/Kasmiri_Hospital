@@ -36,8 +36,9 @@ const LeftNav = ({close , setClose}) => {
   
     return (
       <>
-        <div className={classNames("sidebar h-full w-[260px] bg-cyan-500 fixed top-0 left-0 z-10 transition-all ease-in-out duration-500",
-            close ? "w-[78px]" : ""
+        <div className={classNames("sidebar h-full  bg-cyan-500 fixed top-0 left-0 z-10 transition-all ease-in-out duration-500",
+            close ? "w-[78px]" : "",
+            "w-[78px] sm:block sm:fixed lg:w-[260px]"
         )}>
           <div className={classNames("h-[60px] w-full flex items-center")}>
             <div onClick={()=>setClose(!close)} className="flex items-center justify-center h-12 min-w-[78px] text-center text-white text-[30px] leading-[50px]">
