@@ -82,17 +82,21 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, 
                 <tr>
                   {thead.map((h, key) => (
                     <th
-                      width={h?.width}
+                      
                       className={`text-left text-sm font-semibold text-gray-700 border-b border-gray-300`}
                       key={key}
                       style={{
+                        width: h?.width || "auto",
+                        display: 'block',
                         padding: '8px',
                         fontSize: '0.875rem', // Yazı boyutunu küçült
                         lineHeight: '1.2rem', // Satır yüksekliğini ayarla   
-                        display: h.name === "none" ? 'none' : 'table-cell',       
+                        display: h.name === "none" ? 'none' : 'table-cell',  
+                        overflow: "hidden"     
                       }}
                     >
-                      <div className={`flex items-center 
+                      <div
+                      className={`flex items-center 
                                       ${h.action ? "justify-center" : ""}`}>
                         <span>{h.name}</span>
                         {h.sortable && (

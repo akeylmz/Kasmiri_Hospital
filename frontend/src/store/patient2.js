@@ -1,11 +1,11 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; // react kısmını kontrol edin
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'; 
 
 const patientAPI = createApi({
-    reducerPath: 'patientAPI', // farklı bir isim verebilirsiniz
+    reducerPath: 'patientAPI', 
     baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api' }),
     endpoints: (builder) => ({
         getPatients: builder.query({
-            query: () => `patientcard/`,
+            query: ({ page = 1 }) => `patientcard/?page=${page}`,
         }),
         getPatientId: builder.query({
              query: (selectedPatientId) => `patientcard/${selectedPatientId}`
@@ -18,8 +18,8 @@ const patientAPI = createApi({
             })
         }),
         updatePatient: builder.mutation({
-            query: (newPatient) => ({
-                url: 'patientcard/',
+            query: ({ newPatient, patientID }) => ({
+                url: `patientcard/${patientID}/`,
                 method: 'PUT',
                 body: newPatient
             })
@@ -31,12 +31,34 @@ const patientAPI = createApi({
             })
         }),
 
-        // --------- STOCK -------------
+        // --------- STOCK ORDER -------------
         
         getStockOrders: builder.query({
-            query: () => "stock"
-        })
+            query: ({ page = 1 }) => `order/?page=${page}`
+        }),
+        getStockOrdersByID: builder.query({
+            query: (ID) =>`order/${ID}/`
+        }),
+        createStockOrder: builder.mutation({
+            query: (newOrder) => ({
+                url: 'order/',
+                method: 'POST',
+                body: newOrder
+            })
+        }),
         
+        // --------- STOCK -------------
+        
+        getAllStocks: builder.query({
+            query: ({ page = 1} ) => `stock/?page=${page}`
+        }),
+        createStock: builder.mutation({
+            query: (newStock) => ({
+                url: 'stock/',
+                method: 'POST',
+                body: newStock
+            })
+        })
 
     }),
     keepUnusedDataFor: 30,
@@ -48,6 +70,10 @@ export const {  useGetPatientsQuery,
                 useCreatePatientMutation,
                 useUpdatePatientMutation,
                 useDeletePatientMutation,
-                useGetStockOrdersQuery
+                useGetStockOrdersQuery,
+                useGetStockOrdersByIDQuery,
+                useCreateStockOrderMutation,
+                useGetAllStocksQuery,
+                useCreateStockMutation,
            } = patientAPI; 
 export default patientAPI;

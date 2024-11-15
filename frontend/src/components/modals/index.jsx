@@ -24,11 +24,11 @@ const ModalOverlay = (props) => {
   return (
     <div>
       {modals.map((modal, key) => {
-        // console.log(modal.data);
+         console.log(modal);
         
         const m = modalData.find(m => m.name === modal.name)
         // console.log(m);
-        return( <m.element key={key} data = {modal.data} isEdit = {modal.isEdit}/> )
+        return( <m.element key={key} data = {modal.data} isEdit = {modal.isEdit} patientID= {modal.patientID} /> )
       })}
     </div>
   );

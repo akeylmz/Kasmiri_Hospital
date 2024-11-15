@@ -5,10 +5,14 @@ const fetchImageAsFile = async (imageUrl) => {
             throw new Error('Resmi indirmede hata oluştu: ' + response.statusText);
         }
         const blob = await response.blob();
-        const file = new File([blob], 'patient-image.jpg', { type: blob.type });
+
+        // Dosya adını URL’den al veya varsayılan bir ad ver
+        const fileName = imageUrl.split('/').pop() || 'patient-image.jpg';
+        const file = new File([blob], fileName, { type: blob.type });
         return file;
     } catch (error) {
         console.error('Hata:', error);
+        return null; // Hata durumunda açıkça null döndür
     }
 };
 export default fetchImageAsFile;
