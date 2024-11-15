@@ -10,8 +10,8 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, PopulationCardSerializer, OrderSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave
 from django.contrib.auth.decorators import login_required, user_passes_test
 
 from asgiref.sync import async_to_sync
@@ -109,3 +109,28 @@ class OrderListCreateAPIView(generics.ListCreateAPIView):
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
+
+class WorkerListCreateAPIView(generics.ListCreateAPIView):
+    queryset= Worker.objects.all()
+    serializer_class=WorkerSerializer
+
+class WorkerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= Worker.objects.all()
+    serializer_class=WorkerSerializer
+
+class TaskAssignmentListCreateAPIView(generics.ListCreateAPIView):
+    queryset= TaskAssignment.objects.all()
+    serializer_class=TaskAssignmentSerializer
+
+class TaskAssignmentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= TaskAssignment.objects.all()
+    serializer_class=TaskAssignmentSerializer
+
+
+class LeaveListCreateAPIView(generics.ListCreateAPIView):
+    queryset= Leave.objects.all()
+    serializer_class=LeaveSerializer
+
+class LeaveDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= Leave.objects.all()
+    serializer_class=LeaveSerializer

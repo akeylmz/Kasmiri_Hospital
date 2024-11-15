@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order
+from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -195,5 +195,152 @@ class OrderSerializer(serializers.ModelSerializer):
         instance.order_startdate = validated_data.get('order_startdate', instance.order_startdate)
         instance.order_finishdate = validated_data.get('order_finishdate', instance.order_finishdate)
 
+        instance.save()
+        return instance
+    
+class WorkerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Worker
+        fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Yeni bir Person nesnesi oluşturmak için özelleştirilmiş metot.
+        
+        # Örnek: Otomatik bir alan doldurma
+        if not validated_data.get('registry_no'):
+            validated_data['registry_no'] = f"REG-{validated_data['first_name'][:2].upper()}-{validated_data['last_name'][:2].upper()}"
+        """
+        # Yeni bir Person nesnesi oluştur ve kaydet
+        person = Worker.objects.create(**validated_data)
+        return person
+
+    def update(self, instance, validated_data):
+        """
+        Var olan bir Person nesnesini güncellemek için özelleştirilmiş metot.
+        
+        # Örnek: Belirli bir alan değiştiğinde tetikleme
+        if 'national_id' in validated_data and validated_data['national_id'] != instance.national_id:
+            raise serializers.ValidationError("National ID cannot be updated.")
+        """
+        # Diğer alanları güncelle
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        # Güncellenmiş nesneyi kaydet
+        instance.save()
+        return instance
+
+class TaskAssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskAssignment
+        fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Yeni bir görev atama oluşturulurken çalışacak özelleştirilmiş metot.
+        """
+        # Örnek: Başlangıç saati ile bitiş saati arasındaki farkı kontrol et
+        start_time = validated_data.get('start_time')
+        end_time = validated_data.get('end_time')
+
+        if start_time and end_time and start_time >= end_time:
+            raise serializers.ValidationError("Bitiş saati, başlangıç saatinden önce olamaz.")
+
+        # Yeni bir görev atama oluştur ve kaydet
+        task_assignment = TaskAssignment.objects.create(**validated_data)
+        return task_assignment
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir görev atamasını güncelleme metodu.
+        """
+        # Örnek: Başlangıç saati ile bitiş saati arasındaki farkı kontrol et
+        start_time = validated_data.get('start_time', instance.start_time)
+        end_time = validated_data.get('end_time', instance.end_time)
+
+        if start_time and end_time and start_time >= end_time:
+            raise serializers.ValidationError("Bitiş saati, başlangıç saatinden önce olamaz.")
+
+        # Diğer alanları güncelle
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        # Güncellenmiş nesneyi kaydet
+        instance.save()
+        return instance
+
+from rest_framework import serializers
+from .models import WorkingHours
+
+class WorkingHoursSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkingHours
+        fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Yeni bir çalışma saati oluşturulurken çalışacak özelleştirilmiş metot.
+        """
+        # Haftalık çalışma saati hesaplamak için işbaşı ve paydos saatlerini kontrol et
+        start_time = validated_data.get('start_time')
+        end_time = validated_data.get('end_time')
+
+        if start_time and end_time and weekly_hours==None:
+            # Örnek: Haftalık çalışma saati hesaplaması yapılabilir
+            weekly_hours = (end_time.hour - start_time.hour) * 5  # Basit bir hesaplama (örneğin günde 8 saat)
+            validated_data['weekly_hours'] = weekly_hours
+
+        working_hours = WorkingHours.objects.create(**validated_data)
+        return working_hours
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut çalışma saati kaydını güncelleme metodu.
+        """
+        # Haftalık çalışma saati güncellemesi
+        start_time = validated_data.get('start_time', instance.start_time)
+        end_time = validated_data.get('end_time', instance.end_time)
+
+        if start_time and end_time and weekly_hours==None:
+            weekly_hours = (end_time.hour - start_time.hour) * 5  # Haftalık saat hesaplama
+            validated_data['weekly_hours'] = weekly_hours
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        instance.save()
+        return instance
+
+class LeaveSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Leave
+        fields = '__all__'
+
+    def validate(self, data):
+        """
+        İzin tarihlerini kontrol eder.
+        """
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+
+        if start_date and end_date and start_date > end_date:
+            raise serializers.ValidationError("İzin bitiş tarihi, başlangıç tarihinden önce olamaz.")
+
+        return data
+
+    def create(self, validated_data):
+        """
+        Yeni bir izin kaydı oluşturur.
+        """
+        leave = Leave.objects.create(**validated_data)
+        return leave
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir izin kaydını günceller.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         instance.save()
         return instance
