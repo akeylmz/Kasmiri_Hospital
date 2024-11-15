@@ -156,9 +156,6 @@ class PopulationCard(models.Model):
         verbose_name_plural = "Population Cards"
     
 
-
-from django.db import models
-
 class Worker(models.Model):
 
     # Basic information
