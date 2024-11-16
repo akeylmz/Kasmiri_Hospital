@@ -20,5 +20,12 @@ urlpatterns = [
     path('order/<int:pk>/', views.OrderDetailAPIView.as_view(), name='order-detail'),
     path('stock-summary/', StockSummaryView.as_view(), name='stock-summary'),
 
+    path('worker/', views.WorkerListCreateAPIView.as_view(), name='worker-list'),
+    path('worker/<int:pk>/', views.WorkerDetailAPIView.as_view(), name='worker-detail'),
+    path('task-assignment/', views.TaskAssignmentListCreateAPIView.as_view(), name='task-assignment-list'),
+    path('task-assignment/<int:pk>/', views.TaskAssignmentDetailAPIView.as_view(), name='task-assignment-detail'),
+    path('leave/', views.LeaveListCreateAPIView.as_view(), name='leave-list'),
+    path('leave/<int:pk>/', views.LeaveDetailAPIView.as_view(), name='leave-detail'),
+
     path('webhook/', views.webhook, name='webhook'),
 ]
