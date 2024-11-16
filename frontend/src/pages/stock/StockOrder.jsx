@@ -9,7 +9,7 @@ import { createModal } from '../../components/Utils/Modal';
 const StockOrder = () => {
 
     const [ activePage, setActivePage] = useState(1)
-    const {data, isLoading} = useGetStockOrdersQuery({page: activePage})
+    const {data, isLoading} = useGetStockOrdersQuery(activePage)
     console.log(data);
     console.log(activePage);
     

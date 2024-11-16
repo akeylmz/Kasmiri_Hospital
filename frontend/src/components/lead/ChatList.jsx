@@ -1,36 +1,39 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { UnipileClient } from "unipile-node-sdk"
 import ChatRetrive from './ChatRetrive'
+import { ALL_KEYS, ALL_URL } from '../../constants'
 
 const ChatList = () => {
 
 // SDK setup
-const chat_id = "zZEl51soV4OqmEEJcBoAHw"
-const BASE_URL = `https://api9.unipile.com:13920`
-const ACCESS_TOKEN = "4KfpVYrT.GaXc9QHSbaeYeyMN0fe9IWpe88eGWOt8DMPkUwDtgbI="
+
 // Inputs
 const [chats1, setChats] = useState([])
 const previousResponse = useRef(null)
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const client = new UnipileClient(BASE_URL, ACCESS_TOKEN)  
-      const allChats = await client.messaging.getAllChats()
+// useEffect(() => {
+ 
+//   const interval = setInterval(fetchData, 2000)
+//   return () => clearInterval(interval)
+// }, [])
 
-      if (JSON.stringify(allChats) !== JSON.stringify(previousResponse.current)) {
-        setChats(allChats);            
-        previousResponse.current = allChats
-      }
-      setChats(allChats.items)
-    } catch (error) {
-      console.log(error)
+const fetchData = async () => {
+  try {
+    const client = new UnipileClient(ALL_URL.UNIPILE_URL, ALL_KEYS.UNIPILE_API_KEY)  
+    const allChats = await client.messaging.getAllChats()
+
+    if (JSON.stringify(allChats) !== JSON.stringify(previousResponse.current)) {
+      setChats(allChats);            
+      previousResponse.current = allChats
     }
-  };
+    setChats(allChats.items)
+  } catch (error) {
+    console.log(error)
+  }
+};
 
+useEffect(() => {
   fetchData();
-  const interval = setInterval(fetchData, 2000)
-  return () => clearInterval(interval)
 }, [])
 
 

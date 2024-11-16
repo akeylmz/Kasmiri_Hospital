@@ -34,7 +34,7 @@ const patientAPI = createApi({
         // --------- STOCK ORDER -------------
         
         getStockOrders: builder.query({
-            query: ({ page = 1 }) => `order/?page=${page}`
+            query: (page = 1) => `order/?page=${page}`
         }),
         getStockOrdersByID: builder.query({
             query: (ID) =>`order/${ID}/`
@@ -50,7 +50,7 @@ const patientAPI = createApi({
         // --------- STOCK -------------
         
         getAllStocks: builder.query({
-            query: ({ page = 1} ) => `stock/?page=${page}`
+            query: (page = 1) => `stock/?page=${page}`
         }),
         createStock: builder.mutation({
             query: (newStock) => ({

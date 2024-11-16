@@ -6,7 +6,7 @@ import { useGetAllStocksQuery } from '../../store/patient2'
 const StockProducts = () => {
 
   const [activePage, setActivePage] = useState(1)
-  const { data, isLoading } = useGetAllStocksQuery({ page: activePage })
+  const { data, isLoading } = useGetAllStocksQuery(activePage)
   console.log(data)
   
     const thead = [
