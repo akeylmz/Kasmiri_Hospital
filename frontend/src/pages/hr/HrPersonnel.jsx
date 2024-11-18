@@ -147,6 +147,7 @@ const HrPersonnel = () => {
             row.department, 
             row.actions
             ])}
+            modal={"workerAdd"}
             searchable={true}
             tableTitle= {"ÇALIŞAN LİSTESİ"}
         />  
