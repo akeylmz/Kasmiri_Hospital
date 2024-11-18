@@ -41,16 +41,12 @@ console.log(patientID);
     
     console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
     const formData = new FormData()
-    console.log(selectedPatient.patient_image)
-    console.log(values.patient_image)
-    console.log(selectedPatient.patient_image === values.patient_image)
     
     
     if(selectedPatient.patient_image === values.patient_image){
       fetchImageAsFile(selectedPatient.patient_image).then(file => {
         if (file) {
-          formData.append("patient_image", file)   
-          console.log(formData.get("patient_image"))
+          formData.append("patient_image", file)            
         }
       })             
     }else{
@@ -63,9 +59,6 @@ console.log(patientID);
       }
     });
     if(isEdit){   
-      console.log(JSON.stringify(formDataToJson(formData), null, 2))
-      console.log(formData.get("patient_image"));
-      
       await updatePatient({ newPatient: formData, patientID }).unwrap()
       refetch() 
     }else{

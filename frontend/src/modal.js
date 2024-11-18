@@ -1,4 +1,5 @@
 
+import { elements } from "chart.js";
 import BodroAddModal from "./components/modals/BodroAddModal";
 import InvoiceModal from "./components/modals/InvoiceModal";
 import PatientAddModal from "./components/modals/PatientAddModal";
@@ -8,6 +9,7 @@ import StockOrderModal from "./components/modals/StockOrderModal";
 import WorkerCheck from "./components/modals/WorkerCheck";
 import WorkerQuest from "./components/modals/WorkerQuest";
 import YabancıModal from "./components/modals/YabancıModal";
+import WorkerAddModal from "./components/modals/WorkerAddModal";
 
 const modals = [
     {
@@ -45,6 +47,10 @@ const modals = [
     {
         name: "stockOrder",
         element: StockOrderModal
+    },
+    {
+        name: "workerAdd",
+        element: WorkerAddModal
     }
 ]
 

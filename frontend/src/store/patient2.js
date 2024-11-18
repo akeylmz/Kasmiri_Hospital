@@ -58,6 +58,16 @@ const patientAPI = createApi({
                 method: 'POST',
                 body: newStock
             })
+        }),
+
+        // --------- KPI -------------
+
+        createWorker: builder.mutation({
+            query: (newWorker) => ({
+                url: 'worker/',
+                method: 'POST',
+                body: newWorker
+            })
         })
 
     }),
@@ -75,5 +85,6 @@ export const {  useGetPatientsQuery,
                 useCreateStockOrderMutation,
                 useGetAllStocksQuery,
                 useCreateStockMutation,
+                useCreateWorkerMutation,
            } = patientAPI; 
 export default patientAPI;
