@@ -195,7 +195,7 @@ class Worker(models.Model):
     is_temporary_personnel = models.BooleanField(blank=True, null=True, default=False, verbose_name="Geçici Personel Mi?")  # İs_GeçiciPersonel
     is_candidate_officer = models.BooleanField(blank=True, null=True, default=False, verbose_name="Aday Memur Mu?")  # is_AdayMemur
     is_foreign_language_support = models.BooleanField(blank=True, null=True, default=False, verbose_name="Yabancı Dil Yardımı Var Mı?")  # is_yabancı<dil Yardımı
-
+    
     # Other fields
     series_no = models.CharField(blank=True, null=True, max_length=50, verbose_name="Seri Numarası")  # Seri numarası
     national_id = models.CharField(blank=True, null=True,max_length=11, verbose_name="T.C. Kimlik No")  # TC
@@ -210,7 +210,8 @@ class Worker(models.Model):
     country = models.CharField(blank=True, null=True,max_length=100, verbose_name="Ülke")  # Ülke
     city = models.CharField(blank=True, null=True,max_length=100, verbose_name="Şehir")  # Şehir
     district = models.CharField(blank=True, null=True,max_length=100, verbose_name="İlçe")  # İlçe
-
+    disability_rate = models.CharField(blank=True, null=True,max_length=100, verbose_name="Engellilik Oranı")  # Engellilik Oranı
+    
     # Contact fields
     phone_1 = models.CharField(blank=True, null=True,max_length=15, verbose_name="Telefon Numarası 1")  # Telno-1
     phone_2 = models.CharField(blank=True, null=True,max_length=15, verbose_name="Telefon Numarası 2")  # Telno-2
