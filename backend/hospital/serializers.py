@@ -57,7 +57,11 @@ class CommunicationCardSerializer(serializers.ModelSerializer):
         return instance
 
 class PatientCardSerializer(serializers.ModelSerializer):
-    class Meta:
+    patient_image = serializers.ImageField(
+        max_length=None, use_url=True,
+        )
+    class Meta:      
+
         model = PatientCard
         fields = '__all__'
 

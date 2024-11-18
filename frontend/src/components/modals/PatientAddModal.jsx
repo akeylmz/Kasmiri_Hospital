@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { t } from "i18next";
+import { useTranslation } from 'react-i18next';
 import { Check, ArrowRight, ArrowLeft } from "lucide-react";
 import { createModal, destroyModal } from "../Utils/Modal";
 import { useFormik } from 'formik';
@@ -7,7 +7,7 @@ import { useCreatePatientMutation, useGetPatientsQuery, useUpdatePatientMutation
 import fetchImageAsFile from "../Utils/fetchImageAsFile.js"
 
 const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
-
+  const { t } = useTranslation()
   // console.log("data:", data);
   const formDataToJson = (formData) => {
     const jsonObject = {};
@@ -218,7 +218,7 @@ useEffect(() => {
 
   return (
     <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-      <form onSubmit={handleSubmit} encType="multipart/form-data" className="bg-lightGray rounded-lg shadow-lg w-full max-w-4xl p-8">
+      <form onSubmit={handleSubmit} encType="multipart/form-data" className="bg-lightGray rounded-lg shadow-lg  w-[1000px] p-8">
         <div className="flex justify-between items-center pb-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold text-cyan-500">{t("patientAdd")}</h2>
           <button
@@ -247,7 +247,7 @@ useEffect(() => {
           {step === 1 && (
             <>
               <div className="row-span-3">
-                <label className="block text-sm font-medium text-gray-500">Fotoğraf</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Image")}</label>
                 <div className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2">
                   <div className="relative w-32 h-32 bg-gray-100 border border-gray-200 rounded-md overflow-hidden">
                     {values.patient_image && (
@@ -276,7 +276,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Adı</label>
+                <label className="block text-sm font-medium text-gray-500">{t("name")}</label>
                 <input
                   type="text"
                   name="first_name"
@@ -287,7 +287,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Soyadı</label>
+                <label className="block text-sm font-medium text-gray-500">{t("surname")}</label>
                 <input
                   type="text"
                   name="last_name"
@@ -299,14 +299,14 @@ useEffect(() => {
 
               <div>
                   <label className="flex items-center text-sm font-medium text-gray-500">
-                    TC No 
+                    {t("tcPassport")} 
                     <input 
                       className="ml-8 mr-2" 
                       type="checkbox" 
                       checked={!isCitizen}
                       onChange={handleCheckboxChange} 
                     /> 
-                    <span>T.C. Vatandaşı değilim</span>
+                    <span className="text-xs">{t("I am not a Turkish citizen")}</span>
                   </label>
                   
                   <input
@@ -320,7 +320,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Doğum Yeri</label>
+                <label className="block text-sm font-medium text-gray-500">{t("birth_place")}</label>
                 <input
                   type="text"
                   name="place_of_birth"
@@ -331,7 +331,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Doğum Tarihi</label>
+                <label className="block text-sm font-medium text-gray-500">{t("birth_date")}</label>
                 <input
                   type="date"
                   name="date_of_birth"
@@ -342,7 +342,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Cinsiyet</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Gender")}</label>
                 <input
                   type="text"
                   name="gender"
@@ -353,7 +353,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Uyruk</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Nationality")}</label>
                 <input
                   type="text"
                   name="nationality"
@@ -364,7 +364,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Ana Adı</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Mother's Name")}</label>
                 <input
                   type="text"
                   name="mother_name"
@@ -375,7 +375,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Baba Adı</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Father's Name")}</label>
                 <input
                   type="text"
                   name="father_name"
@@ -386,7 +386,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Cep Telefonu 1</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Mobile Phone")} 1</label>
                 <input
                   type="text"
                   name="mobile_phone1"
@@ -397,7 +397,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Cep Telefonu 2</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Mobile Phone")} 2</label>
                 <input
                   type="text"
                   name="mobile_phone2"
@@ -419,7 +419,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">İnstagram Adı</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Instagram Username")}</label>
                 <input
                   type="text"
                   name="instagram_username"
@@ -430,7 +430,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Hasta Tipi</label>
+                <label className="block text-sm font-medium text-gray-500">{t("patient_type")}</label>
                 <input
                   type="text"
                   name="patient_type"
@@ -441,7 +441,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Ülke</label>
+                <label className="block text-sm font-medium text-gray-500">{t("country")}</label>
                 <input
                   type="text"
                   name="country"
@@ -452,7 +452,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Şehir</label>
+                <label className="block text-sm font-medium text-gray-500">{t("city")}</label>
                 <input
                   type="text"
                   name="city"
@@ -462,7 +462,7 @@ useEffect(() => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Hastanın Bölümü</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Patient's Department")}</label>
                 <input
                   type="text"
                   name="city"
@@ -470,7 +470,7 @@ useEffect(() => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Doktor Adı</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Doctor's Name")}</label>
                 <input
                   type="text"
                   name="city"
@@ -479,7 +479,7 @@ useEffect(() => {
               </div>
 
               <div className="col-span-3">
-                <label className="block text-sm font-medium text-gray-500">İkametgah Adresi</label>
+                <label className="block text-sm font-medium text-gray-500">{t("address")}</label>
                 <input
                   type="text"
                   name="address"
@@ -494,7 +494,7 @@ useEffect(() => {
           {step === 2 && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Seans</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Session")}</label>
                 <input
                   type="text"
                   name="seans_number"
@@ -505,7 +505,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Cihaz Adı</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Device Name")}</label>
                 <input
                   type="text"
                   name="device_name"
@@ -516,7 +516,7 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Seans Tarihi</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Session Date")}</label>
                 <input
                   type="date"
                   name="device_name"
@@ -524,7 +524,7 @@ useEffect(() => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Seans Saati</label>
+                <label className="block text-sm font-medium text-gray-500">{t("Session Time")}</label>
                 <input
                   type="time"
                   name="device_name"
@@ -533,7 +533,7 @@ useEffect(() => {
               </div>
 
               <div className="col-span-3 flex flex-wrap gap-2">
-                {["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"].map((day) => (
+                {[t("Monday"), t("Tuesday"), t("Wednesday"), t("Thursday"), t("Friday"), t("Saturday"), t("Sunday")].map((day) => (
                   <button
                     key={day}
                     type="button"

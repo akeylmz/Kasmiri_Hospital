@@ -2,16 +2,23 @@ import classNames from 'classnames'
 import React, { useEffect, useRef, useState } from 'react'
 import { IoLogoWhatsapp } from "react-icons/io";
 import { UnipileClient } from "unipile-node-sdk"
+import { ALL_KEYS, ALL_URL } from '../../constants';
+import { parseMessage } from './parseMessage';
+import { useGetAttachmentQuery } from '../../store/chatAPI';
 
 const Message = ({message}) => {
   const [imageUrl, setImageUrl] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  
+  
 
-  const BASE_URL = `https://api9.unipile.com:13920`
-  const ACCESS_TOKEN = "4KfpVYrT.GaXc9QHSbaeYeyMN0fe9IWpe88eGWOt8DMPkUwDtgbI="
+  const BASE_URL = ALL_URL.UNIPILE_URL
+  const ACCESS_TOKEN = ALL_KEYS.UNIPILE_API_KEY
   
   const attachment_id = message?.attachments?.[0]?.id
   const message_id = message.id
+
+  
 
   useEffect(() => {
     setImageUrl(null)
@@ -26,7 +33,7 @@ const Message = ({message}) => {
             attachment_id,
             message_id,
           })
-          const blob = response;  // API'den dönen veriyi blob olarak alıyoruz
+          const blob = response
           const url = URL.createObjectURL(blob);
           setImageUrl(url);
           setIsLoading(false)
@@ -40,34 +47,21 @@ const Message = ({message}) => {
 
 
 
+ const x = parseMessage(message, true, isLoading, imageUrl)
 
-
-
+if(!isLoading){
   return (
     <div className={classNames({
         'flex gap-x-2 max-w-[45%]': true,
         'self-end': message.is_sender == 1
     })}>
-        {!message.is_sender == -1 && <IoLogoWhatsapp color='blue' size={40} />}
-        {/* <img src={message.avatar} className='w-6 h-6 rounded-full self-end object-cover' /> */}
-        {message.text && 
-          <p 
-              style={{hyphens: 'auto'}}
-              className={classNames({
-                  'min-h-[44px] mt-2 inline-flex items-center py-2 px-4 text-sm rounded-3xl': true,
-                  'border border-gray-200': !message.is_sender == 1,
-                  'bg-[#efefef]': message.is_sender == 1
-          })}>
-              {message.text}
-          </p>
-        }  
-        {message.attachments.length !== 0 && (isLoading ?  
-            <div className='w-32 h-32 bg-slate-200 rounded-lg flex items-center justify-center'>
-              <div className="animate-spin border-4 border-t-transparent border-gray-600 rounded-full w-12 h-12"></div> 
-            </div>
-            : <img className='rounded-lg' src={imageUrl} alt="Loading image" />)}
+        {/* {!message.is_sender == -1 && <IoLogoWhatsapp color='green' size={40} />} */}
+        {/* <img src={message.avatar} className='w-6 h-6 rounded-full self-end object-cover' /> */}        
+         {x}
     </div>
   )
+}
+  
 }
 
 export default Message

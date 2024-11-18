@@ -11,10 +11,10 @@ const InboxLayout = () => {
  
 
   return (
-    <div className='w-full h-full flex border border-gray-300 bg-slate-100 rounded-xl'>
+    <div className='w-full h-full flex border border-gray-300 bg-slate-100 '>
         <SideBar />
         <Outlet />
-        <div className='border-l h-full w-[25%] flex flex-col items-center bg-slate-100'>
+        {/* <div className='border-l h-full w-[25%] flex flex-col items-center bg-slate-100'>
               <div className='mt-[15px] w-[90%] flex flex-col gap-2 pb-7 border rounded-lg shadow-md bg-white'>
                   <div className='w-full px-4 py-2 bg-blue-100 flex gap-5 items-center'>
                       <CgProfile size={20} color='#2563eb' />
@@ -48,7 +48,7 @@ const InboxLayout = () => {
                   </div>
               </div>
               
-        </div>
+        </div> */}
     </div>    
   )
 }

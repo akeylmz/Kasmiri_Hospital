@@ -2,15 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import ChatHeader from './ChatHeader'
 import Reply from './Reply'
 import Messages from './Messages'
-import { CgProfile } from "react-icons/cg";
-import { IoIosArrowDown } from 'react-icons/io';
-import { IoLocationSharp } from 'react-icons/io5';
-import { BsStripe } from "react-icons/bs";
-import { SiTeamviewer } from "react-icons/si";
-import { Outlet } from 'react-router-dom';
 import ChatUserDetail from './ChatUserDetail';
 import { UnipileClient } from "unipile-node-sdk"
-
+import { ALL_KEYS, ALL_URL } from '../../constants';
 import { NavLink, useParams } from 'react-router-dom'
 
 const Chat = (  ) => {
@@ -19,8 +13,7 @@ const Chat = (  ) => {
 //console.log(chatId);
 
 const chat_id = chatId
-const BASE_URL = `https://api9.unipile.com:13920`
-const ACCESS_TOKEN = "4KfpVYrT.GaXc9QHSbaeYeyMN0fe9IWpe88eGWOt8DMPkUwDtgbI="
+
 
 const [chats, setChats] = useState([])
 const previousChats = useRef([])
@@ -28,7 +21,7 @@ const previousChats = useRef([])
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const client = new UnipileClient(BASE_URL, ACCESS_TOKEN)  
+      const client = new UnipileClient(ALL_URL.UNIPILE_URL, ALL_KEYS.UNIPILE_API_KEY)  
       const response = await client.messaging.getAllMessagesFromChat({
         chat_id,
       })
@@ -42,7 +35,7 @@ useEffect(() => {
     }
   };
   fetchData();
-  const interval = setInterval(fetchData, 2000);
+  const interval = setInterval(fetchData, 200000);
   return () => clearInterval(interval);
 }, [chatId])
 
@@ -87,7 +80,7 @@ useEffect(() => {
 
  
   return (
-    <div className='flex w-[70%] h-[calc(100%-32px)] my-4 ml-4 bg-white rounded-xl border border-gray-300'>
+    <div className='flex w-[76%] h-[calc(100%-32px)] my-4 ml-4 bg-white rounded-xl border border-gray-300'>
         <div className='h-full w-full'>
           <ChatHeader user={user} setDetailIsShow={setDetailIsShow} detailIsShow={detailIsShow} />
           <Messages messages={chats} />      

@@ -1,23 +1,16 @@
-import React, { useState } from 'react'
-import TableComp2 from '../../UI/TableComp2'
+import React from 'react'
+import TableComp from '../../UI/TableComp'
 import { motion } from 'framer-motion'
-import { useGetAllStocksQuery } from '../../store/patient2'
 
 const StockProducts = () => {
 
-  const [activePage, setActivePage] = useState(1)
-  const { data, isLoading } = useGetAllStocksQuery({ page: activePage })
-  console.log(data)
-  
     const thead = [
-        { name: 'Ürün Adı', sortable: true},
-        { name: 'Stok', sortable: true},
-        { name: 'S.K.T', sortable: true},
+        { name: 'Ürün Adı', sortable: true },
+        { name: 'Stok', sortable: true },
+        { name: 'S.K.T', sortable: true },
         { name: 'Ürün Grubu', sortable: true },
-        { name: 'Depo', sortable: true},
-        // { name: '', width: 50 }, 
+        { name: '', width: 50 }, // İşlemler sütunu, simge için küçük bir genişlik
       ];
-
 
       const tbody = [
         {
@@ -153,34 +146,24 @@ const StockProducts = () => {
           )
         },
       ];
-
-      if(isLoading) {
-        return <div>Yükleniyor...</div>
-    }
       
   return (
     <motion.div 
         initial={{opacity:0}}   
         animate={{opacity:1}}
         className="w-[95%] h-[99%]">
-        <TableComp2
+        <TableComp
             thead={thead}
-            tbody={data.results.map(row => [
-            row.stock_name || '',
-            row.stock_haved || '',
-            row.stock_skt || '',
-            row.stcok_group || '',
-            row.stock_wharehouse || '',
-            <button key="details-12" className="h-[30px] px-[9px] flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
-              &gt;
-            </button>
+            tbody={tbody.map(row => [
+            row.productName,
+            row.stock,
+            row.expiryDate,
+            row.productGroup,
+            row.actions
             ])}
             searchable={true}
-            tableTitle= {"ÜRÜNLER"}  
-            billing={false}
-            page={data.count}
-            activePage={activePage}
-            setActivePage={setActivePage}
+            tableTitle= {"ÜRÜNLER"} 
+            modal={'product'}           
         />
     </motion.div>
   )

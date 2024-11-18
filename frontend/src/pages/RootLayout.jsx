@@ -50,7 +50,7 @@ const RootLayout = () => {
     <div className='w-screen h-screen flex justify-between overflow-hidden'>
         {modals.length > 0 && <Modal />}
         <div className={` h-full transition-all duration-300 ease-in-out ${
-            !expanded ? "!w-16" : ""
+            !expanded ? "!w-16" : "w-[12%]"
             
         }`}>
             <Sidebar expanded={expanded} setExpanded={setExpanded}>
