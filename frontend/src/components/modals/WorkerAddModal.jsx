@@ -72,6 +72,7 @@ const WorkerAddModal = () => {
         "doctor_facility_code": "",
         "avg_waiting_time": "",
         "evaluation_group": "",
+        "info_note": "",
         "is_authorized_to_open": "",
         "is_external_doctor": "",
         "is_intern": "",
@@ -110,6 +111,7 @@ const WorkerAddModal = () => {
         "next_workplace": "",
         "children_count": "",
         "education_level": "",
+        "retired_date": "",
         "registry_no": "",
         "retired_registry_no": "",
         "savings_registry_no": "",
@@ -198,7 +200,13 @@ const WorkerAddModal = () => {
                             </div>
                         </div>
                     </div>
-                    <textarea className='mt-4 bg-slate-100 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' placeholder='Bilgi Notu' name="" id=""></textarea>
+                    <textarea
+                        onChange={handleChange}
+                        value={values.info_note}
+                        className='mt-4 bg-slate-100 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' 
+                        placeholder='Bilgi Notu' 
+                        name="info_note" id="">
+                    </textarea>
                 </div>
                 <div className='bg-white h-full w-2/4 p-4'>
                     <div className="grid grid-cols-3 gap-4">
@@ -346,7 +354,10 @@ const WorkerAddModal = () => {
                             <label htmlFor='evaluation_group_id' className='labelline'>Değerlendirme Grubu</label>
                         </div>
                         <div className="flex items-center space-x-2">
-                        <input                            
+                        <input      
+                            name='is_authorized_to_open' 
+                            value={values.is_authorized_to_open}
+                            onChange={handleChange}                     
                             type="checkbox" 
                             className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                         />
@@ -355,6 +366,9 @@ const WorkerAddModal = () => {
 
                         <div className="flex items-center space-x-2">
                         <input 
+                            name='is_external_doctor'
+                            value={values.is_external_doctor}
+                            onChange={handleChange}
                             type="checkbox" 
                             className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                         />
@@ -847,6 +861,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_foreign_language_support'
+                        value={values.is_foreign_language_support}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -917,6 +934,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_intern'
+                        value={values.is_intern}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -924,6 +944,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_terror_victim'
+                        value={values.is_terror_victim}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -931,6 +954,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_convict_personnel'
+                        value={values.is_convict_personnel}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -938,6 +964,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_temporary_personnel'
+                        value={values.is_temporary_personnel}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -945,6 +974,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_company_employee'
+                        value={values.is_company_employee}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -952,6 +984,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_contract_personnel'
+                        value={values.is_contract_personnel}
+                        onVolumeChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -959,6 +994,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_spouse_working'
+                        value={values.is_spouse_working}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -966,6 +1004,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_candidate_officer'
+                        value={values.is_candidate_officer}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -973,6 +1014,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_disabled_personnel'
+                        value={values.is_disabled_personnel}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -988,6 +1032,9 @@ const WorkerAddModal = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                     <input 
+                        name='is_retired'
+                        value={values.is_retired}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />
@@ -995,9 +1042,11 @@ const WorkerAddModal = () => {
                 </div>
                 <div className='entryarea'>
                     <input 
-                    type="date" 
-                    placeholder="" 
-                    className="mt-1 block w-full rounded-xl bg-slate-100 border-none outline-none p-3" 
+                        name='retired_date'
+                        value={values.retired_date}
+                        onChange={handleChange}
+                        type="date" 
+                        placeholder="" 
                     />
                     <label htmlFor='' className='labelline'>Emeklilik Tarihi</label>
                 </div>
@@ -1059,24 +1108,36 @@ const WorkerAddModal = () => {
                 </div>
                 <div className='entryarea'>
                     <input 
+                        name='birth_city'
+                        id='birth_city_id'
+                        value={values.birth_city}
+                        onChange={handleChange}
                         type="text" 
                         placeholder="" 
                     />
-                    <label htmlFor='' className='labelline'>Şehir</label>
+                    <label htmlFor='birth_city_id' className='labelline'>Şehir</label>
                 </div>
                 <div className='entryarea'>
                     <input 
+                        name='birth_district'
+                        id='birth_district_id'  
+                        value={values.birth_district}
+                        onChange={handleChange}       
                         type="text" 
                         placeholder="" 
                     />
-                    <label htmlFor='' className='labelline'>İlçe</label>
+                    <label htmlFor='birth_district_id' className='labelline'>İlçe</label>
                 </div>
                 <div className='entryarea'>
                     <input 
+                        name='neighborhood_village'
+                        id='neighborhood_village_id'
+                        value={values.neighborhood_village}
+                        onChange={handleChange}
                         type="text" 
                         placeholder="" 
                     />
-                    <label htmlFor='' className='labelline'>Mahalle/Köy</label>
+                    <label htmlFor='neighborhood_village_id' className='labelline'>Mahalle/Köy</label>
                 </div>
                 <div className='entryarea'>
                     <input 
