@@ -180,7 +180,7 @@ class Worker(models.Model):
     doctor_facility_code = models.PositiveIntegerField(blank=True, null=True, verbose_name="Doktor Tesis Kodu")  # Doktor tesis kodu
     avg_waiting_time = models.PositiveIntegerField(blank=True, null=True, verbose_name="Ortalama Hasta Bekleme Süresi")  # Ortalama hasta bekleme süresi
     evaluation_group = models.CharField(max_length=100, blank=True, null=True,verbose_name="Değerlendirme Grubu")  # Değerlendirme grubu
-    
+    info_note = models.CharField(max_length=100, blank=True, null=True,verbose_name="Bilgi Notu")  # Bilgi Notu
     # Boolean fields
     is_authorized_to_open = models.BooleanField(blank=True, null=True, default=False, verbose_name="Doçentlik Açabilir Mi?")  # is_dofaçabilir
     is_external_doctor = models.BooleanField(blank=True, null=True, default=False, verbose_name="Dış Doktor Mu?")  # is_dısDoktor
@@ -226,7 +226,7 @@ class Worker(models.Model):
     next_workplace = models.CharField(blank=True, null=True,max_length=100, verbose_name="Gittiği Yer")  # Gittiği yer
     children_count = models.PositiveIntegerField(blank=True, null=True,verbose_name="Çocuk Sayısı")  # Çocuk sayısı
     education_level = models.CharField(blank=True, null=True,max_length=100, verbose_name="Eğitim Seviyesi")  # Eğitim seviyesi
-    
+    retired_date = models.DateField(blank=True, null=True, verbose_name="Emeklilik Tarihi")  # Emeklilik Tarihi
     # Additional information
     registry_no = models.CharField(blank=True, null=True,max_length=50, verbose_name="Sicil No")  # Sicil no
     retired_registry_no = models.CharField(blank=True, null=True,max_length=50, verbose_name="Emekli Sicil No")  # Emekli sicil no
@@ -320,3 +320,13 @@ class Leave(models.Model):
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - {self.leave_days} Gün İzin"
+
+class WorkerFile(models.Model):
+    person = models.ForeignKey(
+        Worker,
+        on_delete=models.CASCADE,
+        related_name="worker_files",
+        verbose_name="Çalışan"
+    )
+    file_name = models.CharField(max_length=60, blank=True, null=True)
+    file = models.FileField(blank=True, null=True,upload_to='images/worker_files/')
