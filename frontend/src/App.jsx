@@ -91,12 +91,12 @@ function App() {
             { path: "statistics", element: <StockStatistics />},
             { index: true, element: <Navigate to="overwiev" replace /> }
           ]
-        },
-        { path: "KPI-personnel", element: <HrSummaryFile />},
+        },        
+        { path: "/human-resources/personnel/:workerID", element: <HrSummaryFile />},
         { path: "KPI-checklist", element: <HrChecklist />},
         { path: "/human-resources",
           element: <HrLayout />,
-          children: [
+          children: [            
             { path: "hierarchy", element: <HrHierarchy />},
             { path: "personnel", element: <HrPersonnel />},
             { path: "working-hours", element: <HrWorkingHours />},

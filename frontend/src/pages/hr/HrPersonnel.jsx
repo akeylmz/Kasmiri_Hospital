@@ -1,13 +1,15 @@
 import React from 'react'
 import { motion } from 'framer-motion';
-import TableComp from '../../UI/TableComp';
 import { useNavigate } from 'react-router-dom';
 import { IoMailOutline } from "react-icons/io5";
+import TableComp2 from '../../UI/TableComp2';
+import { useGetAllWorkerQuery } from '../../store/patient2';
 
 const HrPersonnel = () => {
 
   const navigate = useNavigate()
-
+  const { data, isLoading, error} = useGetAllWorkerQuery()
+  
     const tbody = [
         {
           fullName: ['https://via.placeholder.com/40', 'Selim GÜRSES'],
@@ -131,6 +133,13 @@ const HrPersonnel = () => {
         { name: '', width: 120 }, // İşlemler sütunu için genişlik
       ];
 
+      if(isLoading){
+        return <div>Yükleniyor</div>
+      }
+      const workers = data.results
+      console.log(workers);
+      
+
   return (
     <motion.div
         initial={{opacity:0}}   
@@ -138,14 +147,24 @@ const HrPersonnel = () => {
         className='w-full h-full flex flex-col items-center justify-evenly'
     >
       
-        <TableComp
+        <TableComp2            
             thead={thead}
-            tbody={tbody.map(row => [
-            [<img src={row.fullName[0]} alt={`${row.fullName[1]} avatar`} className="w-10 h-10 rounded-full" />, row.fullName[1]], 
-            row.email, 
-            row.contact, 
-            row.department, 
-            row.actions
+            tbody={workers.map(worker => [
+            <div className='flex items-center gap-x-1'>
+              <img src={worker.worker_image} alt={`${worker.first_name} avatar`} className="w-10 h-10 rounded-full" />
+              {worker.first_name + " " + worker.last_name}
+            </div>, 
+            worker.email, 
+            worker.phone_1, 
+            worker.department, 
+            <div className='flex gap-5'>
+              <button>
+                <IoMailOutline size={30} color='blue' />
+              </button>
+                <button onClick={()=> navigate(`${worker.id}`)} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
+                &gt;
+              </button>
+            </div>
             ])}
             modal={"workerAdd"}
             searchable={true}

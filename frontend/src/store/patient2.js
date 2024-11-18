@@ -62,13 +62,21 @@ const patientAPI = createApi({
 
         // --------- KPI -------------
 
+
+        getAllWorker: builder.query({
+            query: ( page = 1 ) => `worker/?page=${page}`
+        }),
+        getWorkerById: builder.query({
+            query: ( workerID ) => `worker/${workerID}/`
+        }),
         createWorker: builder.mutation({
             query: (newWorker) => ({
                 url: 'worker/',
                 method: 'POST',
                 body: newWorker
             })
-        })
+        }),
+
 
     }),
     keepUnusedDataFor: 30,
@@ -86,5 +94,7 @@ export const {  useGetPatientsQuery,
                 useGetAllStocksQuery,
                 useCreateStockMutation,
                 useCreateWorkerMutation,
+                useGetAllWorkerQuery,
+                useGetWorkerByIdQuery,
            } = patientAPI; 
 export default patientAPI;

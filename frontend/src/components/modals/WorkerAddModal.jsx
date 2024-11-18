@@ -8,7 +8,7 @@ import { destroyModal } from '../Utils/Modal';
 
 const WorkerAddModal = () => {
   // Accordion için her sekmenin açık mı kapalı mı olduğunu kontrol eden state'ler
-  const [isGeneralOpen, setIsGeneralOpen] = useState(false);
+  const [isGeneralOpen, setIsGeneralOpen] = useState(true);
   const [isPersonalOpen, setIsPersonalOpen] = useState(false);
   const [isAddressOpen, setIsAddressOpen] = useState(false);
 
@@ -1024,9 +1024,12 @@ const WorkerAddModal = () => {
                 </div>
                 <div className='entryarea'>
                     <input 
-                    type="text" 
-                    placeholder="" 
-                    className="mt-1 block w-full rounded-xl bg-slate-100 border-none outline-none p-3" 
+                        name='disability_rate'
+                        value={values.disability_rate}
+                        onChange={handleChange}
+                        type="text" 
+                        placeholder="" 
+                        className="mt-1 block w-full rounded-xl bg-slate-100 border-none outline-none p-3" 
                     />
                     <label htmlFor='' className='labelline'>Engellilik Oranı</label>
                 </div>
