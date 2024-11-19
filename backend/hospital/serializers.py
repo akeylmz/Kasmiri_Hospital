@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave
+from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -201,8 +201,31 @@ class OrderSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+class WorkerFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkerFile
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        """
+        Yeni bir izin kaydı oluşturur.
+        """
+        leave = WorkerFile.objects.create(**validated_data)
+        return leave
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir izin kaydını günceller.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
     
 class WorkerSerializer(serializers.ModelSerializer):
+    worker_files = WorkerFileSerializer(many=True, read_only=True)
     class Meta:
         model = Worker
         fields = '__all__'
@@ -338,6 +361,28 @@ class LeaveSerializer(serializers.ModelSerializer):
         Yeni bir izin kaydı oluşturur.
         """
         leave = Leave.objects.create(**validated_data)
+        return leave
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir izin kaydını günceller.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+class WorkerFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkerFile
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        """
+        Yeni bir izin kaydı oluşturur.
+        """
+        leave = WorkerFile.objects.create(**validated_data)
         return leave
 
     def update(self, instance, validated_data):

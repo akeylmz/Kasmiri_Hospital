@@ -27,5 +27,8 @@ urlpatterns = [
     path('leave/', views.LeaveListCreateAPIView.as_view(), name='leave-list'),
     path('leave/<int:pk>/', views.LeaveDetailAPIView.as_view(), name='leave-detail'),
 
+    path('worker-file/', views.WorkerFileListCreateAPIView.as_view(), name='worker-file-list'),
+    path('worker-file/<int:pk>/', views.WorkerFileDetailAPIView.as_view(), name='worker-file-detail'),
+
     path('webhook/', views.webhook, name='webhook'),
 ]

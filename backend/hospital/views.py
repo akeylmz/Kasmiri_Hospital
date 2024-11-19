@@ -10,8 +10,8 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, WorkerFileSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -137,3 +137,11 @@ class LeaveListCreateAPIView(generics.ListCreateAPIView):
 class LeaveDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Leave.objects.all()
     serializer_class=LeaveSerializer
+
+class WorkerFileListCreateAPIView(generics.ListCreateAPIView):
+    queryset= WorkerFile.objects.all()
+    serializer_class=WorkerFileSerializer
+
+class WorkerFileDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= WorkerFile.objects.all()
+    serializer_class=WorkerFileSerializer
