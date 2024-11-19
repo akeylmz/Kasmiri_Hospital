@@ -154,7 +154,7 @@ const WorkerAddModal = () => {
     <div className="p-5 h-full overflow-scroll z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="bg-lightGray rounded-lg shadow-lg  w-[1400px] p-8">
         {/* Genel Bilgiler */}
-        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl">
+        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl overflow-hidden">
             <button 
             type='button'
             className={`w-full text-left bg-white text-gray-500 font-bold rounded-2xl focus:outline-none 
@@ -406,7 +406,7 @@ const WorkerAddModal = () => {
         </div>
 
         {/* Kişisel Bilgiler */}
-        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl">
+        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl overflow-hidden">
         <button 
             type='button'
             className={`w-full text-left bg-white text-gray-500 font-bold rounded-2xl focus:outline-none 
@@ -554,7 +554,7 @@ const WorkerAddModal = () => {
         </div>
 
         {/* Adres ve İletişim */}
-        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl">
+        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl overflow-hidden">
             <button 
                 type='button'
             className={`w-full text-left bg-white text-gray-500 font-bold rounded-2xl focus:outline-none 
@@ -665,7 +665,7 @@ const WorkerAddModal = () => {
         </div>
 
         {/* Özlük Bilgileri */}
-        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl">
+        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl overflow-hidden">
             <button 
             type='button'
             className={`w-full text-left bg-white text-gray-500 font-bold rounded-2xl focus:outline-none 
@@ -1069,7 +1069,7 @@ const WorkerAddModal = () => {
         </div>
 
         {/* Nüfus Bilgileri */}
-        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl">
+        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl overflow-hidden">
             <button 
             type='button'
             className={`w-full text-left bg-white text-gray-500 font-bold rounded-2xl focus:outline-none 
@@ -1190,7 +1190,7 @@ const WorkerAddModal = () => {
         </div>
 
             {/* Ozluk Dosyaları */}
-        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl">
+        <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl overflow-hidden">
             <button 
             type='button'
             className={`w-full text-left bg-white text-gray-500 font-bold rounded-2xl focus:outline-none 

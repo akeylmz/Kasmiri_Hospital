@@ -148,8 +148,8 @@ const HrSummaryFile = () => {
           <div className='bg-cyan-600 p-3 rounded-2xl flex items-center'>
           <button onClick={()=> navigate("/human-resources/personnel")}  className='border-2 border-white rounded-full' ><TiArrowBack size={35} color='white' /></button>
             <div className='pl-4'>
-              <p className='text-white ml-4 text-lg font-semibold'>{(data.first_name + " " + data.last_name).toUpperCase()}</p>
-              <p className='text-white ml-6 '>{data.department.toUpperCase()}</p>
+              <p className='text-white ml-4 text-lg font-semibold'>{(data?.first_name + " " + data?.last_name).toUpperCase()}</p>
+              <p className='text-white ml-6 '>{data?.department.toUpperCase()}</p>
             </div>
           </div>
       </div>
