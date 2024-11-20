@@ -76,6 +76,13 @@ const patientAPI = createApi({
                 body: newWorker
             })
         }),
+        createWorkerFile: builder.mutation({
+            query: (files) => ({
+                url: `worker-file/`,
+                method: 'POST',
+                body: files,
+            })
+        }),
 
 
     }),
@@ -96,5 +103,6 @@ export const {  useGetPatientsQuery,
                 useCreateWorkerMutation,
                 useGetAllWorkerQuery,
                 useGetWorkerByIdQuery,
+                useCreateWorkerFileMutation,
            } = patientAPI; 
 export default patientAPI;

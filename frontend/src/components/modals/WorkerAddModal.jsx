@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import { TiArrowBack } from "react-icons/ti";
 import { useNavigate } from 'react-router-dom';
-import { useCreateWorkerMutation } from '../../store/patient2';
+import { useCreateWorkerFileMutation, useCreateWorkerMutation } from '../../store/patient2';
 import { destroyModal } from '../Utils/Modal';
 
 const WorkerAddModal = () => {
@@ -31,23 +31,45 @@ const WorkerAddModal = () => {
   const toggleMilitary = () => setIsMilitaryOpen(!isMilitaryOpen);
   const toggleWork = () => setIsWorkOpen(!isWorkOpen);
   const navigate = useNavigate();
-  const [ createWorker ] = useCreateWorkerMutation();
+  const [ createWorker ] = useCreateWorkerMutation()
+  const [ createWorkerFile ] = useCreateWorkerFileMutation()
+  const [files, setFiles] = useState([])
+
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFiles((prevFiles) => [...prevFiles, file])
+    }
+  }
+
+  const submitFiles = async (workerID) =>{
+    const promises = files.map(async (file) => {
+        const formData = new FormData()
+        formData.append('person', workerID)
+        formData.append('file', file)
+        try {
+        await createWorkerFile(formData)
+        } catch (error) {
+        console.error(`Error uploading file ${file.name}:`, error)
+        }
+    })
+    await Promise.all(promises)
+  }
 
   const submit = async (values, actions) => {
-
     const formData = new FormData()
     formData.append("worker_image", values.worker_image)
     Object.keys(values).forEach((key) => {
         if (key !== "worker_image") { 
           formData.append(key, values[key]);
         }
-    });
-
-    await createWorker(formData).unwrap()
+    })
+    const response = await createWorker(formData).unwrap()
+    await submitFiles(response.id) 
     actions.resetForm()
     destroyModal()
   }
-
 
   const { values, errors, handleChange, handleSubmit, setFieldValue } = useFormik({
     initialValues: {
@@ -141,14 +163,9 @@ const WorkerAddModal = () => {
     onSubmit: submit,
   })
 
-  const [files, setFiles] = useState([])
+  
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setFiles((prevFiles) => [...prevFiles, file])
-    }
-  }
+ 
 
   return (
     <div className="p-5 h-full overflow-scroll z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
@@ -1204,7 +1221,7 @@ const WorkerAddModal = () => {
             </button>
             {isOzluk && (
             <div className="p-4 bg-white border-t border-gray-300">
-                <div className="">
+                <div>
                     <div className='flex justify-end w-full'>
                         <label htmlFor='file-input' className='text-white text-lg font-semibold bg-sky-600 hover:bg-sky-500 py-3 px-5 rounded-xl'>
                            <input

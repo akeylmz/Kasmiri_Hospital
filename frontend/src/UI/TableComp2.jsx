@@ -13,7 +13,7 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
  }) => {
   const navigate = useNavigate();
   const [sorting, setSorting] = useState({});
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');  
 
   const filteredData = tbody
     .filter((items) =>
