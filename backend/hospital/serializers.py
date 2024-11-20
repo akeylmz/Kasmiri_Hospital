@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile
+from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -297,8 +297,6 @@ class TaskAssignmentSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-from rest_framework import serializers
-from .models import WorkingHours
 
 class WorkingHoursSerializer(serializers.ModelSerializer):
     class Meta:

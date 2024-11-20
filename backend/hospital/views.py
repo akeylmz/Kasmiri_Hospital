@@ -14,6 +14,7 @@ from hospital.serializers import  NoteSerializer, PatientCardSerializer, Communi
 from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filters
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -71,9 +72,15 @@ class NoteDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
 
+class PatientCardFilter(filters.FilterSet):
+    class Meta:
+        model = PatientCard
+        exclude = ['patient_image']
 class PatientCardListCreateAPIView(generics.ListCreateAPIView):
     queryset= PatientCard.objects.all()
     serializer_class=PatientCardSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PatientCardFilter
 
 class PatientCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PatientCard.objects.all()
@@ -95,28 +102,44 @@ class PopulationCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PopulationCard.objects.all()
     serializer_class=PopulationCardSerializer
 
+class StockFilter(filters.FilterSet):
+    class Meta:
+        model = Stock
+        fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
 class StockListCreateAPIView(generics.ListCreateAPIView):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['stock_name', 'stock_skt', 'stock_ut', 'stock_wharehouse', 'stock_buyed', 'stock_haved', 'stock_pozition', 'stcok_group']
+    filterset_class = StockFilter
 
 class StockDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Stock.objects.all()
     serializer_class=StockSerializer
 
+class OrderFilter(filters.FilterSet):
+    class Meta:
+        model = Order
+        fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
 class OrderListCreateAPIView(generics.ListCreateAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = OrderFilter
 
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
 
+class WorkerFilter(filters.FilterSet):
+    class Meta:
+        model = Worker
+        exclude = ['worker_image']
+
 class WorkerListCreateAPIView(generics.ListCreateAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = WorkerFilter
 class WorkerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer
