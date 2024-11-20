@@ -10,8 +10,8 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, WorkerFileSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, WorkerFileSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -128,6 +128,14 @@ class TaskAssignmentListCreateAPIView(generics.ListCreateAPIView):
 class TaskAssignmentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= TaskAssignment.objects.all()
     serializer_class=TaskAssignmentSerializer
+
+class WorkingHoursListCreateAPIView(generics.ListCreateAPIView):
+    queryset= WorkingHours.objects.all()
+    serializer_class=WorkingHoursSerializer
+
+class WorkingHoursDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= WorkingHours.objects.all()
+    serializer_class=WorkingHoursSerializer
 
 
 class LeaveListCreateAPIView(generics.ListCreateAPIView):
