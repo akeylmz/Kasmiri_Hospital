@@ -19,6 +19,7 @@ from django_filters import rest_framework as filters
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Sum
+from django.db import models
 
 def webhook(request):
     if request.method == 'POST':
@@ -76,6 +77,16 @@ class PatientCardFilter(filters.FilterSet):
     class Meta:
         model = PatientCard
         exclude = ['patient_image']
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class PatientCardListCreateAPIView(generics.ListCreateAPIView):
     queryset= PatientCard.objects.all()
     serializer_class=PatientCardSerializer
@@ -106,6 +117,16 @@ class StockFilter(filters.FilterSet):
     class Meta:
         model = Stock
         fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class StockListCreateAPIView(generics.ListCreateAPIView):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
@@ -120,6 +141,16 @@ class OrderFilter(filters.FilterSet):
     class Meta:
         model = Order
         fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class OrderListCreateAPIView(generics.ListCreateAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
@@ -134,7 +165,16 @@ class WorkerFilter(filters.FilterSet):
     class Meta:
         model = Worker
         exclude = ['worker_image']
-
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class WorkerListCreateAPIView(generics.ListCreateAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer
