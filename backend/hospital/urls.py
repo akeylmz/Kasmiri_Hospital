@@ -24,6 +24,8 @@ urlpatterns = [
     path('worker/<int:pk>/', views.WorkerDetailAPIView.as_view(), name='worker-detail'),
     path('task-assignment/', views.TaskAssignmentListCreateAPIView.as_view(), name='task-assignment-list'),
     path('task-assignment/<int:pk>/', views.TaskAssignmentDetailAPIView.as_view(), name='task-assignment-detail'),
+    path('working-hours/', views.WorkingHoursListCreateAPIView.as_view(), name='working-hours-list'),
+    path('working-hours/<int:pk>/', views.WorkingHoursDetailAPIView.as_view(), name='working-hours-detail'),
     path('leave/', views.LeaveListCreateAPIView.as_view(), name='leave-list'),
     path('leave/<int:pk>/', views.LeaveDetailAPIView.as_view(), name='leave-detail'),
 

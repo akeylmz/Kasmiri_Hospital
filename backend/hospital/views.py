@@ -10,14 +10,16 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, WorkerFileSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, WorkerFileSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework as filters
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Sum
+from django.db import models
 
 def webhook(request):
     if request.method == 'POST':
@@ -71,9 +73,25 @@ class NoteDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
 
+class PatientCardFilter(filters.FilterSet):
+    class Meta:
+        model = PatientCard
+        exclude = ['patient_image']
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class PatientCardListCreateAPIView(generics.ListCreateAPIView):
     queryset= PatientCard.objects.all()
     serializer_class=PatientCardSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = PatientCardFilter
 
 class PatientCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PatientCard.objects.all()
@@ -95,28 +113,73 @@ class PopulationCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PopulationCard.objects.all()
     serializer_class=PopulationCardSerializer
 
+class StockFilter(filters.FilterSet):
+    class Meta:
+        model = Stock
+        fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class StockListCreateAPIView(generics.ListCreateAPIView):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['stock_name', 'stock_skt', 'stock_ut', 'stock_wharehouse', 'stock_buyed', 'stock_haved', 'stock_pozition', 'stcok_group']
+    filterset_class = StockFilter
 
 class StockDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Stock.objects.all()
     serializer_class=StockSerializer
 
+class OrderFilter(filters.FilterSet):
+    class Meta:
+        model = Order
+        fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class OrderListCreateAPIView(generics.ListCreateAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = OrderFilter
 
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
 
+class WorkerFilter(filters.FilterSet):
+    class Meta:
+        model = Worker
+        exclude = ['worker_image']
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
 class WorkerListCreateAPIView(generics.ListCreateAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer
-
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = WorkerFilter
 class WorkerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer
@@ -128,6 +191,14 @@ class TaskAssignmentListCreateAPIView(generics.ListCreateAPIView):
 class TaskAssignmentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= TaskAssignment.objects.all()
     serializer_class=TaskAssignmentSerializer
+
+class WorkingHoursListCreateAPIView(generics.ListCreateAPIView):
+    queryset= WorkingHours.objects.all()
+    serializer_class=WorkingHoursSerializer
+
+class WorkingHoursDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= WorkingHours.objects.all()
+    serializer_class=WorkingHoursSerializer
 
 
 class LeaveListCreateAPIView(generics.ListCreateAPIView):
