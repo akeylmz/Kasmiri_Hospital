@@ -277,10 +277,12 @@ class TaskAssignment(models.Model):
     start_time = models.TimeField(blank=True, null=True, verbose_name="Başlangıç Saati")  # Başlangıç saati
     end_time = models.TimeField(blank=True, null=True, verbose_name="Bitiş Saati")  # Bitiş saati
     description = models.TextField(blank=True, null=True, verbose_name="İş Tanımı")  # İş tanımı
-    date = models.DateField(blank=True, null=True, verbose_name="Tarih")  # Tarih
-    situation = models.CharField(max_length=200, blank=True, null=True, verbose_name="İş Tanımı")  # İş tanımı
+    date = models.DateField(blank=True, null=True, verbose_name="Son Kontrol Tarihi")  # Tarih
+    cheked_person = models.CharField(max_length=200, blank=True, null=True, verbose_name="Son Kontrol Eden")  # İş tanımı
+
+    situation = models.CharField(max_length=200, blank=True, null=True, verbose_name="İş Durumu")  # İş tanımı
     def __str__(self):
-        return f"{self.task_name} - {self.person.first_name} {self.person.last_name}" if self.task_name else "Görev Tanımsız"
+        return f"{self.task_name} - {self.person.first_name} {self.person.last_name}" if self.task_name else f"{self.person.first_name} {self.person.last_name}"
 
 class WorkingHours(models.Model):
     person = models.ForeignKey(
