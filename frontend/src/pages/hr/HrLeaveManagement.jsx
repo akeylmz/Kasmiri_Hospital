@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import TableComp2 from '../../UI/TableComp2';
 import { useGetAllWorkerQuery } from '../../store/patient2';
+import { capitalizeWords } from '../../components/Utils/capitalizeWords';
+import { formatDateToShow } from '../../components/Utils/DateFormat';
 
 const HrLeaveManagement = () => {
 
@@ -10,17 +12,20 @@ const HrLeaveManagement = () => {
   
   const thead = [
       { name: 'Adı Soyadı', sortable: true },
-      { name: 'İş Başı', sortable: true },
-      { name: 'Paydos', sortable: true },
-      { name: 'Çalışma Günleri', sortable: true },
-      { name: 'Haftalık Çalışma', sortable: true },
-      { name: '', width: 80 },
+      { name: 'Başlangıç Tarihi', sortable: true },
+      { name: 'Bitiş Tarihi', sortable: true },
+      { name: 'İzin Süresi', sortable: true },
     ]     
     
   if(isLoading){
     return <div>Yükleniyor...</div>
   }
   console.log(data.results);
+  data.results.filter((x) => x.leaves.length > 0).map((x)=>{
+    console.log(x.leaves.length);
+    
+  })
+  
       
   return (
     <motion.div
@@ -30,19 +35,18 @@ const HrLeaveManagement = () => {
     >
         <TableComp2
             thead={thead}
-            tbody={data.results.map(worker => [
-              <div className='flex items-center gap-x-1'>
+            tbody={data.results.filter((x) => x.leaves.length > 0).map(worker => [
+              <div className='flex items-center gap-x-2'>
                 <img src={worker.worker_image} alt={`${worker.first_name} avatar`} className="w-10 h-10 rounded-full" />
-                {worker.first_name + " " + worker.last_name}
+                {capitalizeWords(worker.first_name + " " + worker.last_name)}
               </div>, 
-              worker.startTime,
-              worker.endTime,
-              worker.workDays,
-              worker.weeklyHours,
-              worker.actions
+              formatDateToShow(worker.leaves[0].start_date),
+              formatDateToShow(worker.leaves[0].end_date),
+              worker.leaves[0].leave_days,
             ])}
             searchable={true}
-            tableTitle={"ÇALIŞMA SAATLERİ"}
+            tableTitle={"İZİN YÖNETİMİ"}
+            modal={"leaves-modal"}
             activePage = {activePage}
             setActivePage = {setActivePage}
         />

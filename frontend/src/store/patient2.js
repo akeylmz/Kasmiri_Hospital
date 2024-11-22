@@ -92,8 +92,13 @@ const patientAPI = createApi({
                 body: files,
             })
         }),
-
-
+        createWorkerLeaves: builder.mutation({
+            query: (newLeave) => ({
+                url: "leave/",
+                method: "POST",
+                body: newLeave
+            })
+        }),
     }),
     keepUnusedDataFor: 30,
     refetchOnMountOrArgChange: 5
@@ -113,5 +118,6 @@ export const {  useGetPatientsQuery,
                 useGetAllWorkerQuery,
                 useGetWorkerByIdQuery,
                 useCreateWorkerFileMutation,
+                useCreateWorkerLeavesMutation,
            } = patientAPI; 
 export default patientAPI;
