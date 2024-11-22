@@ -49,9 +49,9 @@ const patientAPI = createApi({
         
         // --------- STOCK -------------
         
-        getAllStocks: builder.query({
-            query: (page = 1) => `stock/?page=${page}`
-        }),
+        // getAllStocks: builder.query({
+        //     query: (page = 1) => `stock/?page=${page}`
+        // }),
         createStock: builder.mutation({
             query: (newStock) => ({
                 url: 'stock/',
@@ -59,12 +59,21 @@ const patientAPI = createApi({
                 body: newStock
             })
         }),
+        getAllStocks: builder.query({
+            query: ({ page = 1, stock_wharehouse } = {}) => {
+                let params = new URLSearchParams({ page });
+                if (stock_wharehouse) {
+                    params.append("stock_wharehouse", stock_wharehouse);
+                }
+                return `stock/?${params.toString()}`;
+            }
+        }),
 
         // --------- KPI -------------
 
 
         getAllWorker: builder.query({
-            query: ( page = 1 ) => `worker/?page=${page}`
+            query: ({ page = 1 }) => `worker/?page=${page}`
         }),
         getWorkerById: builder.query({
             query: ( workerID ) => `worker/${workerID}/`
