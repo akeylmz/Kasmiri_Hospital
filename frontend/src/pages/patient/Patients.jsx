@@ -9,25 +9,14 @@ import { useNavigate } from 'react-router-dom';
 
 
 const Patients = () => {
-    const [currentPage, setCurrentPage] = useState(1);
    
     const navigate = useNavigate()
-    const [itemsPerPage] = useState(10);
     const { t } = useTranslation();
     const [deletePatient ] = useDeletePatientMutation()
     const [ activePage, setActivePage] = useState(1)
-    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage});
-    console.log(patients);
-    console.log(activePage);
+    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage})
+    //console.log(patients)
     
-    //console.log(Math.ceil(patients.length / 10));
-    useEffect(() => {
-        if (patients) {
-            // console.log("Fetched patients data:", patients);
-        }
-    }, [patients]);
-    
-
     const [firstLoad, setFirstLoad] = useState(false);
     const [editToggle, setEditToggle] = useState(false);
     const [selectedPatientId, setSelectedPatientId] = useState(null);
@@ -45,6 +34,24 @@ const Patients = () => {
      if (error) return <div>Failed to load patients</div>
      if (isLoading) return <div>Loading...</div>
 
+     const thead = [
+        { name: t('name'), sortable: true, minWidth: 180 },
+        { name: t('surname'), sortable: true, minWidth: 130 },
+        { name: t("Attending Doctor"), sortable: true, minWidth: 160 },                               
+        { name: t('phone') },
+        { name: t('email'), sortable: true },
+        { name: t('location'), sortable: true },
+        { name: t('tcPassport') },
+        { name: t("Patient Department"), sortable: true },
+        { name: t("Registrar"), sortable: true },
+        { name: t("Approving Doctor"), sortable: true },
+        { name: t("Entry Date/Time"), sortable: true },
+        { name: t("Discharge Date/Time"), sortable: true },
+        { name: t("Insurance"), sortable: true },
+        { name: t('actions'), action: true},
+        { name: "none"},
+    ]
+
     return (
         <motion.div
             initial={{opacity:0}}   
@@ -53,23 +60,7 @@ const Patients = () => {
             
            <div className='w-[95%] h-[95%]'>
                 <TableComp2
-            thead={[
-                { name: t('name'), sortable: true, minWidth: 180 },
-                { name: t('surname'), sortable: true, minWidth: 130 },
-                { name: t("Attending Doctor"), sortable: true, minWidth: 160 },                               
-                { name: t('phone') },
-                { name: t('email'), sortable: true },
-                { name: t('location'), sortable: true },
-                { name: t('tcPassport') },
-                { name: t("Patient Department"), sortable: true },
-                { name: t("Registrar"), sortable: true },
-                { name: t("Approving Doctor"), sortable: true },
-                { name: t("Entry Date/Time"), sortable: true },
-                { name: t("Discharge Date/Time"), sortable: true },
-                { name: t("Insurance"), sortable: true },
-                { name: t('actions'), action: true},
-                { name: "none"},
-            ]}
+            thead={thead}
             tbody={patients.results.map((user) => [        
                 <button 
                     type='button' 

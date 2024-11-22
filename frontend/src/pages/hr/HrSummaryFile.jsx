@@ -4,8 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { IoChevronBack } from 'react-icons/io5';
 import { TiArrowBack } from "react-icons/ti";
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCreateWorkerMutation, useGetWorkerByIdQuery } from '../../store/patient2';
+import { useCreateWorkerFileMutation, useCreateWorkerMutation, useGetWorkerByIdQuery } from '../../store/patient2';
 import { Label } from 'recharts';
+import { fetchFileDetails } from '../../components/Utils/fetchFileDetails';
+import { FaDownload } from "react-icons/fa6";
 
 const HrSummaryFile = () => {
   const [isGeneralOpen, setIsGeneralOpen] = useState(true);
@@ -25,8 +27,12 @@ const HrSummaryFile = () => {
   const { workerID } = useParams()
   
   const [ createWorker ] = useCreateWorkerMutation()
+  const [ createWorkerFile ] = useCreateWorkerFileMutation()
   const { data, isLoading, error } = useGetWorkerByIdQuery(workerID)
-  console.log(data);
+  const [files, setFiles] = useState([])
+  const [currentWorkerFiles, setCurrrentWorkerFiles] = useState([])
+ 
+ // console.log(data);
   
   const submit = async (values, actions) => {
 
@@ -43,13 +49,45 @@ const HrSummaryFile = () => {
   useEffect(() => {
     if (data) {
       setValues((prevValues) => ({
-        ...prevValues, 
-        ...data,   
+        ...prevValues,
+        ...Object.fromEntries(
+          Object.entries(data).map(([key, value]) => [key, value ?? ""])
+        ),
       }));
+      fetchWorkerFiles(data);
     }
   }, [data]);
 
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFiles((prevFiles) => [...prevFiles, file])
+    }
+  }
+  const fileSubmit = async () => {
+    if (!files || files.length === 0) {
+      console.error("No files to upload");
+      return;
+    }
   
+    const promises = files.map(async (file) => {
+      const formData = new FormData();
+      formData.append('person', workerID); // person verisini ekle
+      formData.append('file', file); // döngüdeki file verisini ekle
+  
+      try {
+        await createWorkerFile(formData); // POST işlemi
+        console.log(`File ${file.name} uploaded successfully`);
+      } catch (error) {
+        console.error(`Error uploading file ${file.name}:`, error);
+      }
+    });
+  
+    // Tüm dosya yükleme işlemlerinin tamamlanmasını bekle
+    await Promise.all(promises);
+    console.log("All files have been uploaded");
+  }  
   const { values, errors, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
     initialValues: {
       "worker_image": "",
@@ -141,6 +179,42 @@ const HrSummaryFile = () => {
     },
     onSubmit: submit,
   })
+
+  const downloadFile = async (fileUrl, fileName) => {
+    try {
+      // URL'yi al ve blob'a dönüştür
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      
+      // Blob verisini bir URL'ye çevir
+      const url = window.URL.createObjectURL(blob);
+      
+      // Link elementi oluştur
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = fileName; // İndirilecek dosyanın ismi
+      document.body.appendChild(a);
+      a.click(); // Tıkla, dosya indirilsin
+      window.URL.revokeObjectURL(url); // URL'yi temizle
+    } catch (error) {
+      console.error('Dosya indirilemedi:', error);
+    }
+  };
+
+  const fetchWorkerFiles = (data) => {
+    console.log(data);
+    data.worker_files.map( async (workerFile)=>{
+        
+      const response = await fetchFileDetails(workerFile.file); 
+      console.log(response)
+      setCurrrentWorkerFiles((prevFiles) => [
+        ...prevFiles,
+        response   
+      ])
+    })
+  }
+
 
   return (
     <div className="p-5 h-full overflow-scroll">
@@ -1210,99 +1284,68 @@ const HrSummaryFile = () => {
             <div className="p-4 bg-white border-t border-gray-300">
                 <div className="">
                     <div className='flex justify-end w-full'>
-                        <button className='text-white text-lg font-semibold bg-sky-600 hover:bg-sky-500 py-3 px-5 rounded-xl '>Dosya Ekle</button>
+                        <label htmlFor='file-input' className='text-white text-lg font-semibold bg-sky-600 hover:bg-sky-500 py-3 px-5 rounded-xl'>
+                           <input
+                                id="file-input"
+                                type="file"
+                                className="hidden"
+                                onChange={handleFileChange}
+                            />
+                            Dosya Ekle
+                        </label>
                     </div>
-
                     <div className="grid grid-cols-3 gap-4 mt-5">
-                        {/* İlk Dosya */}
-                        <div className="border rounded-lg p-4 flex items-center space-x-4 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                            <polyline points="10 9 9 9 8 9" />
-                        </svg>
-                        <div>
-                            <p className="text-gray-700 font-semibold">Dosya-1.pdf</p>
-                            <p className="text-sm text-gray-500">1.2 MB</p>
-                        </div>
-                        </div>
-
-                        {/* İkinci Dosya */}
-                        <div className="border rounded-lg p-4 flex items-center space-x-4 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                            <polyline points="10 9 9 9 8 9" />
-                        </svg>
-                        <div>
-                            <p className="text-gray-700 font-semibold">Dosya-2.pdf</p>
-                            <p className="text-sm text-gray-500">3.5 MB</p>
-                        </div>
-                        </div>
-
-                        {/* Üçüncü Dosya */}
-                        <div className="border rounded-lg p-4 flex items-center space-x-4 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                            <polyline points="10 9 9 9 8 9" />
-                        </svg>
-                        <div>
-                            <p className="text-gray-700 font-semibold">Dosya-3.pdf</p>
-                            <p className="text-sm text-gray-500">500 KB</p>
-                        </div>
-                        </div>
-
-                        {/* Üçüncü Dosya */}
-                        <div className="border rounded-lg p-4 flex items-center space-x-4 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                            <polyline points="10 9 9 9 8 9" />
-                        </svg>
-                        <div>
-                            <p className="text-gray-700 font-semibold">Dosya-4.pdf</p>
-                            <p className="text-sm text-gray-500">134 KB</p>
-                        </div>
-                        </div>
-                        {/* Üçüncü Dosya */}
-                        <div className="border rounded-lg p-4 flex items-center space-x-4 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-sky-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                            <polyline points="10 9 9 9 8 9" />
-                        </svg>
-                        <div>
-                            <p className="text-gray-700 font-semibold">Dosya-5.pdf</p>
-                            <p className="text-sm text-gray-500">45.3 KB</p>
-                        </div>
-                        </div>
-                        {/* Üçüncü Dosya */}
-                        <div className="border rounded-lg p-4 flex items-center space-x-4 shadow-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                            <polyline points="14 2 14 8 20 8" />
-                            <line x1="16" y1="13" x2="8" y2="13" />
-                            <line x1="16" y1="17" x2="8" y2="17" />
-                            <polyline points="10 9 9 9 8 9" />
-                        </svg>
-                        <div>
-                            <p className="text-gray-700 font-semibold">Dosya-6.pdf</p>
-                            <p className="text-sm text-gray-500">430 KB</p>
-                        </div>
-                        </div>
-                </div>
-
+                    
+                        {currentWorkerFiles.map((file, index) => (
+                            <div key={index} className="border w-full rounded-lg p-4 flex items-center space-x-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                            <div className='overflow-hidden pr-1'>
+                                <p title={file.fileName} className="text-gray-700 font-semibold truncate">
+                                    {file.fileName}
+                                </p>
+                                <p className="text-sm text-gray-500">{file.size}</p>
+                            </div>
+                            <button
+                                className='bg-cyan-600 p-2 rounded-lg !ml-auto'
+                                type='button'
+                                onClick={() => downloadFile(file.url, file.fileName)}>
+                                <FaDownload color='#fff' size={25} />
+                            </button>
+                            </div>
+                        ))}                       
+                        {files.map((file, index) => (
+                            <div key={index} className="border rounded-lg p-4 flex items-center space-x-4 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                                <polyline points="10 9 9 9 8 9" />
+                            </svg>
+                            <div>
+                                <p className="text-gray-700 font-semibold">
+                                    {file.name}
+                                </p>
+                                <p className="text-sm text-gray-500">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                            </div>
+                            </div>
+                        ))}
+                    </div>
+                    <div className='flex justify-end w-full mt-4'>
+                        <button
+                            className='text-white text-lg font-semibold bg-sky-600 hover:bg-sky-500 py-3 px-5 rounded-xl !ml-auto'
+                                type='button'
+                                onClick={fileSubmit}
+                        >
+                            kaydet
+                        </button>
+                    </div>
                 </div>
             </div>
             )}
@@ -1310,6 +1353,7 @@ const HrSummaryFile = () => {
         <div className='w-full pt-2  flex items-center justify-center'>
             <button type='submit' className='w-full py-3 bg-cyan-600 text-white rounded-lg'>KAYDET</button>
         </div>
+        
       </form>
     </div>
   );
