@@ -278,6 +278,7 @@ class WorkingHoursSerializer(serializers.ModelSerializer):
         # Haftalık çalışma saati hesaplamak için işbaşı ve paydos saatlerini kontrol et
         start_time = validated_data.get('start_time')
         end_time = validated_data.get('end_time')
+        weekly_hours = validated_data.get('weekly_hours')
 
         if start_time and end_time and weekly_hours==None:
             # Örnek: Haftalık çalışma saati hesaplaması yapılabilir

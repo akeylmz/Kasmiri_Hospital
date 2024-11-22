@@ -277,10 +277,12 @@ class TaskAssignment(models.Model):
     start_time = models.TimeField(blank=True, null=True, verbose_name="Başlangıç Saati")  # Başlangıç saati
     end_time = models.TimeField(blank=True, null=True, verbose_name="Bitiş Saati")  # Bitiş saati
     description = models.TextField(blank=True, null=True, verbose_name="İş Tanımı")  # İş tanımı
-    date = models.DateField(blank=True, null=True, verbose_name="Tarih")  # Tarih
-    situation = models.CharField(max_length=200, blank=True, null=True, verbose_name="İş Tanımı")  # İş tanımı
+    date = models.DateField(blank=True, null=True, verbose_name="Son Kontrol Tarihi")  # Tarih
+    cheked_person = models.CharField(max_length=200, blank=True, null=True, verbose_name="Son Kontrol Eden")  # İş tanımı
+
+    situation = models.CharField(max_length=200, blank=True, null=True, verbose_name="İş Durumu")  # İş tanımı
     def __str__(self):
-        return f"{self.task_name} - {self.person.first_name} {self.person.last_name}" if self.task_name else "Görev Tanımsız"
+        return f"{self.task_name} - {self.person.first_name} {self.person.last_name}" if self.task_name else f"{self.person.first_name} {self.person.last_name}"
 
 class WorkingHours(models.Model):
     person = models.ForeignKey(
@@ -309,15 +311,6 @@ class Leave(models.Model):
     end_date = models.DateField(blank=True, null=True, verbose_name="İzin Bitiş Tarihi")
     leave_days = models.PositiveIntegerField(blank=True, null=True, verbose_name="Kullanılan İzin Günleri")
 
-    def save(self, *args, **kwargs):
-        """
-        Kullanılan izin günleri otomatik olarak hesaplanır.
-        
-        if self.start_date and self.end_date:
-            delta = self.end_date - self.start_date
-            self.leave_days = delta.days + 1  # Başlangıç günü dahil
-        super().save(*args, **kwargs)
-        """
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - {self.leave_days} Gün İzin"
