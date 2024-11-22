@@ -309,15 +309,6 @@ class Leave(models.Model):
     end_date = models.DateField(blank=True, null=True, verbose_name="İzin Bitiş Tarihi")
     leave_days = models.PositiveIntegerField(blank=True, null=True, verbose_name="Kullanılan İzin Günleri")
 
-    def save(self, *args, **kwargs):
-        """
-        Kullanılan izin günleri otomatik olarak hesaplanır.
-        
-        if self.start_date and self.end_date:
-            delta = self.end_date - self.start_date
-            self.leave_days = delta.days + 1  # Başlangıç günü dahil
-        super().save(*args, **kwargs)
-        """
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - {self.leave_days} Gün İzin"
