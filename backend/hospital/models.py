@@ -155,7 +155,6 @@ class PopulationCard(models.Model):
         verbose_name = "Population Card"
         verbose_name_plural = "Population Cards"
     
-
 class Worker(models.Model):
 
     # Basic information
@@ -261,7 +260,6 @@ class Worker(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
 
 class TaskAssignment(models.Model):
     # ForeignKey relationship to Person model

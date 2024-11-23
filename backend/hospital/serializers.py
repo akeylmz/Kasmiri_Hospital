@@ -361,38 +361,43 @@ class WorkerFileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+from rest_framework import serializers
+
 class WorkerSerializer(serializers.ModelSerializer):
     worker_files = WorkerFileSerializer(many=True, read_only=True)
-    working_hours = WorkingHoursSerializer(many=True, read_only=True)
-    leaves = LeaveSerializer(many=True, read_only=True)
+    working_hours = serializers.SerializerMethodField()
+    leaves = serializers.SerializerMethodField()
+
     class Meta:
         model = Worker
         fields = '__all__'
 
+    def get_working_hours(self, obj):
+        """
+        Working hours'ı testten başa doğru sıralar (en eski başta).
+        """
+        working_hours = obj.working_hours.all().order_by('-id')  # 'test_field' yerine sıralama kriterinizi yazın
+        return WorkingHoursSerializer(working_hours, many=True).data
+
+    def get_leaves(self, obj):
+        """
+        Leaves'ı testten başa doğru sıralar (en eski başta).
+        """
+        leaves = obj.leaves.all().order_by('-start_date')  # start_date'e göre sıralar
+        return LeaveSerializer(leaves, many=True).data
+
     def create(self, validated_data):
         """
-        Yeni bir Person nesnesi oluşturmak için özelleştirilmiş metot.
-        
-        # Örnek: Otomatik bir alan doldurma
-        if not validated_data.get('registry_no'):
-            validated_data['registry_no'] = f"REG-{validated_data['first_name'][:2].upper()}-{validated_data['last_name'][:2].upper()}"
+        Yeni bir Worker nesnesi oluşturmak için özelleştirilmiş metot.
         """
-        # Yeni bir Person nesnesi oluştur ve kaydet
-        person = Worker.objects.create(**validated_data)
-        return person
+        worker = Worker.objects.create(**validated_data)
+        return worker
 
     def update(self, instance, validated_data):
         """
-        Var olan bir Person nesnesini güncellemek için özelleştirilmiş metot.
-        
-        # Örnek: Belirli bir alan değiştiğinde tetikleme
-        if 'national_id' in validated_data and validated_data['national_id'] != instance.national_id:
-            raise serializers.ValidationError("National ID cannot be updated.")
+        Var olan bir Worker nesnesini güncellemek için özelleştirilmiş metot.
         """
-        # Diğer alanları güncelle
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
-        # Güncellenmiş nesneyi kaydet
         instance.save()
         return instance
