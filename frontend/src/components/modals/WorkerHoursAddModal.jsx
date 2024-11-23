@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { destroyModal } from '../Utils/Modal'
 import { useFormik } from 'formik'
 import { Check } from 'lucide-react'
-import { useCreateWorkerLeavesMutation, useGetAllWorkerQuery } from '../../store/patient2'
+import { useCreateWorkerHoursMutation, useGetAllWorkerQuery } from '../../store/patient2'
 import CustomerCombobox from '../tools/CustomCombobox'
+import DaySelector from '../tools/DaySelector'
 
-const WorkerLeavesAddModal = () => {
+const WorkerHoursAddModal = () => {
  
     const [ activePage, setActivePage] = useState(1)
-    const [ createWorkerLeaves ] = useCreateWorkerLeavesMutation()
+    const [ createWorkerHours ] = useCreateWorkerHoursMutation()
     const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
-    console.log(data);
+    //console.log(data);
 
-    const leaves = data?.results.map(worker => ({
+    const workers = data?.results.map(worker => ({
         id: worker.id,
         name: `${worker.first_name} ${worker.last_name}`,
         image: worker.worker_image
@@ -23,14 +24,14 @@ const WorkerLeavesAddModal = () => {
     }
     
     const submit = async (values, actions) => {
-         // console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+          //console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
         
         try {
           const formData = new FormData();
           Object.keys(values).forEach((key) => {
             formData.append(key, values[key])
           })
-          await createWorkerLeaves(formData).unwrap()
+          await createWorkerHours(formData).unwrap()
           actions.resetForm()
           destroyModal()
           //refetch()
@@ -40,28 +41,15 @@ const WorkerLeavesAddModal = () => {
     }
     const {values, errors, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
       initialValues: {
-        "start_date": "",
-        "end_date": "",
-        "leave_days": "",
-        "person": "",
+        "start_time": "",
+        "end_time": "",
+        "working_days": "",
+        "weekly_hours": "",
+        "date": "",
+        "person": ""
       },
       onSubmit: submit,
     })
-    
-    //   useEffect(() => {
-        //   if (data) {
-        //     setValues({
-        //       stock_name: data.order_name || '',
-        //       stock_buyed: data.order_number || '',
-        //       stock_haved: data.order_number || '',
-        //       stock_wharehouse: data.order_wharehouse || '',
-        //       stock_pozition: data.order_pozition || '',
-        //       stcok_group: data.order_group || '',
-        //       stock_ut: '',
-        //       stock_skt: '',
-        //     });
-        //   }
-        // }, [data]);
       
     return (
       <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[650px]">
@@ -95,45 +83,49 @@ const WorkerLeavesAddModal = () => {
                 <CustomerCombobox 
                     value={values.person} 
                     onChange={(id) => setFieldValue('person', id)} 
-                    customers={leaves} 
+                    customers={workers} 
                 />
             </div>
-          {/* <div>
-              <label className="block text-sm font-medium text-gray-500">Çalışan</label>
-              <input
-                type="text"
-                name="person"
-                value={values.person}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-              />
-            </div> */}
             <div>
-              <label className="block text-sm font-medium text-gray-500">İzin Süresi</label>
+              <label className="block text-sm font-medium text-gray-500">İş Başı</label>
               <input
-                type="text"
-                name="leave_days"
-                value={values.leave_days}
+                type="time"
+                name="start_time"
+                value={values.start_time}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-500">Başlangıç Tarihi</label>
+              <label className="block text-sm font-medium text-gray-500">Paydos</label>
               <input
-                type="date"
-                name="start_date"
-                value={values.start_date}
+                type="time"
+                name="end_time"
+                value={values.end_time}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-500">Bitiş Tarihi</label>
+            {/* <div>
+              <label className="block text-sm font-medium text-gray-500">Çalışma Günleri</label>
               <input
-                type="date"
-                name="end_date"
-                value={values.end_date}
+                type="text"
+                name="working_days"
+                value={values.working_days}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+              />
+            </div>             */}
+            <div>
+              <label className="block text-sm font-medium text-gray-500">Çalışma Günleri</label>
+                <DaySelector value={values.working_days} setFieldValue={setFieldValue} name={"working_days"} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-500">Haftalık Çalışma</label>
+              <input
+                type="text"
+                name="weekly_hours"
+                value={values.weekly_hours}
                 onChange={handleChange}
                 className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
               />
@@ -151,4 +143,4 @@ const WorkerLeavesAddModal = () => {
     )
 }
 
-export default WorkerLeavesAddModal
+export default WorkerHoursAddModal

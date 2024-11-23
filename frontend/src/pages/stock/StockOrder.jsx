@@ -5,8 +5,10 @@ import { useGetStockOrdersQuery } from '../../store/patient2';
 import { formatDateToShow } from '../../components/Utils/DateFormat';
 import { ImBoxRemove } from "react-icons/im";
 import { createModal } from '../../components/Utils/Modal';
+import { useTranslation } from 'react-i18next';
 
 const StockOrder = () => {
+    const { t } = useTranslation()
 
     const [ activePage, setActivePage] = useState(1)
     const {data, isLoading} = useGetStockOrdersQuery(activePage)
@@ -16,13 +18,13 @@ const StockOrder = () => {
 
     const thead = [
         // { name: '', sortable: false, width: 30 },
-        { name: 'ÜRÜN', sortable: true },
-        { name: 'ALINAN ADET/MİKTAR', sortable: true },
-        { name: 'TARİH', sortable: true },
-        { name: 'DEPO', sortable: true },
-        { name: 'POZİSYON', sortable: true },
-        { name: 'ÜRÜN GRUBU', sortable: true },
-        { name: 'DURUM', sortable: false, width: 120 }
+        { name: t("PRODUCT"), sortable: true },
+        { name: t("QUANTITY PURCHASED"), sortable: true },
+        { name: t("DATE"), sortable: true },
+        { name: t("WAREHOUSE"), sortable: true },
+        { name: t("POSITION"), sortable: true },
+        { name: t("PRODUCT GROUP"), sortable: true },
+        { name: t("STATUS"), sortable: false, width: 120 }
     ];
 
     

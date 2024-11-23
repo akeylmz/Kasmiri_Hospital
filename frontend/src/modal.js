@@ -11,6 +11,7 @@ import WorkerQuest from "./components/modals/WorkerQuest";
 import YabancıModal from "./components/modals/YabancıModal";
 import WorkerAddModal from "./components/modals/WorkerAddModal";
 import WorkerLeavesAddModal from "./components/modals/WorkerLeavesAddModal";
+import WorkerHoursAddModal from "./components/modals/WorkerHoursAddModal";
 
 const modals = [
     {
@@ -56,6 +57,10 @@ const modals = [
     {
         name: "leaves-modal",
         element: WorkerLeavesAddModal
+    },
+    {
+        name: "workerhours-modal",
+        element: WorkerHoursAddModal
     }
 ]
 

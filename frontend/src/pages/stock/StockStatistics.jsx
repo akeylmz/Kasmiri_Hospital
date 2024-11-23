@@ -1,6 +1,7 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import TableComp from '../../UI/TableComp';
+import { useTranslation } from 'react-i18next';
 
 const data = [
   { name: 'Adrenalin 0.5mg', alinan: 200, satilan: 110, stokta: 90 },
@@ -12,11 +13,12 @@ const data = [
 ];
 
 const StockStatistics = () => {
+  const { t } = useTranslation()
 
   const thead = [
-    { name: 'ÜRÜN ADI', sortable: true }, 
-    { name: 'STOK', sortable: true },
-    { name: 'KULLANIM ORANI', sortable: true }
+    { name: t("PRODUCT NAME"), sortable: true }, 
+    { name: t("STOCK"), sortable: true },
+    { name: t("USAGE RATE"), sortable: true }
   ];
 
   const tbody = [
@@ -39,12 +41,12 @@ const StockStatistics = () => {
 ];
 
 const thead2 = [
-  { name: 'ÜRÜN', sortable: false }, 
-  { name: 'ÜRÜN ADI', sortable: true },
-  { name: 'ÖNGÖRÜLEN STOK', sortable: true },
-  { name: 'SON SATIN ALMA', sortable: true },
-  { name: 'MEVCUT STOK', sortable: true },
-  { name: 'STOK YÜZDESİ', sortable: true }
+  { name: t("PRODUCT"), sortable: false }, 
+  { name: t("PRODUCT NAME"), sortable: true },
+  { name: t("EXPECTED STOCK"), sortable: true },
+  { name: t("LAST PURCHASE"), sortable: true },
+  { name: t("CURRENT STOCK"), sortable: true },
+  { name: t("STOCK PERCENTAGE"), sortable: true }
 ];
 const tbody2 = [
   { productImage: '🧪', productName: 'Adrenalin 0,5 mg (osel) amp', predictedStock: '420 Ampul', lastPurchase: '400 Ampul', currentStock: '163 Ampul', stockPercentage: '38.81%' },
