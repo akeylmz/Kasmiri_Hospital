@@ -1,15 +1,20 @@
-import React from 'react'
-import TableComp from '../../UI/TableComp';
+import React, { useState } from 'react'
+import TableComp2 from '../../UI/TableComp2';
 import { useNavigate } from 'react-router-dom';
+import { useGetAllWorkerQuery } from '../../store/patient2';
+import { processDays } from '../../components/Utils/processDays';
+import { capitalizeWords } from '../../components/Utils/capitalizeWords';
 
 const HrQuests = () => {
 
   const navigate = useNavigate()
+  const [ activePage, setActivePage] = useState(1)
+  const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
+  console.log(data?.results);  
 
   const thead = [
     { name: 'Görevli', sortable: true },
     { name: 'Görev Yeri', sortable: true },
-    { name: 'Yöneticiler', sortable: true },
     { name: 'Mesai Haftası', sortable: true },
     { name: '', width: 50 },   
   ];
@@ -139,21 +144,30 @@ const HrQuests = () => {
       )
     },
   ];
+  if(isLoading){
+    return <div>Yükleniyor...</div>
+  }
   
   return (
     <div>
       
-    <TableComp
+    <TableComp2
             thead={thead}
-            tbody={tbody.map(row => [
-            row.name,
-            row.productName,
-            row.stock,
-            row.expiryDate,
-            row.actions
+            tbody={data?.results.map(worker => [
+              <div className='flex items-center gap-x-2'>
+                <img src={worker.worker_image} alt={`${capitalizeWords(worker.first_name)} avatar`} className="w-10 h-10 rounded-full" />
+                {capitalizeWords(worker.first_name + " " + worker.last_name)}
+              </div>,
+            worker.duty_place,
+            worker.working_hours[0] ? processDays(worker.working_hours[0]?.working_days) : "-",
+            <button
+              onClick={()=> navigate("/human-resources/KPI-detail")}
+              key="details-1" className="h-8 px-3 flex items-center justify-center rounded-full bg-cyan-500 text-white text-lg">
+                &gt;
+            </button>
             ])}
             searchable={true}
-            tableTitle= {"GÖREVLER"}        
+            tableTitle= {"ÇALIŞANLAR"}        
         /> 
     </div>
   )

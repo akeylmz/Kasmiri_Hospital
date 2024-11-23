@@ -6,9 +6,11 @@ import { useState } from 'react';
 export default function CustomCombobox({ customers, value, onChange, placeholder = 'Select a customer' }) {
   const [query, setQuery] = useState('');
   console.log(customers);
+  
 
   const selectedCustomer = customers.find((customer) => customer.id === value) || null;
-
+  
+  
   const filteredCustomers =
     query === ''
       ? customers
@@ -54,31 +56,29 @@ export default function CustomCombobox({ customers, value, onChange, placeholder
                   )
                 }
               >
-                {({ selected, active }) => (
-                  <>
-                    <img
-                      src={customer.image}
-                      alt={customer.name}
-                      className="h-8 w-8 rounded-full border border-gray-300 object-cover"
-                    />
-                    <span className="block truncate">{customer.name}</span>
-                    {selected && (
-                      <span
-                        className={clsx(
-                          'absolute inset-y-0 left-0 flex items-center pl-3',
-                          active ? 'text-white' : 'text-indigo-600'
-                        )}
-                      >
-                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                      </span>
-                    )}
-                  </>
-                )}
+                <img
+                  src={customer.image}
+                  alt={customer.name}
+                  className="h-8 w-8 rounded-full border border-gray-300 object-cover"
+                />
+                <span className="block truncate">{customer.name}</span>
+                {({ selected, active }) =>
+                  selected ? (
+                    <span
+                      className={clsx(
+                        'absolute inset-y-0 left-0 flex items-center pl-3',
+                        active ? 'text-white' : 'text-indigo-600'
+                      )}
+                    >
+                      <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  ) : null
+                }
               </ComboboxOption>
             ))
           )}
         </ComboboxOptions>
       </Combobox>
     </div>
-  );
+  )
 }
