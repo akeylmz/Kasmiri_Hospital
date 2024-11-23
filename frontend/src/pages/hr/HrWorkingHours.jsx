@@ -3,6 +3,7 @@ import TableComp2 from '../../UI/TableComp2';
 import { Clock4 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGetAllWorkerQuery } from '../../store/patient2';
+import { processDays } from '../../components/Utils/processDays';
 
 const HrWorkingHours = () => {
 
@@ -208,20 +209,32 @@ const HrWorkingHours = () => {
         className="w-full">
         <TableComp2
             thead={thead}
-            tbody={data.results.map(worker => [
+            tbody={data.results.filter((x) => x.working_hours.length > 0).map(worker => [
               <div className='flex items-center gap-x-1'>
                 <img src={worker.worker_image} alt={`${worker.first_name} avatar`} className="w-10 h-10 rounded-full" />
                 {worker.first_name + " " + worker.last_name}
               </div>, 
-              worker.startTime,
-              worker.endTime,
-              worker.workDays,
-              worker.weeklyHours,
+              worker.working_hours[0].start_time.substring(0, 5),
+              worker.working_hours[0].end_time.substring(0, 5),              
+              (() => {
+                const processResult = processDays(worker.working_hours[0].working_days)
+                const [dayCount, ...rest] = processResult.split(", ")
+                const dayDetails = rest.join(", ")
+                //console.log(dayDetails);
+                return (
+                    <span>
+                        <span className="text-cyan-500 font-semibold mr-1">{dayCount},</span>
+                        <span>{dayDetails}</span>
+                    </span>
+                )
+            })(),
+              parseInt(worker.working_hours[0].weekly_hours, 10),
               worker.actions
             ])}
             searchable={true}
             tableTitle={"ÇALIŞMA SAATLERİ"}
             activePage = {activePage}
+            modal={"workerhours-modal"}
             setActivePage = {setActivePage}
         />
     </motion.div>

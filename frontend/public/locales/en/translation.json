@@ -135,6 +135,31 @@
     "Doctor's Name": "Doctor's Name",
     "Device Name": "Device Name",
     "Session Date": "Session Date",
-    "Session Time": "Session Time"
+    "Session Time": "Session Time",
+    "Product Name": "Product Name",
+    "Stock": "Stock",
+    "Expiry Date": "Expiry Date",
+    "PRODUCTS": "PRODUCTS",
+    "Product Group": "Product Group",
+    "PRODUCT": "PRODUCT",
+    "QUANTITY PURCHASED": "QUANTITY PURCHASED",
+    "DATE": "DATE",
+    "WAREHOUSE": "WAREHOUSE",
+    "POSITION": "POSITION",
+    "PRODUCT GROUP": "PRODUCT GROUP",
+    "STATUS": "STATUS",
+    "MANUFACTURING DATE": "MANUFACTURING DATE",
+    "EXPIRY DATE": "EXPIRY DATE",
+    "AVAILABLE": "AVAILABLE",
+    "PRODUCT NAME": "PRODUCT NAME",
+    "STOCK": "STOCK",
+    "USAGE RATE": "USAGE RATE",
+    "EXPECTED STOCK": "EXPECTED STOCK",
+    "LAST PURCHASE": "LAST PURCHASE",
+    "CURRENT STOCK": "CURRENT STOCK",
+    "STOCK PERCENTAGE": "STOCK PERCENTAGE"
+
+
+
 
 }

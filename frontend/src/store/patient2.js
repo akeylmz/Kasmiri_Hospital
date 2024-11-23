@@ -99,6 +99,13 @@ const patientAPI = createApi({
                 body: newLeave
             })
         }),
+        createWorkerHours: builder.mutation({
+            query: (newHours) => ({
+                url: "working-hours/",
+                method: "POST",
+                body: newHours
+            })
+        }),
     }),
     keepUnusedDataFor: 30,
     refetchOnMountOrArgChange: 5
@@ -119,5 +126,6 @@ export const {  useGetPatientsQuery,
                 useGetWorkerByIdQuery,
                 useCreateWorkerFileMutation,
                 useCreateWorkerLeavesMutation,
+                useCreateWorkerHoursMutation,
            } = patientAPI; 
 export default patientAPI;

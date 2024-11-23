@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 const Patients = () => {
    
     const navigate = useNavigate()
-    const { t } = useTranslation();
+    const { t } = useTranslation()
     const [deletePatient ] = useDeletePatientMutation()
     const [ activePage, setActivePage] = useState(1)
     const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage})

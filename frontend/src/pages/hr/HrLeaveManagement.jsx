@@ -21,10 +21,6 @@ const HrLeaveManagement = () => {
     return <div>Yükleniyor...</div>
   }
   console.log(data.results);
-  data.results.filter((x) => x.leaves.length > 0).map((x)=>{
-    console.log(x.leaves.length);
-    
-  })
   
       
   return (
