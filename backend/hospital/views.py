@@ -193,7 +193,7 @@ class TaskAssignmentDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class=TaskAssignmentSerializer
 
 class WorkingHoursListCreateAPIView(generics.ListCreateAPIView):
-    queryset= WorkingHours.objects.all()
+    queryset= WorkingHours.objects.all().order_by('-id')
     serializer_class=WorkingHoursSerializer
 
 class WorkingHoursDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -202,7 +202,7 @@ class WorkingHoursDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class LeaveListCreateAPIView(generics.ListCreateAPIView):
-    queryset= Leave.objects.all()
+    queryset = Leave.objects.all().order_by('-start_date')  # start_date azalan sırada
     serializer_class=LeaveSerializer
 
 class LeaveDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
