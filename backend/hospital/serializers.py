@@ -367,7 +367,7 @@ class WorkerSerializer(serializers.ModelSerializer):
     worker_files = WorkerFileSerializer(many=True, read_only=True)
     working_hours = serializers.SerializerMethodField()
     leaves = serializers.SerializerMethodField()
-    task_assignments = serializers.SerializerMethodField()
+    task_assignments = TaskAssignmentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Worker
