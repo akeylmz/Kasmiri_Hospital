@@ -106,6 +106,13 @@ const patientAPI = createApi({
                 body: newHours
             })
         }),
+        createWorkerTask: builder.mutation({
+            query: (newTask)=> ({
+                url: "task-assignment/",
+                method: "POST",
+                body: newTask
+            })
+        })
     }),
     keepUnusedDataFor: 30,
     refetchOnMountOrArgChange: 5
@@ -127,5 +134,6 @@ export const {  useGetPatientsQuery,
                 useCreateWorkerFileMutation,
                 useCreateWorkerLeavesMutation,
                 useCreateWorkerHoursMutation,
+                useCreateWorkerTaskMutation,
            } = patientAPI; 
 export default patientAPI;
