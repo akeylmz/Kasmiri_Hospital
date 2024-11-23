@@ -1,18 +1,28 @@
-import React from 'react';
-import TableComp from '../../UI/TableComp';
+import React, { useState } from 'react';
+import TableComp2 from '../../UI/TableComp2';
 import { motion } from 'framer-motion';
+import { useGetAllStocksQuery } from '../../store/patient2';
 
 const StockWarehouse = () => {
 
+    const [ activeWarehouse, setActiveWarehouse ] = useState("DEPO-1")
+
+    const { data, error, isLoading } = useGetAllStocksQuery({
+        page: 1,
+        stock_wharehouse: activeWarehouse
+    })
+    console.log(data);
+    
+
     const thead = [
+        { name: "none"},
         { name: 'ÜRÜN', sortable: true },
         { name: 'ALINAN ADET/MİKTAR', sortable: true },
         { name: 'ÜRETİM TARİHİ', sortable: true },
         { name: 'SKT', sortable: true },
         { name: 'POZİSYON', sortable: true },
         { name: 'MEVCUT', sortable: true },
-    ];
-
+    ]
     const tbody = [
         {
             productName: '%5 DEKSTROZ 500CC',
@@ -102,7 +112,10 @@ const StockWarehouse = () => {
             position: 'HAZAR İLAÇ',
             stock: '1 Kutu'
         }
-    ];
+    ]
+    if(isLoading){
+        return <div>Yükleniyor...</div>
+    }
 
     return (
         <div className="flex h-full items-center pb-4">
@@ -110,13 +123,13 @@ const StockWarehouse = () => {
             <div className="w-1/6 max-w-[200px] bg-cyan-600 h-full flex flex-col p-4 rounded-3xl mr-3">
                 <h2 className="text-white w-full text-center text-lg pt-2 mb-4">DEPOLAR</h2>
                 <ul className="stock-list relative text-white space-y-2 border-t border-slate-300 pt-5">
-                    <li>ANA DEPO</li>
-                    <li>DEPO 1</li>
-                    <li>DEPO 2</li>
-                    <li>DEPO 3</li>
-                    <li>DEPO 4</li>
-                    <li>DEPO 5</li>
-                    <li>DEPO 6</li>
+                    <li className={`${activeWarehouse === "ANADEPO" ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} onClick={()=>setActiveWarehouse("ANADEPO")}>ANA DEPO</li>
+                    <li className={`${activeWarehouse === "DEPO-1" ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} onClick={()=>setActiveWarehouse("DEPO-1")}>DEPO 1</li>
+                    <li className={`${activeWarehouse === "DEPO-2" ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} onClick={()=>setActiveWarehouse("DEPO-2")}>DEPO 2</li>
+                    <li className={`${activeWarehouse === "DEPO-3" ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} onClick={()=>setActiveWarehouse("DEPO-3")}>DEPO 3</li>
+                    <li className={`${activeWarehouse === "DEPO-4" ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} onClick={()=>setActiveWarehouse("DEPO-4")}>DEPO 4</li>
+                    <li className={`${activeWarehouse === "DEPO-5" ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} onClick={()=>setActiveWarehouse("DEPO-5")}>DEPO 5</li>
+                    <li className={`${activeWarehouse === "DEPO-6" ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} onClick={()=>setActiveWarehouse("DEPO-6")}>DEPO 6</li>
                 </ul>
             </div>
 
@@ -125,15 +138,15 @@ const StockWarehouse = () => {
                 initial={{opacity:0}}   
                 animate={{opacity:1}}
                 className="w-5/6 min-w-[calc(100%-200px)] h-full ">
-                <TableComp
+                <TableComp2
                     thead={thead}
-                    tbody={tbody.map(row => [
-                        row.productName,
-                        row.quantity,
-                        row.productionDate,
-                        row.expiryDate,
-                        row.position,
-                        row.stock
+                    tbody={data.results.map(row => [
+                        row.stock_name,
+                        row.stock_buyed,
+                        row.stock_ut,
+                        row.stock_skt,
+                        row.stock_pozition,
+                        row.stock_haved
                     ])}
                     searchable={true}
                     tableTitle={"SİPARİŞLER"}  

@@ -24,7 +24,7 @@ const ModalOverlay = (props) => {
   return (
     <div>
       {modals.map((modal, key) => {
-         console.log(modal);
+         //console.log(modal);
         
         const m = modalData.find(m => m.name === modal.name)
         // console.log(m);

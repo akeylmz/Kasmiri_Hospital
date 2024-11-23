@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { IoMailOutline } from "react-icons/io5";
@@ -8,7 +8,9 @@ import { useGetAllWorkerQuery } from '../../store/patient2';
 const HrPersonnel = () => {
 
   const navigate = useNavigate()
-  const { data, isLoading, error} = useGetAllWorkerQuery()
+  const [ activePage, setActivePage] = useState(1)
+  const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
+  console.log(data?.results);    
   
     const tbody = [
         {
@@ -136,9 +138,7 @@ const HrPersonnel = () => {
       if(isLoading){
         return <div>Yükleniyor</div>
       }
-      const workers = data.results
-      console.log(workers);
-      
+        
 
   return (
     <motion.div
@@ -149,7 +149,7 @@ const HrPersonnel = () => {
       
         <TableComp2            
             thead={thead}
-            tbody={workers.map(worker => [
+            tbody={data.results.map(worker => [
             <div className='flex items-center gap-x-1'>
               <img src={worker.worker_image} alt={`${worker.first_name} avatar`} className="w-10 h-10 rounded-full" />
               {worker.first_name + " " + worker.last_name}
@@ -169,6 +169,8 @@ const HrPersonnel = () => {
             modal={"workerAdd"}
             searchable={true}
             tableTitle= {"ÇALIŞAN LİSTESİ"}
+            activePage = {activePage}
+            setActivePage = {setActivePage}
         />  
     </motion.div>
   )
