@@ -168,8 +168,30 @@ const WorkerAddModal = () => {
  
 
   return (
-    <div className="p-5 h-full overflow-scroll z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+    <div className="p-5 h-full overflow-scroll z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">       
       <form onSubmit={handleSubmit} encType="multipart/form-data" className="bg-lightGray rounded-lg shadow-lg  w-[1400px] p-8">
+      <div className="flex justify-between items-center pb-4">
+          <h2 className="text-xl font-semibold ml-2 text-cyan-600">Çalışan Ekle</h2>
+          <button
+            onClick={() => destroyModal()}
+            className="text-gray-400 hover:text-gray-600"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
         {/* Genel Bilgiler */}
         <div className="mb-4 border border-gray-200 drop-shadow-md rounded-2xl overflow-hidden">
             <button 
