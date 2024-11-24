@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import getPagination from './getPagination'
-import PageButton from './pageButton';
+import PageButton from './PageButton';
 import { useState } from 'react';
 
 

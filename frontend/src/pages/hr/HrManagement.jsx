@@ -5,8 +5,10 @@ import { createModal } from '../../components/Utils/Modal';
 import { useGetAllWorkerQuery } from '../../store/patient2';
 import { processDays } from '../../components/Utils/processDays';
 import { capitalizeWords } from '../../components/Utils/capitalizeWords';
+import { useTranslation } from 'react-i18next';
 
 const HrManagement = () => {
+  const { t } = useTranslation()
 
   const [ activePage, setActivePage] = useState(1)
   const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
@@ -58,10 +60,10 @@ const HrManagement = () => {
       },
     ];
     const thead = [
-      { name: 'Görevli', sortable: true },
-      { name: 'Görev Yeri', sortable: true },
-      { name: 'Mesai Haftası', sortable: true },
-      { name: 'Son Kontrol', sortable: true },
+      { name: t("STAFF"), sortable: true },
+      { name: t("Workplace"), sortable: true },
+      { name: t("Work Week"), sortable: true },
+      { name: t("Final Check"), sortable: true },
     ]
   if(isLoading){
     return <div>Yükleniyor...</div>
@@ -95,7 +97,7 @@ const HrManagement = () => {
          <p>sonkontrol</p>,
         ])}
         searchable={true}
-        tableTitle="Görev Kontrol"
+        tableTitle={t("Duty Check")}
         modal={"worker-quest"}
       />
     </div>

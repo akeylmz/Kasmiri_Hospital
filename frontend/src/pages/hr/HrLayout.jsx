@@ -1,19 +1,21 @@
 import React from 'react'
 import TopMenu from '../../UI/TopMenu';
 import { Outlet } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const HrLayout = () => {
+    const { t } = useTranslation()
 
     const tabs = [
-        { label: 'HİYERARŞİ', active: true, url: 'hierarchy' },
-        { label: 'ÇALIŞAN', active: false, url: 'personnel',submenu: [
-            { label: 'İzin Yönetimi', active: true, url: 'leave-management' },
-            { label: 'Çalışma Saatleri', active: false, url: 'working-hours' },
+        { label: t("HIERARCHY"), active: true, url: 'hierarchy' },
+        { label: t("EMPLOYEE"), active: false, url: 'personnel',submenu: [
+            { label: t("Leave Management"), active: true, url: 'leave-management' },
+            { label: t("Working Hours"), active: false, url: 'working-hours' },
         ] },
-        { label: 'İŞE ALIM', active: false, url: 'recruitment' },   
+        { label: t("RECRUITMENT"), active: false, url: 'recruitment' },   
         { label: 'KPI', active: false, url: 'KPI-quests',submenu: [
-            { label: 'Çalışan', active: true, url: 'KPI-quests' },
-            { label: 'Yönetim', active: false, url: 'KPI-management' },
+            { label: t("Employee"), active: true, url: 'KPI-quests' },
+            { label: t("Management"), active: false, url: 'KPI-management' },
         ] },    
       ];
 

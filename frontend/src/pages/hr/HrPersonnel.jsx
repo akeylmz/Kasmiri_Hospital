@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { IoMailOutline } from "react-icons/io5";
 import TableComp2 from '../../UI/TableComp2';
 import { useGetAllWorkerQuery } from '../../store/patient2';
+import { useTranslation } from 'react-i18next';
 
 const HrPersonnel = () => {
+  const { t } = useTranslation()
 
   const navigate = useNavigate()
   const [ activePage, setActivePage] = useState(1)
@@ -128,17 +130,17 @@ const HrPersonnel = () => {
       ];
 
       const thead = [
-        { name: 'Adı Soyadı', sortable: true },
-        { name: 'E-Posta', sortable: true },
-        { name: 'İletişim' },
-        { name: 'Departman', sortable: true },
+        { name: t("Full Name"), sortable: true },
+        { name: t("Email"), sortable: true },
+        { name: t("Contact") },
+        { name: t("Department"), sortable: true },
         { name: '', width: 120 }, // İşlemler sütunu için genişlik
       ];
 
       if(isLoading){
         return <div>Yükleniyor</div>
       }
-        
+      
 
   return (
     <motion.div
@@ -168,7 +170,7 @@ const HrPersonnel = () => {
             ])}
             modal={"workerAdd"}
             searchable={true}
-            tableTitle= {"ÇALIŞAN LİSTESİ"}
+            tableTitle= {t("EMPLOYEE LIST")}
             activePage = {activePage}
             setActivePage = {setActivePage}
         />  

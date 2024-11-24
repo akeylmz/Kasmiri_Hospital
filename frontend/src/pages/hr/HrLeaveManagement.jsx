@@ -4,17 +4,19 @@ import TableComp2 from '../../UI/TableComp2';
 import { useGetAllWorkerQuery } from '../../store/patient2';
 import { capitalizeWords } from '../../components/Utils/capitalizeWords';
 import { formatDateToShow } from '../../components/Utils/DateFormat';
+import { useTranslation } from 'react-i18next';
 
 const HrLeaveManagement = () => {
+  const { t } = useTranslation()
 
   const [ activePage, setActivePage] = useState(1)
   const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
   
   const thead = [
-      { name: 'Adı Soyadı', sortable: true },
-      { name: 'Başlangıç Tarihi', sortable: true },
-      { name: 'Bitiş Tarihi', sortable: true },
-      { name: 'İzin Süresi', sortable: true },
+      { name: t("Full Name"), sortable: true },
+      { name: t("Start Date"), sortable: true },
+      { name: t("End Date"), sortable: true },
+      { name: t("Leave Duration"), sortable: true },
     ]     
     
   if(isLoading){
@@ -41,7 +43,7 @@ const HrLeaveManagement = () => {
               worker.leaves[0].leave_days,
             ])}
             searchable={true}
-            tableTitle={"İZİN YÖNETİMİ"}
+            tableTitle={t("LEAVE MANAGEMENT")}
             modal={"leaves-modal"}
             activePage = {activePage}
             setActivePage = {setActivePage}

@@ -1,15 +1,17 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import TopMenu from '../../UI/TopMenu';
+import { useTranslation } from 'react-i18next';
 
 const StockLayout = () => {
+    const { t } = useTranslation()
 
     const tabs = [
-        { label: 'GENEL BAKIŞ', active: true, url: 'overwiev' },
-        { label: 'ÜRÜNLER', active: false, url: 'products' },
-        { label: 'DEPOLAR', active: false, url: 'warehouse' },
-        { label: 'SİPARİŞLER', active: false, url: 'orders' },
-        { label: 'İSTATİSTİK', active: false, url: 'statistics' },       
+        { label: t("OVERVIEW"), active: true, url: 'overwiev' },
+        { label: t("PRODUCTS"), active: false, url: 'products' },
+        { label: t("WAREHOUSES"), active: false, url: 'warehouse' },
+        { label: t("ORDERS"), active: false, url: 'orders' },
+        { label: t("STATISTIC"), active: false, url: 'statistics' },       
       ];
 
   return (

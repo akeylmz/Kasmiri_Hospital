@@ -4,8 +4,10 @@ import { Clock4 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGetAllWorkerQuery } from '../../store/patient2';
 import { processDays } from '../../components/Utils/processDays';
+import { useTranslation } from 'react-i18next';
 
 const HrWorkingHours = () => {
+  const { t } = useTranslation()
 
   const [ activePage, setActivePage] = useState(1)
   const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
@@ -13,11 +15,11 @@ const HrWorkingHours = () => {
   
 
     const thead = [
-        { name: 'Adı Soyadı', sortable: true },
-        { name: 'İş Başı', sortable: true },
-        { name: 'Paydos', sortable: true },
-        { name: 'Çalışma Günleri', sortable: true },
-        { name: 'Haftalık Çalışma', sortable: true },
+        { name: t("Full Name"), sortable: true },
+        { name: t("Start Work"), sortable: true },
+        { name: t("Break"), sortable: true },
+        { name: t("Working Days"), sortable: true },
+        { name: t("Weekly Working"), sortable: true },
         { name: '', width: 80 },
       ]
       const tbody = [
@@ -232,7 +234,7 @@ const HrWorkingHours = () => {
               worker.actions
             ])}
             searchable={true}
-            tableTitle={"ÇALIŞMA SAATLERİ"}
+            tableTitle={t("WORKING HOURS")}
             activePage = {activePage}
             modal={"workerhours-modal"}
             setActivePage = {setActivePage}

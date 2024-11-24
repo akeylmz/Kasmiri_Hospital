@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useGetAllWorkerQuery } from '../../store/patient2';
 import { processDays } from '../../components/Utils/processDays';
 import { capitalizeWords } from '../../components/Utils/capitalizeWords';
+import { useTranslation } from 'react-i18next';
 
 const HrQuests = () => {
+  const { t } = useTranslation()
 
   const navigate = useNavigate()
   const [ activePage, setActivePage] = useState(1)
@@ -13,9 +15,9 @@ const HrQuests = () => {
   console.log(data?.results);  
 
   const thead = [
-    { name: 'Görevli', sortable: true },
-    { name: 'Görev Yeri', sortable: true },
-    { name: 'Mesai Haftası', sortable: true },
+    { name: t("Officer"), sortable: true },
+    { name: t("Workplace"), sortable: true },
+    { name: t("Work Week"), sortable: true },
     { name: '', width: 50 },   
   ];
 
@@ -167,7 +169,7 @@ const HrQuests = () => {
             </button>
             ])}
             searchable={true}
-            tableTitle= {"ÇALIŞANLAR"}        
+            tableTitle= {t("EMPLOYEES")}        
         /> 
     </div>
   )

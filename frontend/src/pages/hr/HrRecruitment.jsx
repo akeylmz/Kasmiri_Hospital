@@ -2,8 +2,10 @@ import { ChevronDown } from 'lucide-react';
 import React, { useState } from 'react';
 import CVCard from '../../UI/CVCard';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 const HrRecruitment = () => {
+  const { t } = useTranslation()
   const [selectedDepartment, setSelectedDepartment] = useState('Tümü');
   const [selectedGender, setSelectedGender] = useState('Tümü');
   const [selectedStars, setSelectedStars] = useState('Tümü');
@@ -196,8 +198,8 @@ const itemMotion = {
     >
       <div className="bg-white flex items-center h-[13%] justify-between p-4 rounded-lg shadow-md">
         <div className="flex flex-col justify-between items-center">
-          <h1 className="text-2xl font-semibold text-cyan-600">İŞE ALIM</h1>
-          <p className="text-gray-600">Toplam {filteredCVs.length} CV Bulundu</p>
+          <h1 className="text-2xl font-semibold text-cyan-600">{t("RECRUITMENT")}</h1>
+          <p className="text-gray-600">{t("Total")} {filteredCVs.length} CV {t("Found")}</p>
         </div>
         <div className="flex space-x-4">
           <div className="relative">
@@ -205,18 +207,18 @@ const itemMotion = {
               onClick={() => setDropdownOpen({ ...dropdownOpen, department: !dropdownOpen.department })}
               className="bg-gray-100 border flex border-gray-300 text-gray-700 pl-4 pr-2 py-2 rounded-lg shadow"
             >
-              Departmana Göre
+              {t("By Department")}
               <ChevronDown className='ml-1'/>
             </button>
             {dropdownOpen.department && (
               <div className="absolute mt-2 w-full bg-gray-100 border border-gray-200 shadow-lg rounded-lg z-10">
                 <ul>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Tümü'); setDropdownOpen({ ...dropdownOpen, department: false });}}>Tümü</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Muhasebe'); setDropdownOpen({ ...dropdownOpen, department: false });}}>Muhasebe</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Satınalma'); setDropdownOpen({ ...dropdownOpen, department: false });}}>Satınalma</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Pazarlama'); setDropdownOpen({ ...dropdownOpen, department: false });}}>Pazarlama</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Vezne'); setDropdownOpen({ ...dropdownOpen, department: false });}}>Vezne</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Temizlik Elemanı'); setDropdownOpen({ ...dropdownOpen, department: false });}}>Temizlik Elemanı</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Tümü'); setDropdownOpen({ ...dropdownOpen, department: false });}}>{t("All")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Muhasebe'); setDropdownOpen({ ...dropdownOpen, department: false });}}>{t("Accounting")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Satınalma'); setDropdownOpen({ ...dropdownOpen, department: false });}}>{t("Purchasing")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Pazarlama'); setDropdownOpen({ ...dropdownOpen, department: false });}}>{t("Marketing")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Vezne'); setDropdownOpen({ ...dropdownOpen, department: false });}}>{t("Cashier")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedDepartment('Temizlik Elemanı'); setDropdownOpen({ ...dropdownOpen, department: false });}}>{t("Cleaning Staff")}</li>
                 </ul>
               </div>
             )}
@@ -227,15 +229,15 @@ const itemMotion = {
               onClick={() => setDropdownOpen({ ...dropdownOpen, gender: !dropdownOpen.gender })}
               className="bg-gray-100 flex border border-gray-300 text-gray-700 pl-4 pr-2 py-2 rounded-lg shadow"
             >
-              Cinsiyete Göre
+              {t("By Gender")}
               <ChevronDown className='ml-1'/>
             </button>
             {dropdownOpen.gender && (
               <div className="absolute mt-2 w-full bg-gray-100 border border-gray-200 shadow-lg rounded-lg z-10">
                 <ul>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedGender('Tümü'); setDropdownOpen({ ...dropdownOpen, gender: false });}}>Tümü</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedGender('Erkek'); setDropdownOpen({ ...dropdownOpen, gender: false });}}>Erkek</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedGender('Kadın'); setDropdownOpen({ ...dropdownOpen, gender: false });}}>Kadın</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedGender('Tümü'); setDropdownOpen({ ...dropdownOpen, gender: false });}}>{t("All")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedGender('Erkek'); setDropdownOpen({ ...dropdownOpen, gender: false });}}>{t("Male")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedGender('Kadın'); setDropdownOpen({ ...dropdownOpen, gender: false });}}>{t("Female")}</li>
                 </ul>
               </div>
             )}
@@ -246,18 +248,18 @@ const itemMotion = {
               onClick={() => setDropdownOpen({ ...dropdownOpen, stars: !dropdownOpen.stars })}
               className="bg-gray-100 flex border border-gray-300 text-gray-700 pl-4 pr-2 py-2 rounded-lg shadow"
             >
-              Yıldıza Göre
+              {t("By Star")}
               <ChevronDown className='ml-1'/>
             </button>
             {dropdownOpen.stars && (
               <div className="absolute mt-2 w-full bg-gray-100 border border-gray-200 shadow-lg rounded-lg z-10">
                 <ul>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('Tümü'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>Tümü</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('5'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>5 Yıldız</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('4'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>4 Yıldız</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('3'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>3 Yıldız</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('2'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>2 Yıldız</li>
-                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('1'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>1 Yıldız</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('Tümü'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>{t("All")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('5'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>5 {t("Star")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('4'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>4 {t("Star")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('3'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>3 {t("Star")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('2'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>2 {t("Star")}</li>
+                  <li className="px-4 py-2 hover:bg-gray-200 cursor-pointer" onClick={() => {setSelectedStars('1'); setDropdownOpen({ ...dropdownOpen, stars: false });}}>1 {t("Star")}</li>
                 </ul>
               </div>
             )}

@@ -1,11 +1,13 @@
 import React from 'react';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement } from 'chart.js';
+import { useTranslation } from 'react-i18next';
 
 // ChartJS ayarları
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement);
 
 const Reports = () => {
+  const { t } = useTranslation()
   // Grafik verileri
   const surgeryData = {
     labels: ['Saç', 'Diş', 'Plastik Cerrahi'],

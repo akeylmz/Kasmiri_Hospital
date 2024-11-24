@@ -1,8 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion';
-import TableComp from '../../UI/TableComp';
+import TableComp2 from '../../UI/TableComp2';
+import { useTranslation } from 'react-i18next';
 
 const Billing = () => {
+  const { t } = useTranslation()
 
     const tbody = [
         {
@@ -129,12 +131,12 @@ const Billing = () => {
       
 
     const thead = [
-        { name: 'Fatura No', sortable: true },
-        { name: 'Firma', sortable: true },
-        { name: 'Fatura Tarihi' },
-        { name: 'Son Ödeme Tarihi', sortable: true },
-        { name: 'Tutar', sortable: true },
-        { name: 'Detay', width: 80 }, // İşlemler sütunu için genişlik
+        { name: t("Invoice Number"), sortable: true },
+        { name: t("Company"), sortable: true },
+        { name: t("Invoice Date") },
+        { name: t("Due Date"), sortable: true },
+        { name: t("Amount"), sortable: true },
+        { name: t("Detail"), width: 80 }, // İşlemler sütunu için genişlik
     ];
 
   return (
@@ -143,7 +145,7 @@ const Billing = () => {
         animate={{ opacity: 1 }}
         className='w-full h-full flex flex-col items-center justify-evenly'
     >
-        <TableComp
+        <TableComp2
             thead={thead}
             tbody={tbody.map(row => [
                 row.billNo, 
@@ -154,7 +156,7 @@ const Billing = () => {
                 row.actions
             ])}
             searchable={true}
-            tableTitle= {"FATURA LİSTESİ"}
+            tableTitle= {t("INVOICE LIST")}
             billing={true}
             modal={"invoice-modal"}
         />  

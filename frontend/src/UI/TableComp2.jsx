@@ -39,9 +39,9 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
           <h2 className='text-xl ml-4 font-semibold text-cyan-600'>{tableTitle}</h2>
           <div className='flex space-x-3 ml-auto'>
             {billing && <div className='flex gap-x-5 mr-20'>
-                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />Tutara Göre</button>
-                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />Depertmana Göre</button>
-                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />Tarihe Göre</button>
+                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />{t("By Amount")}</button>
+                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />{t("By Department")}</button>
+                <button className='flex items-center justify-center border-2 gap-x-2 border-gray-300 rounded-xl py-2 px-4 shadow-md hover:bg-slate-50'><FaSortAmountDown />{t("By Date")}</button>
               </div>}
             {printDiv && <>
               <button 
