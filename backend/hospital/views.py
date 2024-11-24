@@ -14,8 +14,9 @@ from hospital.serializers import  NoteSerializer, PatientCardSerializer, Communi
 from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
-from django_filters import rest_framework as filters
+from rest_framework.filters import OrderingFilter
 
+from django_filters import rest_framework as filters
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.db.models import Sum
@@ -90,8 +91,9 @@ class PatientCardFilter(filters.FilterSet):
 class PatientCardListCreateAPIView(generics.ListCreateAPIView):
     queryset= PatientCard.objects.all()
     serializer_class=PatientCardSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = PatientCardFilter
+    ordering_fields = [field.name for field in PatientCard._meta.fields]  # Tüm alanlar
 
 class PatientCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PatientCard.objects.all()
@@ -130,8 +132,9 @@ class StockFilter(filters.FilterSet):
 class StockListCreateAPIView(generics.ListCreateAPIView):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = StockFilter
+    ordering_fields = [field.name for field in Stock._meta.fields]  # Tüm alanlar
 
 class StockDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Stock.objects.all()
@@ -154,8 +157,9 @@ class OrderFilter(filters.FilterSet):
 class OrderListCreateAPIView(generics.ListCreateAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = OrderFilter
+    ordering_fields = [field.name for field in Order._meta.fields]  # Tüm alanlar
 
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
@@ -175,11 +179,14 @@ class WorkerFilter(filters.FilterSet):
                 'extra': lambda f: {'lookup_expr': 'icontains'},
             },
         }
+        
 class WorkerListCreateAPIView(generics.ListCreateAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = WorkerFilter
+    ordering_fields = [field.name for field in Worker._meta.fields]  # Tüm alanlar
+
 class WorkerDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer

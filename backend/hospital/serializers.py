@@ -223,8 +223,6 @@ class WorkerFileSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
-    
-
 
 class TaskAssignmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -264,7 +262,6 @@ class TaskAssignmentSerializer(serializers.ModelSerializer):
         # Güncellenmiş nesneyi kaydet
         instance.save()
         return instance
-
 
 class WorkingHoursSerializer(serializers.ModelSerializer):
     class Meta:
@@ -360,8 +357,6 @@ class WorkerFileSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
-
-from rest_framework import serializers
 
 class WorkerSerializer(serializers.ModelSerializer):
     worker_files = WorkerFileSerializer(many=True, read_only=True)
