@@ -114,7 +114,7 @@ function App() {
         { path: "reporting", element: <Reports />},
         { path: "settings", element: <SettingsPage />},
         { path: "bodro", element: <Bodro />},   
-        { path: "deneme", element: <Deneme />},        
+        { path: "deneme", element: <Deneme />},     
       ]
     }
   ])

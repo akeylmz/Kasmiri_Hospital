@@ -83,8 +83,8 @@ const tbody2 = [
                 thead={thead}
                 tbody={tbody.map(row => [
                     row.productName,    // Ürün Adı
-                    row.stock,          // Stok Bilgisi
-                    row.usageRate       // Kullanım Oranı
+                    row.stock,          
+                    row.usageRate       
                 ])}
                 searchable={true}         // Arama özelliği aktif
                 tableTitle={"AYIN EN ÇOK KULLANILAN ÜRÜNLERİ"}  // Tablo başlığı

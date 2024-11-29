@@ -22,6 +22,8 @@ export default {
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
+        ubuntu: ['Ubuntu', 'sans-serif'],
       },
       gridTemplateColumns: {
         "1/5": "1fr 5fr",

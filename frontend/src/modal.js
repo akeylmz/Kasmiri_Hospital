@@ -12,6 +12,7 @@ import YabancıModal from "./components/modals/YabancıModal";
 import WorkerAddModal from "./components/modals/WorkerAddModal";
 import WorkerLeavesAddModal from "./components/modals/WorkerLeavesAddModal";
 import WorkerHoursAddModal from "./components/modals/WorkerHoursAddModal";
+import ToothNotesAddModal from "./components/modals/ToothNotesAddModal";
 
 const modals = [
     {
@@ -61,6 +62,10 @@ const modals = [
     {
         name: "workerhours-modal",
         element: WorkerHoursAddModal
+    },
+    {
+        name: "tooth-modal",
+        element: ToothNotesAddModal
     }
 ]
 
