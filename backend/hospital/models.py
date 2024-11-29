@@ -29,6 +29,8 @@ class Note(models.Model):
         self.clean()
         super().save(*args, **kwargs)
 
+
+
 class PatientCard(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     patient_number = models.CharField(max_length=50, unique=True, blank=True, null=True)
@@ -78,6 +80,64 @@ class PatientCard(models.Model):
         verbose_name = "Patient Card"
         verbose_name_plural = "Patient Cards"
         ordering = ['last_name', 'first_name']
+
+
+class PatientNote(models.Model):
+    # Patient Information
+    patient = models.ForeignKey(PatientCard, on_delete=models.CASCADE, related_name='patient_note')
+
+    country = models.CharField(max_length=50, verbose_name="Country")
+    age = models.PositiveIntegerField(verbose_name="Age")
+    smoker = models.BooleanField(default=False, verbose_name="Smoker")
+    allergy = models.BooleanField(default=False, verbose_name="Allergy")
+    registration_date = models.DateField(auto_now_add=True, verbose_name="Registration Date")
+    discharge_date = models.DateField(null=True, blank=True, verbose_name="Discharge Date")
+    sharing_permission = models.BooleanField(default=False, verbose_name="Sharing Permission")
+
+    # Surgeries
+    upcoming_surgeries = models.TextField(blank=True, verbose_name="Upcoming Surgeries")
+    past_surgeries = models.TextField(blank=True, verbose_name="Past Surgeries")
+
+    # Doctor Notes
+    doctor_notes = models.TextField(blank=True, verbose_name="Doctor Notes")
+
+    # Boolean Fields for Numbers
+    number_11 = models.BooleanField(default=False, verbose_name="11")
+    number_12 = models.BooleanField(default=False, verbose_name="12")
+    number_13 = models.BooleanField(default=False, verbose_name="13")
+    number_14 = models.BooleanField(default=False, verbose_name="14")
+    number_15 = models.BooleanField(default=False, verbose_name="15")
+    number_16 = models.BooleanField(default=False, verbose_name="16")
+    number_17 = models.BooleanField(default=False, verbose_name="17")
+    number_18 = models.BooleanField(default=False, verbose_name="18")
+    number_21 = models.BooleanField(default=False, verbose_name="21")
+    number_22 = models.BooleanField(default=False, verbose_name="22")
+    number_23 = models.BooleanField(default=False, verbose_name="23")
+    number_24 = models.BooleanField(default=False, verbose_name="24")
+    number_25 = models.BooleanField(default=False, verbose_name="25")
+    number_26 = models.BooleanField(default=False, verbose_name="26")
+    number_27 = models.BooleanField(default=False, verbose_name="27")
+    number_28 = models.BooleanField(default=False, verbose_name="28")
+    number_31 = models.BooleanField(default=False, verbose_name="31")
+    number_32 = models.BooleanField(default=False, verbose_name="32")
+    number_33 = models.BooleanField(default=False, verbose_name="33")
+    number_34 = models.BooleanField(default=False, verbose_name="34")
+    number_35 = models.BooleanField(default=False, verbose_name="35")
+    number_36 = models.BooleanField(default=False, verbose_name="36")
+    number_37 = models.BooleanField(default=False, verbose_name="37")
+    number_38 = models.BooleanField(default=False, verbose_name="38")
+    number_41 = models.BooleanField(default=False, verbose_name="41")
+    number_42 = models.BooleanField(default=False, verbose_name="42")
+    number_43 = models.BooleanField(default=False, verbose_name="43")
+    number_44 = models.BooleanField(default=False, verbose_name="44")
+    number_45 = models.BooleanField(default=False, verbose_name="45")
+    number_46 = models.BooleanField(default=False, verbose_name="46")
+    number_47 = models.BooleanField(default=False, verbose_name="47")
+    number_48 = models.BooleanField(default=False, verbose_name="48")
+
+    def __str__(self):
+        return f"{self.patient.first_name} - {self}"
+
 
 class Stock(models.Model):
     stock_name = models.CharField(max_length=100, blank=True, null=True)
