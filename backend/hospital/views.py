@@ -10,8 +10,8 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, WorkerFileSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, StockSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -223,3 +223,11 @@ class WorkerFileListCreateAPIView(generics.ListCreateAPIView):
 class WorkerFileDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= WorkerFile.objects.all()
     serializer_class=WorkerFileSerializer
+
+class PatientNoteListCreateAPIView(generics.ListCreateAPIView):
+    queryset= PatientNote.objects.all()
+    serializer_class=PatientNoteSerializer
+
+class PatientNoteDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= PatientNote.objects.all()
+    serializer_class=PatientNoteSerializer
