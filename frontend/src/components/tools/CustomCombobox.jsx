@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 export default function CustomCombobox({ customers, value, onChange, placeholder = 'Select a customer' }) {
   const [query, setQuery] = useState('');
-  console.log(customers);
+  //console.log(customers);
 
   const selectedCustomer = customers.find((customer) => customer.id === value) || null;
 

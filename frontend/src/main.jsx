@@ -5,6 +5,8 @@ import './index.css'
 import { Provider } from 'react-redux'
 import store from './store'
 import './i18n.js'
+import 'react-date-range/dist/styles.css'; // Ana stil dosyası
+import 'react-date-range/dist/theme/default.css'; // Varsayılan tema
 
 createRoot(document.getElementById('root')).render(
     <Provider store={store}>

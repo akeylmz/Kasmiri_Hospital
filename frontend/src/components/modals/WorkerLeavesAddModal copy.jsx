@@ -4,15 +4,13 @@ import { useFormik } from 'formik'
 import { Check } from 'lucide-react'
 import { useCreateWorkerLeavesMutation, useGetAllWorkerQuery } from '../../store/patient2'
 import CustomerCombobox from '../tools/CustomCombobox'
-import { DateRange } from 'react-date-range'
-import { format } from 'date-fns'
 
 const WorkerLeavesAddModal = () => {
  
     const [ activePage, setActivePage] = useState(1)
     const [ createWorkerLeaves ] = useCreateWorkerLeavesMutation()
     const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
-    //console.log(data);
+    console.log(data);
 
     const leaves = data?.results.map(worker => ({
         id: worker.id,
@@ -25,7 +23,7 @@ const WorkerLeavesAddModal = () => {
     }
     
     const submit = async (values, actions) => {
-          console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+         // console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
         
         try {
           const formData = new FormData();
@@ -40,33 +38,34 @@ const WorkerLeavesAddModal = () => {
           console.log(error)      
         }
     }
-
-    const [state, setState] = useState([
-      {
-        startDate: new Date(),
-        endDate: null,
-        key: 'selection'
-      }
-    ])
-
     const {values, errors, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
       initialValues: {
-        "start_date": format(new Date(state[0].startDate), "yyyy-MM-dd"),
-        "end_date": format(new Date(state[0].endDate), "yyyy-MM-dd"),
+        "start_date": "",
+        "end_date": "",
         "leave_days": "",
         "person": "",
       },
       onSubmit: submit,
     })
-
-    useEffect(() => {
-      setFieldValue("start_date", format(new Date(state[0].startDate), "yyyy-MM-dd"));
-      setFieldValue("end_date", format(new Date(state[0].endDate), "yyyy-MM-dd"));
-    }, [state])    
-
+    
+    //   useEffect(() => {
+        //   if (data) {
+        //     setValues({
+        //       stock_name: data.order_name || '',
+        //       stock_buyed: data.order_number || '',
+        //       stock_haved: data.order_number || '',
+        //       stock_wharehouse: data.order_wharehouse || '',
+        //       stock_pozition: data.order_pozition || '',
+        //       stcok_group: data.order_group || '',
+        //       stock_ut: '',
+        //       stock_skt: '',
+        //     });
+        //   }
+        // }, [data]);
+      
     return (
-      <div className="add-modal z-50 absolute top-0 right-0 min-w-[650px] h-screen">
-        <form onSubmit={handleSubmit} className="bg-white rounded-l-3xl p-6 w-full h-full ">
+      <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[650px]">
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 w-full ">
           <div className="flex justify-between items-center pb-3 border-b mb-5 border-gray-200">
             <h2 className="text-lg font-semibold text-cyan-500">İZİN OLUŞTUR</h2>
             <button
@@ -99,14 +98,16 @@ const WorkerLeavesAddModal = () => {
                     customers={leaves} 
                 />
             </div>
-            <div className='col-span-2'>
-              <DateRange
-                editableDateInputs={true}
-                onChange={item => setState([item.selection])}
-                moveRangeOnFirstSelection={false}
-                ranges={state}
+          {/* <div>
+              <label className="block text-sm font-medium text-gray-500">Çalışan</label>
+              <input
+                type="text"
+                name="person"
+                value={values.person}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
               />
-            </div>
+            </div> */}
             <div>
               <label className="block text-sm font-medium text-gray-500">İzin Süresi</label>
               <input
@@ -117,7 +118,26 @@ const WorkerLeavesAddModal = () => {
                 className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
               />
             </div>
-                        
+            <div>
+              <label className="block text-sm font-medium text-gray-500">Başlangıç Tarihi</label>
+              <input
+                type="date"
+                name="start_date"
+                value={values.start_date}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-500">Bitiş Tarihi</label>
+              <input
+                type="date"
+                name="end_date"
+                value={values.end_date}
+                onChange={handleChange}
+                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+              />
+            </div>            
           </div>
           <button
             type="submit"
