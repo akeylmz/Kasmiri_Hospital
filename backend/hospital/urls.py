@@ -34,5 +34,12 @@ urlpatterns = [
     path('worker-file/', views.WorkerFileListCreateAPIView.as_view(), name='worker-file-list'),
     path('worker-file/<int:pk>/', views.WorkerFileDetailAPIView.as_view(), name='worker-file-detail'),
 
+
+    path('patient-photo/', views.PatientPhotoListCreateAPIView.as_view(), name='patient-photo-list'),
+    path('patient-photo/<int:pk>/', views.PatientPhotoDetailAPIView.as_view(), name='patient-photo-detail'),
+
+    path('poll/', views.PollListCreateAPIView.as_view(), name='poll-list'),
+    path('poll/<int:pk>/', views.PollDetailAPIView.as_view(), name='poll-detail'),
+
     path('webhook/', views.webhook, name='webhook'),
 ]
