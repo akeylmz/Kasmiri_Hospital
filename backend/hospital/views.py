@@ -10,8 +10,8 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PatientPhoto, Poll, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, TaskCheckSerializer, WhareHouseSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WhareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -247,3 +247,19 @@ class PollListCreateAPIView(generics.ListCreateAPIView):
 class PollDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Poll.objects.all()
     serializer_class=PollSerializer
+
+class WhareHouseListCreateAPIView(generics.ListCreateAPIView):
+    queryset= WhareHouse.objects.all()
+    serializer_class=WhareHouseSerializer
+
+class WhareHouseDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= WhareHouse.objects.all()
+    serializer_class=WhareHouseSerializer
+
+class TaskCheckListCreateAPIView(generics.ListCreateAPIView):
+    queryset= TaskCheck.objects.all()
+    serializer_class=TaskCheckSerializer
+
+class TaskCheckDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= TaskCheck.objects.all()
+    serializer_class=TaskCheckSerializer
