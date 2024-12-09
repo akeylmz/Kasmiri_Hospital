@@ -409,7 +409,7 @@ const WorkerAddModal = () => {
                             type="checkbox" 
                             className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                         />
-                        <span className="text-sm text-gray-700">Döf Açılabilir</span>
+                        <span className="text-sm text-gray-700">Staff</span>
                         </div>
 
                         <div className="flex items-center space-x-2">

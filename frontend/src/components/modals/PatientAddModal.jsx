@@ -5,6 +5,7 @@ import { createModal, destroyModal } from "../Utils/Modal";
 import { useFormik } from 'formik';
 import { useCreatePatientMutation, useGetPatientsQuery, useUpdatePatientMutation } from "../../store/patient2";
 import fetchImageAsFile from "../Utils/fetchImageAsFile.js"
+import { patientFormSchemas } from "../../schemas/patientFormSchemas.jsx";
 
 const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
   const { t } = useTranslation()
@@ -15,14 +16,10 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
         jsonObject[key] = value;
     });
     return jsonObject;
-};
-  
-  console.log(isEdit);
-  
+  }
   const [createPatient, { isLoading, isError, error}] = useCreatePatientMutation()
   const [updatePatient, {}] = useUpdatePatientMutation()
   const { refetch } = useGetPatientsQuery();
-
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
   const [isCitizen, setIsCitizen] = useState(true); 
@@ -33,138 +30,50 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
       createModal("yabancı-modal")
     }
   };
- const [step, setStep] = useState(1)
-console.log(patientID);
+  const [step, setStep] = useState(1)
+ // console.log(patientID);
 
- const submit = async (values, actions) => {
-  try {
-    
-    console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
-    const formData = new FormData()
-    
-    
-    if(selectedPatient.patient_image === values.patient_image){
-      fetchImageAsFile(selectedPatient.patient_image).then(file => {
-        if (file) {
-          formData.append("patient_image", file)            
-        }
-      })             
-    }else{
-      formData.append("patient_image", values.patient_image)
-    }
-    
-    Object.keys(values).forEach((key) => {
-      if (key !== "patient_image") { 
-        formData.append(key, values[key]);
+  const submit = async (values, actions) => {    
+    try {
+      
+      console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+      const formData = new FormData()
+      
+      
+      if(selectedPatient.patient_image === values.patient_image){
+        fetchImageAsFile(selectedPatient.patient_image).then(file => {
+          if (file) {
+            formData.append("patient_image", file)            
+          }
+        })             
+      }else{
+        formData.append("patient_image", values.patient_image)
       }
-    });
-    if(isEdit){   
-      await updatePatient({ newPatient: formData, patientID }).unwrap()
-      refetch() 
-    }else{
-      await createPatient(formData).unwrap()
-      refetch() 
-    }    
-    actions.resetForm()
-    destroyModal()
+      
+      Object.keys(values).forEach((key) => {
+        if (key !== "patient_image") { 
+          formData.append(key, values[key]);
+        }
+      });
+      if(isEdit){   
+        await updatePatient({ newPatient: formData, patientID }).unwrap()
+        refetch() 
+      }else{
+        await createPatient(formData).unwrap()
+        refetch() 
+      }    
+      actions.resetForm()
+      destroyModal()
 
-  } catch (error) {
-    console.error('Form gönderilirken hata oluştu:', error)
+    } catch (error) {
+      console.error('Form gönderilirken hata oluştu:', error)
+    }
   }
-}
 
 
 
- const {values, errors, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
-  initialValues: {
-    patient_number: "",
-    national_id: "",
-    first_name: "",
-    last_name: "",
-    patient_image: null,
-    place_of_birth: "",
-    date_of_birth: "",
-    gender: "",
-    nationality: "",
-    mother_name: "",
-    father_name: "",
-    patient_type: "",
-    insurance_info: "",
-    instagram_username: "",
-    mobile_phone1: "",
-    mobile_phone2: "",
-    email: "",
-    country: "",
-    city: "",
-    address: "",
-    seans_number: "",
-    device_name: "",
-    seans_days: "",
-    education_status: "",
-    occupation: "",
-    current_employer: "",
-    marital_status: "",
-    children_count: "",
-    referee: "",
-    institution_type: "",
-    applied_department: "",
-    applied_operation: "",
-    complaints: "",
-    medications: "",
-    existing_conditions: "",
-    smoker: false,
-    past_surgeries: "",
-    allergies: "",
-    post_surgery_address: "",
-  }, 
- 
-  onSubmit: submit,
-});
-useEffect(() => {
-  if (selectedPatient) {    
-    setValues({
-      patient_number: selectedPatient.patient_number || "",
-      national_id: selectedPatient.national_id || "",
-      first_name: selectedPatient.first_name || "",
-      last_name: selectedPatient.last_name || "",
-      patient_image: selectedPatient.patient_image || null,
-      place_of_birth: selectedPatient.place_of_birth || "",
-      date_of_birth: selectedPatient.date_of_birth || "",
-      gender: selectedPatient.gender || "",
-      nationality: selectedPatient.nationality || "",
-      mother_name: selectedPatient.mother_name || "",
-      father_name: selectedPatient.father_name || "",
-      patient_type: selectedPatient.patient_type || "",
-      insurance_info: selectedPatient.insurance_info || "",
-      instagram_username: selectedPatient.instagram_username || "",
-      mobile_phone1: selectedPatient.mobile_phone1 || "",
-      mobile_phone2: selectedPatient.mobile_phone2 || "",
-      email: selectedPatient.email || "",
-      country: selectedPatient.country || "",
-      city: selectedPatient.city || "",
-      address: selectedPatient.address || "",
-      seans_number: selectedPatient.seans_number || "",
-      device_name: selectedPatient.device_name || "",
-      seans_days: selectedPatient.seans_days || "",
-      education_status: selectedPatient.education_status || "",
-      occupation: selectedPatient.occupation || "",
-      current_employer: selectedPatient.current_employer || "",
-      marital_status: selectedPatient.marital_status || "",
-      children_count: selectedPatient.children_count || "",
-      referee: selectedPatient.referee || "",
-      institution_type: selectedPatient.institution_type || "",
-      applied_department: selectedPatient.applied_department || "",
-      applied_operation: selectedPatient.applied_operation || "",
-      complaints: selectedPatient.complaints || "",
-      medications: selectedPatient.medications || "",
-      existing_conditions: selectedPatient.existing_conditions || "",
-      smoker: selectedPatient.smoker ?? false,
-      past_surgeries: selectedPatient.past_surgeries || "",
-      allergies: selectedPatient.allergies || "",
-      post_surgery_address: selectedPatient.post_surgery_address || "",
-    });
-  } else {
-    setValues({
+ const {values, errors, handleChange, handleSubmit, setFieldValue, handleBlur, setValues, touched } = useFormik({
+    initialValues: {
       patient_number: "",
       national_id: "",
       first_name: "",
@@ -204,10 +113,100 @@ useEffect(() => {
       past_surgeries: "",
       allergies: "",
       post_surgery_address: "",
-    });
-  }
-}, [selectedPatient, setValues]);
-
+    }, 
+    validationSchema: patientFormSchemas,
+    validateOnMount:false, 
+    validateOnBlur:true,
+    validateOnChange:true, 
+    onSubmit: submit,
+  });
+  useEffect(() => {
+    if (selectedPatient) {    
+      setValues({
+        patient_number: selectedPatient.patient_number || "",
+        national_id: selectedPatient.national_id || "",
+        first_name: selectedPatient.first_name || "",
+        last_name: selectedPatient.last_name || "",
+        patient_image: selectedPatient.patient_image || null,
+        place_of_birth: selectedPatient.place_of_birth || "",
+        date_of_birth: selectedPatient.date_of_birth || "",
+        gender: selectedPatient.gender || "",
+        nationality: selectedPatient.nationality || "",
+        mother_name: selectedPatient.mother_name || "",
+        father_name: selectedPatient.father_name || "",
+        patient_type: selectedPatient.patient_type || "",
+        insurance_info: selectedPatient.insurance_info || "",
+        instagram_username: selectedPatient.instagram_username || "",
+        mobile_phone1: selectedPatient.mobile_phone1 || "",
+        mobile_phone2: selectedPatient.mobile_phone2 || "",
+        email: selectedPatient.email || "",
+        country: selectedPatient.country || "",
+        city: selectedPatient.city || "",
+        address: selectedPatient.address || "",
+        seans_number: selectedPatient.seans_number || "",
+        device_name: selectedPatient.device_name || "",
+        seans_days: selectedPatient.seans_days || "",
+        education_status: selectedPatient.education_status || "",
+        occupation: selectedPatient.occupation || "",
+        current_employer: selectedPatient.current_employer || "",
+        marital_status: selectedPatient.marital_status || "",
+        children_count: selectedPatient.children_count || "",
+        referee: selectedPatient.referee || "",
+        institution_type: selectedPatient.institution_type || "",
+        applied_department: selectedPatient.applied_department || "",
+        applied_operation: selectedPatient.applied_operation || "",
+        complaints: selectedPatient.complaints || "",
+        medications: selectedPatient.medications || "",
+        existing_conditions: selectedPatient.existing_conditions || "",
+        smoker: selectedPatient.smoker ?? false,
+        past_surgeries: selectedPatient.past_surgeries || "",
+        allergies: selectedPatient.allergies || "",
+        post_surgery_address: selectedPatient.post_surgery_address || "",
+      });
+    } else {
+      setValues({
+        patient_number: "",
+        national_id: "",
+        first_name: "",
+        last_name: "",
+        patient_image: null,
+        place_of_birth: "",
+        date_of_birth: "",
+        gender: "",
+        nationality: "",
+        mother_name: "",
+        father_name: "",
+        patient_type: "",
+        insurance_info: "",
+        instagram_username: "",
+        mobile_phone1: "",
+        mobile_phone2: "",
+        email: "",
+        country: "",
+        city: "",
+        address: "",
+        seans_number: "",
+        device_name: "",
+        seans_days: "",
+        education_status: "",
+        occupation: "",
+        current_employer: "",
+        marital_status: "",
+        children_count: "",
+        referee: "",
+        institution_type: "",
+        applied_department: "",
+        applied_operation: "",
+        complaints: "",
+        medications: "",
+        existing_conditions: "",
+        smoker: false,
+        past_surgeries: "",
+        allergies: "",
+        post_surgery_address: "",
+      });
+    }
+  }, [selectedPatient, setValues]);
 
   return (
     <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
@@ -240,9 +239,9 @@ useEffect(() => {
           {step === 1 && (
             <>
               <div className="row-span-3">
-                <label className="block text-sm font-medium text-gray-500">{t("Image")}</label>
+                <label className={`block text-sm font-medium ${errors.patient_image && touched.patient_image ? "text-red-500" : "text-gray-500"}`}>{t("Image")} {errors.patient_image && touched.patient_image && <span>{errors.patient_image}</span>}</label>
                 <div className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2">
-                  <div className="relative w-32 h-32 bg-gray-100 border border-gray-200 rounded-md overflow-hidden">
+                  <div className={`relative w-32 h-32 bg-gray-100 border border-gray-200 rounded-md overflow-hidden`}>
                     {values.patient_image && (
                       <img
                         src={
@@ -259,6 +258,7 @@ useEffect(() => {
                     type="file"
                     name="patient_image"
                     accept="image/*"
+                    onBlur={handleBlur}
                     onChange={(event) => {
                       const file = event.currentTarget.files[0];                      
                       setFieldValue("patient_image", file);
@@ -269,187 +269,246 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("name")}</label>
+                <label className={`block text-sm font-medium ${errors.first_name && touched.first_name ? "text-red-500" : "text-gray-500"}`}>{t("name")}{errors.first_name && touched.first_name && <span>{errors.first_name}</span>}</label>
                 <input
                   type="text"
                   name="first_name"
                   value={values.first_name}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("surname")}</label>
+                <label className={`block text-sm font-medium ${errors.last_name && touched.last_name ? "text-red-500" : "text-gray-500"}`}>
+                  {t("surname")}
+                  {errors.last_name && touched.last_name && <span>{errors.last_name}</span>}
+                </label>
                 <input
                   type="text"
                   name="last_name"
                   value={values.last_name}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                  <label className="flex items-center text-sm font-medium text-gray-500">
+                  <label className={`flex items-center text-sm font-medium ${errors.national_id && touched.national_id ? "text-red-500" : "text-gray-500"}`}>
                     {t("tcPassport")} 
+                    {errors.national_id && touched.national_id && <span>{errors.national_id}</span>}
                     <input 
                       className="ml-8 mr-2" 
                       type="checkbox" 
                       checked={!isCitizen}
                       onChange={handleCheckboxChange} 
                     /> 
-                    <span className="text-xs">{t("I am not a Turkish citizen")}</span>
+                    <span className="text-xs text-gray-500">{t("I am not a Turkish citizen")}</span>
                   </label>
                   
                   <input
                     type="text"
                     name="national_id"
                     value={values.national_id}
+                    onBlur={handleBlur}
                     onChange={handleChange}
-                    disabled={!isCitizen} // Vatandaşı değilse input devre dışı kalır
+                    disabled={!isCitizen}
                     className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                   />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("birth_place")}</label>
+                <label className={`block text-sm font-medium ${errors.place_of_birth && touched.place_of_birth ? "text-red-500" : "text-gray-500"}`}>
+                  {t("birth_place")}
+                  {errors.place_of_birth && touched.place_of_birth && <span>{errors.place_of_birth}</span>}
+                </label>
                 <input
                   type="text"
                   name="place_of_birth"
                   value={values.place_of_birth}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("birth_date")}</label>
+                <label className={`block text-sm font-medium ${errors.date_of_birth && touched.date_of_birth ? "text-red-500" : "text-gray-500"}`}>
+                  {t("birth_date")}
+                  {errors.date_of_birth && touched.date_of_birth && <span>{errors.date_of_birth}</span>}
+                </label>
                 <input
                   type="date"
                   name="date_of_birth"
                   value={values.date_of_birth}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Gender")}</label>
+                <label className={`block text-sm font-medium ${errors.gender && touched.gender ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Gender")}
+                  {errors.gender && touched.gender && <span>{errors.gender}</span>}
+                </label>
                 <input
                   type="text"
                   name="gender"
                   value={values.gender}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Nationality")}</label>
+                <label className={`block text-sm font-medium ${errors.nationality && touched.nationality ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Nationality")}
+                  {errors.nationality && touched.nationality && <span>{errors.nationality}</span>}
+                </label>
                 <input
                   type="text"
                   name="nationality"
                   value={values.nationality}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Mother's Name")}</label>
+                <label className={`block text-sm font-medium ${errors.mother_name && touched.mother_name ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Mother's Name")}
+                  {errors.mother_name && touched.mother_name && <span>{errors.mother_name}</span>}
+                </label>
                 <input
                   type="text"
                   name="mother_name"
                   value={values.mother_name}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Father's Name")}</label>
+                <label className={`block text-sm font-medium ${errors.father_name && touched.father_name ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Father's Name")}
+                  {errors.father_name && touched.father_name && <span>{errors.father_name}</span>}
+                </label>
                 <input
                   type="text"
                   name="father_name"
                   value={values.father_name}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Mobile Phone")} 1</label>
+                <label className={`block text-sm font-medium ${errors.mobile_phone1 && touched.mobile_phone1 ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Mobile Phone")} 1
+                  {errors.mobile_phone1 && touched.mobile_phone1 && <span>{errors.mobile_phone1}</span>}
+                </label>
                 <input
                   type="text"
                   name="mobile_phone1"
                   value={values.mobile_phone1}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Mobile Phone")} 2</label>
+                <label className={`block text-sm font-medium ${errors.mobile_phone2 && touched.mobile_phone2 ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Mobile Phone")} 2
+                  {errors.mobile_phone2 && touched.mobile_phone2 && <span>{errors.mobile_phone2}</span>}
+                </label>
                 <input
                   type="text"
                   name="mobile_phone2"
                   value={values.mobile_phone2}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">E-Mail</label>
+                <label className={`block text-sm font-medium ${errors.email && touched.email ? "text-red-500" : "text-gray-500"}`}>
+                  E-Mail
+                  {errors.email && touched.email && <span>{errors.email}</span>}
+                </label>
                 <input
                   type="email"
                   name="email"
                   value={values.email}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Instagram Username")}</label>
+                <label className={`block text-sm font-medium ${errors.instagram_username && touched.instagram_username ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Instagram Username")}
+                  {errors.instagram_username && touched.instagram_username && <span>{errors.instagram_username}</span>}
+                </label>
                 <input
                   type="text"
                   name="instagram_username"
                   value={values.instagram_username}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("patient_type")}</label>
+                <label className={`block text-sm font-medium ${errors.patient_type && touched.patient_type ? "text-red-500" : "text-gray-500"}`}>
+                  {t("patient_type")}
+                  {errors.patient_type && touched.patient_type && <span>{errors.patient_type}</span>}
+                </label>
                 <input
                   type="text"
                   name="patient_type"
                   value={values.patient_type}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("country")}</label>
+                <label className={`block text-sm font-medium ${errors.country && touched.country ? "text-red-500" : "text-gray-500"}`}>
+                  {t("country")}
+                  {errors.country && touched.country && <span>{errors.country}</span>}
+                </label>
                 <input
                   type="text"
                   name="country"
                   value={values.country}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("city")}</label>
+                <label className={`block text-sm font-medium ${errors.city && touched.city ? "text-red-500" : "text-gray-500"}`}>
+                  {t("city")}
+                  {errors.city && touched.city && <span>{errors.city}</span>}
+                </label>
                 <input
                   type="text"
                   name="city"
                   value={values.city}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
@@ -472,37 +531,48 @@ useEffect(() => {
               </div>
 
               <div className="col-span-3">
-                <label className="block text-sm font-medium text-gray-500">{t("address")}</label>
+                <label className={`block text-sm font-medium ${errors.address && touched.address ? "text-red-500" : "text-gray-500"}`}>
+                  {t("address")}
+                  {errors.address && touched.address && <span>{errors.address}</span>}
+                </label>
                 <input
                   type="text"
                   name="address"
                   value={values.address}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
             </>
           )}
-
           {step === 2 && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Session")}</label>
+                <label className={`block text-sm font-medium ${errors.seans_number && touched.seans_number ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Session")}
+                  {errors.seans_number && touched.seans_number && <span>{errors.seans_number}</span>}
+                </label>
                 <input
                   type="text"
                   name="seans_number"
                   value={values.seans_number}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Device Name")}</label>
+                <label className={`block text-sm font-medium ${errors.device_name && touched.device_name ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Device Name")}
+                  {errors.device_name && touched.device_name && <span>{errors.device_name}</span>}
+                </label>
                 <input
                   type="text"
                   name="device_name"
                   value={values.device_name}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
@@ -543,140 +613,200 @@ useEffect(() => {
               </div>
             </>
           )}
-
           {step === 3 && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Öğrenim Durumu</label>
+                <label className={`block text-sm font-medium ${errors.education_status && touched.education_status ? "text-red-500" : "text-gray-500"}`}>
+                  Öğrenim Durumu
+                  {errors.education_status && touched.education_status && <span>{errors.education_status}</span>}
+                </label>
                 <input
                   type="text"
                   name="education_status"
                   value={values.education_status}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
-
               <div>
-                <label className="block text-sm font-medium text-gray-500">Meslek</label>
+                <label className={`block text-sm font-medium ${errors.occupation && touched.occupation ? "text-red-500" : "text-gray-500"}`}>
+                  Meslek
+                  {errors.occupation && touched.occupation && <span>{errors.occupation}</span>}
+                </label>
                 <input
                   type="text"
                   name="occupation"
                   value={values.occupation}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Çalışılan Kurum</label>
+                <label className={`block text-sm font-medium ${errors.current_employer && touched.current_employer ? "text-red-500" : "text-gray-500"}`}>
+                  Çalışılan Kurum
+                  {errors.current_employer && touched.current_employer && <span>{errors.current_employer}</span>}
+                </label>
                 <input
                   type="text"
                   name="current_employer"
                   value={values.current_employer}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Medeni Durum</label>
+                <label className={`block text-sm font-medium ${errors.marital_status && touched.marital_status ? "text-red-500" : "text-gray-500"}`}>
+                  Medeni Durum
+                  {errors.marital_status && touched.marital_status && <span>{errors.marital_status}</span>}
+                </label>
                 <input
                   type="text"
                   name="marital_status"
                   value={values.marital_status}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Çocuk Sayısı</label>
+                <label className={`block text-sm font-medium ${errors.children_count && touched.children_count ? "text-red-500" : "text-gray-500"}`}>
+                  Çocuk Sayısı
+                  {errors.children_count && touched.children_count && <span>{errors.children_count}</span>}
+                </label>
                 <input
-                  type="text"
+                  type="number"
                   name="children_count"
                   value={values.children_count}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Refere Eden</label>
+                <label className={`block text-sm font-medium ${errors.referee && touched.referee ? "text-red-500" : "text-gray-500"}`}>
+                  Refere Eden
+                  {errors.referee && touched.referee && <span>{errors.referee}</span>}
+                </label>
                 <input
                   type="text"
                   name="referee"
                   value={values.referee}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Kurum Tipi</label>
+                <label className={`block text-sm font-medium ${errors.institution_type && touched.institution_type ? "text-red-500" : "text-gray-500"}`}>
+                  Kurum Tipi
+                  {errors.institution_type && touched.institution_type && <span>{errors.institution_type}</span>}
+                </label>
                 <input
                   type="text"
                   name="institution_type"
                   value={values.institution_type}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Başvurduğu Birim</label>
+                <label className={`block text-sm font-medium ${errors.applied_department && touched.applied_department ? "text-red-500" : "text-gray-500"}`}>
+                  Başvurduğu Birim
+                  {errors.applied_department && touched.applied_department && <span>{errors.applied_department}</span>}
+                </label>
                 <input
                   type="text"
                   name="applied_department"
                   value={values.applied_department}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Başvurduğu İşlem</label>
+                <label className={`block text-sm font-medium ${errors.applied_operation && touched.applied_operation ? "text-red-500" : "text-gray-500"}`}>
+                  Başvurduğu İşlem
+                  {errors.applied_operation && touched.applied_operation && <span>{errors.applied_operation}</span>}
+                </label>
                 <input
                   type="text"
                   name="applied_operation"
                   value={values.applied_operation}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                />
+              </div>
+              
+              <div>
+                <label className={`block text-sm font-medium ${errors.insurance_info && touched.insurance_info ? "text-red-500" : "text-gray-500"}`}>
+                  Sigorta Bilgisi
+                  {errors.insurance_info && touched.insurance_info && <span>{errors.insurance_info}</span>}
+                </label>
+                <input
+                  type="text"
+                  name="insurance_info"
+                  value={values.insurance_info}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
-              <div className="col-span-3">
-                <label className="block text-sm font-medium text-gray-500">Şikayetler</label>
+              <div className="col-span-2">
+                <label className={`block text-sm font-medium ${errors.complaints && touched.complaints ? "text-red-500" : "text-gray-500"}`}>
+                  Şikayetler
+                  {errors.complaints && touched.complaints && <span>{errors.complaints}</span>}
+                </label>
                 <input
                   type="text"
                   name="complaints"
                   value={values.complaints}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
             </>
           )}
-
           {step === 4 && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-500">Sürekli kullandığınız ilaç var mı?</label>
+                <label className={`block text-sm font-medium ${errors.medications && touched.medications ? "text-red-500" : "text-gray-500"}`}>
+                  Sürekli kullandığınız ilaç var mı?
+                  {errors.medications && touched.medications && <span>{errors.medications}</span>}
+                </label>
                 <input
                   type="text"
                   name="medications"
                   value={values.medications}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Mevcut bir hastalığınız var mı?</label>
+                <label className={`block text-sm font-medium ${errors.existing_conditions && touched.existing_conditions ? "text-red-500" : "text-gray-500"}`}>
+                  Mevcut bir hastalığınız var mı?
+                  {errors.existing_conditions && touched.existing_conditions && <span>{errors.existing_conditions}</span>}
+                </label>
                 <input
                   type="text"
                   name="existing_conditions"
                   value={values.existing_conditions}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
@@ -703,33 +833,45 @@ useEffect(() => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Daha önce geçirdiğiniz operasyonlar</label>
+                <label className={`block text-sm font-medium ${errors.past_surgeries && touched.past_surgeries ? "text-red-500" : "text-gray-500"}`}>
+                  Daha önce geçirdiğiniz operasyonlar
+                  {errors.past_surgeries && touched.past_surgeries && <span>{errors.past_surgeries}</span>}
+                </label>
                 <input
                   type="text"
                   name="past_surgeries"
                   value={values.past_surgeries}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Alerjiniz var mı?</label>
+                <label className={`block text-sm font-medium ${errors.allergies && touched.allergies ? "text-red-500" : "text-gray-500"}`}>
+                  Alerjiniz var mı?
+                  {errors.allergies && touched.allergies && <span>{errors.allergies}</span>}
+                </label>
                 <input
                   type="text"
                   name="allergies"
                   value={values.allergies}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-500">Ameliyat sonrası kalacağınız adres</label>
+                <label className={`block text-sm font-medium ${errors.post_surgery_address && touched.post_surgery_address ? "text-red-500" : "text-gray-500"}`}>
+                  Ameliyat sonrası kalacağınız adres
+                  {errors.post_surgery_address && touched.post_surgery_address && <span>{errors.post_surgery_address}</span>}
+                </label>
                 <input
                   type="text"
                   name="post_surgery_address"
                   value={values.post_surgery_address}
+                  onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />

@@ -42,7 +42,7 @@ const SideBar = ({ patient }) => {
                     <Link to="">{t("photos")}</Link>
                 </li>
                 <li>
-                    <Link to="">{t("create_epicrisis")}</Link>
+                    <Link to="epikriz">{t("create_epicrisis")}</Link>
                 </li>
             </ul>
         </div>

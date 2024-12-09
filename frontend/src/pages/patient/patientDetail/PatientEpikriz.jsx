@@ -1,14 +1,26 @@
 import React, { useState } from "react";
 import { t } from "i18next";
 import { Check } from "lucide-react";
-import { destroyModal } from "../Utils/Modal";
-import { useDispatch } from "react-redux";
 import { useFormik } from 'formik';
-import { addMedicine } from "../../store/medicine";
-import { stockFormSchemas } from "../../schemas/stockFormSchemas";
-import ToothSchema from "../../assets/icons/ToothSchema";
-import FaceSchema from "../../assets/icons/FaceSchema";
-import BodySchema from "../../assets/icons/BodySchema";
+import { stockFormSchemas } from "../../../schemas/stockFormSchemas";
+import FaceSchema from "../../../assets/icons/FaceSchema";
+import BodySchema from "../../../assets/icons/BodySchema";
+import ToothSchema from "../../../assets/icons/ToothSchema";
+
+
+const PatientEpikriz = () => {
+    const [anket, setAnket] = useState("dis") 
+  return (
+    <div  className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>
+        {anket === "dis" && <TethForm setAnket={setAnket} /> }
+        {anket === "body" && <BodyForm setAnket={setAnket} />}
+        {anket === "head" && <HeadForm setAnket={setAnket} />}
+    </div>
+  )
+}
+
+export default PatientEpikriz
+
 
 
 
@@ -519,11 +531,11 @@ const HeadForm = ({setAnket}) => {
                         />
                     </div>
                     <div className="w-auto mt-5 h-[650px] overflow-y-scroll mx-auto flex flex-wrap">
-                        {Array.from({ length: 8 }).map((_, index) => (
+                        {Array.from({ length: 14 }).map((_, index) => (
                             <label
                             key={index}
                             htmlFor={`hair-${index + 1}`}
-                            className={`flex flex-col items-center gap-y-2 ${index + 1 == 5 ? "w-[calc(43.33%-10px)]" :"w-[calc(33.33%-10px)]"}`}
+                            className={`flex flex-col items-center gap-y-2 ${index + 1 == 8 ? "w-[calc(43.33%-10px)]" :"w-[calc(33.33%-10px)]"}`}
                             >
                             <img className="w-14" src={`/img/hair/${index + 1}.png`} alt="" />
                             <input id={`hair-${index + 1}`} name="hair" type="radio" />
@@ -545,20 +557,3 @@ const HeadForm = ({setAnket}) => {
     </form>
     )  
 }
-
-const ToothNotesAddModal = () => {
-
-  const [anket, setAnket] = useState("dis") 
- 
-
-
-  return (
-    <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
-        {anket === "dis" && <TethForm setAnket={setAnket} /> }
-        {anket === "body" && <BodyForm setAnket={setAnket} />}
-        {anket === "head" && <HeadForm setAnket={setAnket} />}
-    </div>
-  )
-}
-
-export default ToothNotesAddModal

@@ -13,6 +13,8 @@ import WorkerAddModal from "./components/modals/WorkerAddModal";
 import WorkerLeavesAddModal from "./components/modals/WorkerLeavesAddModal";
 import WorkerHoursAddModal from "./components/modals/WorkerHoursAddModal";
 import ToothNotesAddModal from "./components/modals/ToothNotesAddModal";
+import TransferProductModal from "./components/modals/TransferProductModal";
+import WarehouseAddModal from "./components/modals/WarehouseAddModal";
 
 const modals = [
     {
@@ -66,6 +68,14 @@ const modals = [
     {
         name: "tooth-modal",
         element: ToothNotesAddModal
+    },
+    {
+        name: "tranfer-product",
+        element: TransferProductModal
+    },
+    {
+        name: "warehouse-modal",
+        element: WarehouseAddModal
     }
 ]
 

@@ -14,17 +14,17 @@ const Anket = () => {
         
 
         <div className='mt-8'>
-            <p className=' '><span className='font-semibold'>3.</span> Kendinizi ne sıklıkla yalnız hissediyorsunuz?</p>
+            <p className=' '><span className='font-semibold'>2.</span> Kendinizi ne sıklıkla yalnız hissediyorsunuz?</p>
             <textarea className='w-full border mt-4 border-gray-300 rounded-xl outline-none px-4 shadow-md' type="text" rows="3" />
         </div>
 
         <div className='mt-8'>
-            <p className=' '><span className='font-semibold'>4.</span> Yaşamdaki kişisel hedeflerinizin durumunu ne sıklıkla erteliyorsunuz?</p>
+            <p className=' '><span className='font-semibold'>3.</span> Yaşamdaki kişisel hedeflerinizin durumunu ne sıklıkla erteliyorsunuz?</p>
             <textarea className='w-full border mt-4 border-gray-300 rounded-xl outline-none px-4 shadow-md' type="text" rows="3" />
         </div>
 
         <div className='mt-8'>
-            <p className=' '><span className='font-semibold'>2.</span>Şu fotoğraf seni rahatsız ediyor mu?</p>
+            <p className=' '><span className='font-semibold'>4.</span>Şu fotoğraf seni rahatsız ediyor mu?</p>
             <img src="/img/anket.png" className='mt-3 ml-4' />
             <textarea className='w-full border mt-4 border-gray-300 rounded-xl outline-none px-4 shadow-md' type="text" rows="3" />
         </div>

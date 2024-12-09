@@ -9,27 +9,27 @@ import { FaSortAmountDown } from "react-icons/fa";
 import PaginationBar from './pagination/PaginationBar';
 
 const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backButton, billing, scroll, printDiv,
-  setActivePage, activePage
+  setActivePage, activePage, setSearchable
  }) => {
   const navigate = useNavigate();
-  const [sorting, setSorting] = useState({});
-  const [search, setSearch] = useState('');  
-
-  const filteredData = tbody
-    .filter((items) =>
-      items.some((item) =>
-        item.toString().toLocaleLowerCase('TR').includes(search.toLocaleLowerCase())
-      )
-    )
-    .sort((a, b) => {
-      if (sorting?.orderBy === 'asc') {
-        return a[sorting.key].toString().localeCompare(b[sorting.key]);
-      }
-      if (sorting?.orderBy === 'dsc') {
-        return b[sorting.key].toString().localeCompare(a[sorting.key]);
-      }
-      return 0;
-    });
+   const [sorting, setSorting] = useState({});
+   const [search, setSearch] = useState('');  
+  
+  // const filteredData = tbody
+  //   .filter((items) =>
+  //     items.some((item) =>
+  //       item.toString().toLocaleLowerCase('TR').includes(search.toLocaleLowerCase())
+  //     )
+  //   )
+  //   .sort((a, b) => {
+  //     if (sorting?.orderBy === 'asc') {
+  //       return a[sorting.key].toString().localeCompare(b[sorting.key]);
+  //     }
+  //     if (sorting?.orderBy === 'dsc') {
+  //       return b[sorting.key].toString().localeCompare(a[sorting.key]);
+  //     }
+  //     return 0;
+  //   });
 
   return (
     <div className='w-full h-full flex flex-col bg-gray-200 rounded-xl'>
@@ -65,7 +65,7 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
           </div>
         </div> 
 
-        {searchable && (
+        {searchable != null && (
           <div className='my-4 px-3 w-full shadow-md bg-gray-100 flex items-center border border-gray-300 rounded-lg'>
             <Search className="w-4 h-4 text-gray-500" />
             <input
@@ -74,7 +74,16 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
               type='text'
               placeholder={t("search")}
               className='h-10 outline-none bg-gray-100 text-sm px-4 w-full border-gray-300 rounded-lg'
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setSearchable(search)                  
+                }
+              }}
             />
+            <button
+            type='button'
+              onClick={()=> setSearchable(search)}
+            >ARA</button>
           </div>
         )}
 
@@ -128,7 +137,7 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
               </thead>
 
               <tbody>
-                {filteredData.map((items, rowIndex) => (
+                {tbody.map((items, rowIndex) => (
                   <tr
                     key={rowIndex}
                     className={classNames('group hover:bg-slate-200 min-h-14', {

@@ -9,7 +9,7 @@ const StockProducts = () => {
   const { t } = useTranslation()
 
   const [ activePage, setActivePage] = useState(1)
-  const { data, isLoading, error } = useGetAllStocksQuery(activePage)
+  const { data, isLoading, error } = useGetAllStocksQuery({page:activePage})
   console.log(data);
   
     const thead = [
@@ -33,7 +33,7 @@ const StockProducts = () => {
             thead={thead}
             tbody={data.results.map(row => [
             row.stock_name,
-            row.stock_haved,
+            row.stock_haved, 
             row.stock_skt,
             row.stcok_group,
             ])}

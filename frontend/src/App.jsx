@@ -42,6 +42,7 @@ import SettingsPage from './pages/SettingsPage'
 import Deneme from './UI/Deneme'
 import Anket from './pages/Anket'
 import Bodro from './pages/Bodro'
+import PatientEpikriz from './pages/patient/patientDetail/PatientEpikriz'
 
 function App() {  
 
@@ -63,6 +64,7 @@ function App() {
                 { path: "other", element: <PatientOther /> },
                 { path: "IDinformation", element: <PatientIDInformation /> },
                 { path: "sessionInformation", element: <PatientSenssion /> },
+                { path: "epikriz", element: <PatientEpikriz />},
                 { path: "files", element: <PatientFiles /> },
                 { path: "bill", element: <PatientBill /> },
                 { path: "poll", element: <Anket />},

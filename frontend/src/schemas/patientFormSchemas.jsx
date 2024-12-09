@@ -1,0 +1,43 @@
+import * as yup from "yup"
+
+export const patientFormSchemas = yup.object().shape({
+    patient_image: yup.mixed().required('*'),
+    first_name: yup.string().required("*"),
+    last_name: yup.string().required("*"),
+    national_id: yup.number().integer().required("*"),
+    place_of_birth: yup.string().required("*"),
+    date_of_birth: yup.string().required("*"),
+    gender: yup.string().required("*"),
+    nationality: yup.string().required("*"),
+    mother_name: yup.string().required("*"),
+    father_name: yup.string().required("*"),
+    mobile_phone1: yup.number().required("*"),
+    mobile_phone2: yup.number().required("*"),
+    email: yup.string().email().required("*"),
+    instagram_username: yup.string().required("*"),
+    patient_type: yup.string().required("*"),
+    country: yup.string().required("*"),
+    city: yup.string().required("*"),
+
+
+    address: yup.string().required("*"),
+    seans_number: yup.number().required("*"),
+    device_name: yup.string().required("*"),
+    education_status: yup.string().required("*"),
+    occupation: yup.string().required("*"),
+    current_employer: yup.string().required("*"),
+    marital_status: yup.string().required("*"),
+    children_count: yup.number().integer().required("*"),
+    referee: yup.string().required("*"),
+    institution_type: yup.string().required("*"),
+    applied_department: yup.string().required("*"),
+    applied_operation: yup.string().required("*"),
+    insurance_info: yup.string().required("*"),
+    complaints: yup.string().required("*"),
+    medications: yup.string().required("*"),
+    existing_conditions: yup.string().required("*"),
+    past_surgeries: yup.string().required("*"),
+    allergies: yup.string().required("*"),
+    post_surgery_address: yup.string().required("*"),
+    
+})

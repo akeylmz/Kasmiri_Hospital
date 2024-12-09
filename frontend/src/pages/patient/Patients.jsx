@@ -11,10 +11,11 @@ import { useNavigate } from 'react-router-dom';
 const Patients = () => {
    
     const navigate = useNavigate()
+    const [searchable, setSearchable] = useState(''); 
     const { t } = useTranslation()
     const [deletePatient ] = useDeletePatientMutation()
     const [ activePage, setActivePage] = useState(1)
-    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage})
+    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage, filters: searchable})
     //console.log(patients)
     
     const [firstLoad, setFirstLoad] = useState(false);
@@ -60,58 +61,57 @@ const Patients = () => {
             
            <div className='w-[95%] h-[95%]'>
                 <TableComp2
-            thead={thead}
-            tbody={patients.results.map((user) => [        
-                <button 
-                    type='button' 
-                    onClick={ () => navigate(`/patients/${user.id}`) }
-                    className='flex items-center gap-x-3 w-full'>
-                    <img src={user.patient_image} alt={`${user.first_name} avatar`} className="w-10 h-10 rounded-full" />
-                    <p>{user.first_name}</p>
-                </button>,              
-                user.last_name,        
-                user.ilgilenenDoktor,       
-                user.mobile_phone1, 
-                user.email,
-                user.city,                 
-                user.national_id || '',   
-                user.hastaBolumu || '',
-                user.kayitAcan || '',   
-                user.onaylayanDoktor || '', 
-                user.girisTarih || '',  
-                user.taburcuTarih || '', 
-                user.sigorta || '',                   
-                <div className='flex gap-x-2'>
+                    thead={thead}
+                    tbody={patients.results.map((user) => [        
                     <button 
-                        key="edit" 
-                        onClick={() => {    
-                            setFirstLoad(true)                              
-                            setSelectedPatientId(user.id)  
-                            setTimeout(()=>{setEditToggle(prev => !prev)}, 200)                   
-                        }}
-                        className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
-                        {t('edit')}
-                    </button>
-                    <button 
-                        key="delete" 
-                        onClick={async () => { 
-                            await deletePatient(user.id) 
-                            refetch()
-                        }}
-                        className='h-8 px-4 flex items-center rounded bg-orange-500 text-white'>
-                        {t('delete')}
-                    </button>
-                </div>
-                         
-               
-            ])}
-            searchable = {true}
-            tableTitle = {t('patientList')}
-            modal = {'patient'}
-            scroll = {true}
-            page = {patients.count}
-            activePage = {activePage}
-            setActivePage = {setActivePage}
+                        type='button' 
+                        onClick={ () => navigate(`/patients/${user.id}`) }
+                        className='flex items-center gap-x-3 w-full'>
+                        <img src={user.patient_image} alt={`${user.first_name} avatar`} className="w-10 h-10 rounded-full" />
+                        <p>{user.first_name}</p>
+                    </button>,              
+                    user.last_name,        
+                    user.ilgilenenDoktor,       
+                    user.mobile_phone1, 
+                    user.email,
+                    user.city,                 
+                    user.national_id || '',   
+                    user.hastaBolumu || '',
+                    user.kayitAcan || '',   
+                    user.onaylayanDoktor || '', 
+                    user.girisTarih || '',  
+                    user.taburcuTarih || '', 
+                    user.sigorta || '',   
+                    <div className='flex gap-x-2'>
+                        <button 
+                            key="edit" 
+                            onClick={() => {    
+                                setFirstLoad(true)                              
+                                setSelectedPatientId(user.id)  
+                                setTimeout(()=>{setEditToggle(prev => !prev)}, 200)                   
+                            }}
+                            className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
+                            {t('edit')}
+                        </button>
+                        <button 
+                            key="delete" 
+                            onClick={async () => { 
+                                await deletePatient(user.id) 
+                                refetch()
+                            }}
+                            className='h-8 px-4 flex items-center rounded bg-orange-500 text-white'>
+                            {t('delete')}
+                        </button>
+                    </div>                        
+                ])}
+                searchable = {searchable}
+                setSearchable = {setSearchable}
+                tableTitle = {t('patientList')}
+                modal = {'patient'}
+                scroll = {true}
+                page = {patients.count}
+                activePage = {activePage}
+                setActivePage = {setActivePage}
             />
            </div>
         </motion.div>
