@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PopulationCard, Stock, Order, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.models import  Note, PatientCard, CommunicationCard, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WhareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -56,6 +56,50 @@ class CommunicationCardSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class PatientPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PatientPhoto
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        """
+        Yeni bir izin kaydı oluşturur.
+        """
+        leave = PatientPhoto.objects.create(**validated_data)
+        return leave
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir izin kaydını günceller.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+class PollSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poll
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        """
+        Yeni bir izin kaydı oluşturur.
+        """
+        leave = Poll.objects.create(**validated_data)
+        return leave
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir izin kaydını günceller.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
 class PatientNoteSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -78,6 +122,8 @@ class PatientNoteSerializer(serializers.ModelSerializer):
 
 class PatientCardSerializer(serializers.ModelSerializer):
     patient_note = PatientNoteSerializer(many=True, read_only=True)
+    patient_poll = PollSerializer(many=True, read_only=True)
+    patient_photos = PatientPhotoSerializer(many=True, read_only=True)
 
     patient_image = serializers.ImageField(
         max_length=None, use_url=True,
@@ -246,7 +292,30 @@ class WorkerFileSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class TaskCheckSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = TaskCheck
+        fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Yeni bir Worker nesnesi oluşturmak için özelleştirilmiş metot.
+        """
+        wh = TaskCheck.objects.create(**validated_data)
+        return wh
+
+    def update(self, instance, validated_data):
+        """
+        Var olan bir Worker nesnesini güncellemek için özelleştirilmiş metot.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
 class TaskAssignmentSerializer(serializers.ModelSerializer):
+    task_checks = TaskCheckSerializer(many=True, read_only=True)
     class Meta:
         model = TaskAssignment
         fields = '__all__'
@@ -420,3 +489,27 @@ class WorkerSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
+class WhareHouseSerializer(serializers.ModelSerializer):
+    wh_stocks = StockSerializer(many=True, read_only=True)
+
+    wh_orders = OrderSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = WhareHouse
+        fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Yeni bir Worker nesnesi oluşturmak için özelleştirilmiş metot.
+        """
+        wh = WhareHouse.objects.create(**validated_data)
+        return wh
+
+    def update(self, instance, validated_data):
+        """
+        Var olan bir Worker nesnesini güncellemek için özelleştirilmiş metot.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance

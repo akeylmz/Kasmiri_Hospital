@@ -3,7 +3,11 @@ from django.forms import ValidationError
 from django.utils import timezone
 
 # Create your models here.
-    
+class WhareHouse(models.Model):
+    wh_name = models.CharField(max_length=63)
+    def __str__(self):
+        return f"{self.wh_name}"
+
 class Note(models.Model):
     note = models.CharField(max_length=255, verbose_name="Note")
     date = models.DateField(verbose_name="Date")
@@ -28,8 +32,6 @@ class Note(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         super().save(*args, **kwargs)
-
-
 
 class PatientCard(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -72,7 +74,12 @@ class PatientCard(models.Model):
     past_surgeries = models.TextField(blank=True, null=True)  # Geçmiş operasyonlar
     allergies = models.TextField(blank=True, null=True)  # Alerjiler
     post_surgery_address = models.CharField(max_length=255, blank=True, null=True)  # Ameliyat sonrası kalınacak adres
-
+    patient_part = models.CharField(max_length=100, blank=True, null=True, verbose_name="hasta bolumu")
+    check_worker = models.CharField(max_length=100, blank=True, null=True, verbose_name="Onaylayan Doktor")#onaylayan doktor
+    start_worker = models.CharField(max_length=100, blank=True, null=True, verbose_name="Kayıt Acan")#
+    discharge_date = models.DateField(null=True, blank=True, verbose_name="Discharge Date")
+    sharing_permission = models.BooleanField(default=False, verbose_name="Sharing Permission")    
+    registration_date = models.DateField(default=timezone.now, verbose_name="Registration Date")
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.national_id})"
 
@@ -85,23 +92,16 @@ class PatientCard(models.Model):
 class PatientNote(models.Model):
     # Patient Information
     patient = models.ForeignKey(PatientCard, on_delete=models.CASCADE, related_name='patient_note')
-
-    country = models.CharField(max_length=50, verbose_name="Country")
-    age = models.PositiveIntegerField(verbose_name="Age")
-    smoker = models.BooleanField(default=False, verbose_name="Smoker")
-    allergy = models.BooleanField(default=False, verbose_name="Allergy")
-    registration_date = models.DateField(auto_now_add=True, verbose_name="Registration Date")
-    discharge_date = models.DateField(null=True, blank=True, verbose_name="Discharge Date")
-    sharing_permission = models.BooleanField(default=False, verbose_name="Sharing Permission")
+    note_type =models.CharField(null=True, blank=True, max_length=15)
 
     # Surgeries
-    upcoming_surgeries = models.TextField(blank=True, verbose_name="Upcoming Surgeries")
-    past_surgeries = models.TextField(blank=True, verbose_name="Past Surgeries")
+    upcoming_surgeries = models.TextField(null=True, blank=True, verbose_name="Upcoming Surgeries")
+    past_surgeries = models.TextField(null=True, blank=True, verbose_name="Past Surgeries")
 
     # Doctor Notes
-    doctor_notes = models.TextField(blank=True, verbose_name="Doctor Notes")
+    doctor_notes = models.TextField(null=True, blank=True, verbose_name="Doctor Notes")
 
-    # Boolean Fields for Numbers
+    # Type: diş
     number_11 = models.BooleanField(default=False, verbose_name="11")
     number_12 = models.BooleanField(default=False, verbose_name="12")
     number_13 = models.BooleanField(default=False, verbose_name="13")
@@ -134,6 +134,61 @@ class PatientNote(models.Model):
     number_46 = models.BooleanField(default=False, verbose_name="46")
     number_47 = models.BooleanField(default=False, verbose_name="47")
     number_48 = models.BooleanField(default=False, verbose_name="48")
+    
+    # Type: plastik
+
+    forehead = models.BooleanField(default=False)
+    right_temple = models.BooleanField(default=False)
+    left_temple = models.BooleanField(default=False)
+    nose = models.BooleanField(default=False)
+    right_ear = models.BooleanField(default=False)
+    left_ear = models.BooleanField(default=False)
+    upper_lip = models.BooleanField(default=False)
+    lower_lip = models.BooleanField(default=False)
+    right_cheek = models.BooleanField(default=False)
+    left_cheek = models.BooleanField(default=False)
+    chin = models.BooleanField(default=False)
+    neck = models.BooleanField(default=False)
+    right_under_eye = models.BooleanField(default=False)
+    left_under_eye = models.BooleanField(default=False)
+    right_eyebrow = models.BooleanField(default=False)
+    left_eyebrow = models.BooleanField(default=False)
+    right_leg = models.BooleanField(default=False)
+    left_leg = models.BooleanField(default=False)
+    right_arm = models.BooleanField(default=False)
+    left_arm = models.BooleanField(default=False)
+    right_breast = models.BooleanField(default=False)
+    left_breast = models.BooleanField(default=False)
+    right_hip = models.BooleanField(default=False)
+    left_hip = models.BooleanField(default=False)
+    abdomen = models.BooleanField(default=False)
+    back = models.BooleanField(default=False)
+
+    # Type: Saç
+    first_application_date = models.DateField(null=True, blank=True, verbose_name="İlk Müracaat Tarihi")
+    planned_procedure_date = models.DateField(null=True, blank=True, verbose_name="Uygulanacak Tarih")
+
+    # Hasta bilgileri
+    diagnosis = models.CharField(null=True, blank=True, max_length=255, verbose_name="Hasta Tanısı")
+    previous_transplant = models.BooleanField(default=False, verbose_name="Daha Önce Saç Ekimi Yapıldı mı?")
+    session_number = models.PositiveIntegerField(null=True, blank=True, verbose_name="Kaçıncı Seans")
+
+    # İşlem bilgileri
+    method = models.CharField(null=True, blank=True, max_length=255, verbose_name="Uygulanacak Metod")
+    graft_count = models.PositiveIntegerField(null=True, blank=True, verbose_name="Kök Sayısı")
+    protocol_number = models.CharField(null=True, blank=True, max_length=50, verbose_name="Protokol No")
+
+    # Kellik seviyesi (Erkek)
+    level_male_1 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 1")
+    level_male_2 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 2")
+    level_male_3 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 3")
+    level_male_4 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 4")
+    level_male_5 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 5")
+
+    # Kellik seviyesi (Kadın)
+    level_female_1 = models.BooleanField(default=False, verbose_name="Kadın Kellik Seviyesi 1")
+    level_female_2 = models.BooleanField(default=False, verbose_name="Kadın Kellik Seviyesi 2")
+    level_female_3 = models.BooleanField(default=False, verbose_name="Kadın Kellik Seviyesi 3")
 
     def __str__(self):
         return f"{self.patient.first_name} - {self}"
@@ -145,7 +200,7 @@ class Stock(models.Model):
     stock_haved = models.IntegerField(default=0, blank=True, null=True)
     stock_ut = models.DateField(blank=True, null=True)
     stock_skt = models.DateField(blank=True, null=True)
-    stock_wharehouse = models.CharField(max_length=100, blank=True, null=True)
+    stock_wharehouse = models.ForeignKey(WhareHouse, on_delete=models.SET_NULL, blank=True, null=True, related_name="wh_stocks")
     stock_pozition = models.CharField(max_length=100, blank=True, null=True)
     stcok_group = models.CharField(max_length=100, blank=True, null=True)
     def __str__(self):
@@ -154,7 +209,7 @@ class Stock(models.Model):
 class Order(models.Model):
     order_name = models.CharField(max_length=100, blank=True, null=True)
     order_number = models.IntegerField(default=0, blank=True, null=True)
-    order_wharehouse = models.CharField(max_length=100, blank=True, null=True)
+    order_wharehouse = models.ForeignKey(WhareHouse, on_delete=models.SET_NULL, blank=True, null=True, related_name="wh_orders")
     order_pozition = models.CharField(max_length=100, blank=True, null=True)
     order_group = models.CharField(max_length=100, blank=True, null=True)
     order_startdate = models.DateField(default=timezone.now)
@@ -342,6 +397,26 @@ class TaskAssignment(models.Model):
     def __str__(self):
         return f"{self.task_name} - {self.person.first_name} {self.person.last_name}" if self.task_name else f"{self.person.first_name} {self.person.last_name}"
 
+
+class TaskCheck(models.Model):
+    # ForeignKey relationship to Person model
+    task = models.ForeignKey(
+        TaskAssignment, 
+        on_delete=models.CASCADE, 
+        related_name="task_checks",
+    )  # Görev atanacak çalışan
+
+    # Fields for the task assignment
+    task_check =models.BooleanField(default=False) 
+    description = models.TextField(blank=True, null=True, verbose_name="İş Tanımı")  # İş tanımı
+    date = models.DateField(blank=True, null=True, verbose_name="Son Kontrol Tarihi")  # Tarih
+    cheked_person = models.CharField(max_length=200, blank=True, null=True, verbose_name="Son Kontrol Eden")  # İş tanımı
+
+    situation = models.CharField(max_length=200, blank=True, null=True, verbose_name="İş Durumu")  # İş tanımı
+    def __str__(self):
+        return f"{self.task} - {self.task_check}"
+
+
 class WorkingHours(models.Model):
     person = models.ForeignKey(
         Worker,
@@ -382,3 +457,23 @@ class WorkerFile(models.Model):
     )
     file_name = models.CharField(max_length=60, blank=True, null=True)
     file = models.FileField(blank=True, null=True,upload_to='images/worker_files/')
+
+class PatientPhoto(models.Model):
+    person = models.ForeignKey(
+        PatientCard,
+        on_delete=models.CASCADE,
+        related_name="patient_photos",
+    )
+    file_name = models.CharField(max_length=60, blank=True, null=True)
+    file = models.FileField(blank=True, null=True,upload_to='images/patient_photos/')
+
+class Poll(models.Model):
+    person = models.ForeignKey(
+        PatientCard,
+        on_delete=models.CASCADE,
+        related_name="patient_poll",
+    )
+    question1 =models.CharField(max_length=255, blank=True, null=True)
+    question2 =models.CharField(max_length=255, blank=True, null=True)
+    question3 =models.CharField(max_length=255, blank=True, null=True)
+    question4 =models.CharField(max_length=255, blank=True, null=True)    

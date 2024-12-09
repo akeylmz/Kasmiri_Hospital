@@ -25,7 +25,10 @@ urlpatterns = [
     path('worker/', views.WorkerListCreateAPIView.as_view(), name='worker-list'),
     path('worker/<int:pk>/', views.WorkerDetailAPIView.as_view(), name='worker-detail'),
     path('task-assignment/', views.TaskAssignmentListCreateAPIView.as_view(), name='task-assignment-list'),
-    path('task-assignment/<int:pk>/', views.TaskAssignmentDetailAPIView.as_view(), name='task-assignment-detail'),
+    path('task-assignment/<int:pk>/', views.TaskCheckDetailAPIView.as_view(), name='task-assignment-detail'),
+    path('task-check/', views.TaskCheckListCreateAPIView.as_view(), name='task-check-list'),
+    path('task-check/<int:pk>/', views.TaskAssignmentDetailAPIView.as_view(), name='task-check-detail'),
+   
     path('working-hours/', views.WorkingHoursListCreateAPIView.as_view(), name='working-hours-list'),
     path('working-hours/<int:pk>/', views.WorkingHoursDetailAPIView.as_view(), name='working-hours-detail'),
     path('leave/', views.LeaveListCreateAPIView.as_view(), name='leave-list'),
@@ -34,5 +37,13 @@ urlpatterns = [
     path('worker-file/', views.WorkerFileListCreateAPIView.as_view(), name='worker-file-list'),
     path('worker-file/<int:pk>/', views.WorkerFileDetailAPIView.as_view(), name='worker-file-detail'),
 
+
+    path('patient-photo/', views.PatientPhotoListCreateAPIView.as_view(), name='patient-photo-list'),
+    path('patient-photo/<int:pk>/', views.PatientPhotoDetailAPIView.as_view(), name='patient-photo-detail'),
+
+    path('poll/', views.PollListCreateAPIView.as_view(), name='poll-list'),
+    path('poll/<int:pk>/', views.PollDetailAPIView.as_view(), name='poll-detail'),
+    path('wharehouse/', views.WhareHouseListCreateAPIView.as_view(), name='wharehouse-list'),
+    path('wharehouse/<int:pk>/', views.WhareHouseDetailAPIView.as_view(), name='wharehouse-detail'),
     path('webhook/', views.webhook, name='webhook'),
 ]
