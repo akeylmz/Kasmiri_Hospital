@@ -41,6 +41,10 @@ urlpatterns = [
     path('patient-photo/', views.PatientPhotoListCreateAPIView.as_view(), name='patient-photo-list'),
     path('patient-photo/<int:pk>/', views.PatientPhotoDetailAPIView.as_view(), name='patient-photo-detail'),
 
+    path('patient-files/', views.PatientFilesListCreateAPIView.as_view(), name='patient-files-list'),
+    path('patient-files/<int:pk>/', views.PatientFilesDetailAPIView.as_view(), name='patient-files-detail'),
+
+
     path('poll/', views.PollListCreateAPIView.as_view(), name='poll-list'),
     path('poll/<int:pk>/', views.PollDetailAPIView.as_view(), name='poll-detail'),
     path('wharehouse/', views.WhareHouseListCreateAPIView.as_view(), name='wharehouse-list'),

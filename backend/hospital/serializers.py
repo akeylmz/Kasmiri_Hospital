@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WhareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.models import  Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WhareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -78,6 +78,28 @@ class PatientPhotoSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class PatientFilesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PatientFiles
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        """
+        Yeni bir izin kaydı oluşturur.
+        """
+        leave = PatientFiles.objects.create(**validated_data)
+        return leave
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir izin kaydını günceller.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
 class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
@@ -124,6 +146,7 @@ class PatientCardSerializer(serializers.ModelSerializer):
     patient_note = PatientNoteSerializer(many=True, read_only=True)
     patient_poll = PollSerializer(many=True, read_only=True)
     patient_photos = PatientPhotoSerializer(many=True, read_only=True)
+    patient_files = PatientPhotoSerializer(many=True, read_only=True)
 
     patient_image = serializers.ImageField(
         max_length=None, use_url=True,
@@ -258,15 +281,11 @@ class OrderSerializer(serializers.ModelSerializer):
         return Order.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        # Mevcut Stock kaydını güncelle
-        instance.order_name = validated_data.get('order_name', instance.order_name)
-        instance.order_number = validated_data.get('order_number', instance.order_number)
-        instance.order_wharehouse = validated_data.get('order_wharehouse', instance.order_wharehouse)
-        instance.order_pozition = validated_data.get('order_pozition', instance.order_pozition)
-        instance.order_group = validated_data.get('order_group', instance.order_group)
-        instance.order_startdate = validated_data.get('order_startdate', instance.order_startdate)
-        instance.order_finishdate = validated_data.get('order_finishdate', instance.order_finishdate)
-
+        """
+        Var olan bir Worker nesnesini güncellemek için özelleştirilmiş metot.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         instance.save()
         return instance
 

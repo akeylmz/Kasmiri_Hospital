@@ -47,6 +47,7 @@ class PatientCard(models.Model):
     mother_name = models.CharField(max_length=100, blank=True, null=True)
     father_name = models.CharField(max_length=100, blank=True, null=True)
     patient_type = models.CharField(max_length=50, blank=True, null=True)
+    is_stranger = models.BooleanField(default=False)
     insurance_info = models.CharField(max_length=40, blank=True, null=True)
     instagram_username = models.CharField(max_length=200, blank=True, null=True)  
     mobile_phone1 = models.CharField(max_length=20, blank=True, null=True)
@@ -77,9 +78,16 @@ class PatientCard(models.Model):
     patient_part = models.CharField(max_length=100, blank=True, null=True, verbose_name="hasta bolumu")
     check_worker = models.CharField(max_length=100, blank=True, null=True, verbose_name="Onaylayan Doktor")#onaylayan doktor
     start_worker = models.CharField(max_length=100, blank=True, null=True, verbose_name="Kayıt Acan")#
+    relevant_worker = models.CharField(max_length=100, blank=True, null=True, verbose_name="ilgilenen doktor")#
+
     discharge_date = models.DateField(null=True, blank=True, verbose_name="Discharge Date")
     sharing_permission = models.BooleanField(default=False, verbose_name="Sharing Permission")    
     registration_date = models.DateField(default=timezone.now, verbose_name="Registration Date")
+
+    flight_date = models.DateField(default=timezone.now, verbose_name="Flight Date")
+    stayed_hotel = models.CharField(max_length=100, blank=True, null=True, verbose_name="Kaldığı Otel")#
+    tour_operator = models.CharField(max_length=100, blank=True, null=True, verbose_name="Tur operatoru")#
+
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.national_id})"
 
@@ -87,7 +95,6 @@ class PatientCard(models.Model):
         verbose_name = "Patient Card"
         verbose_name_plural = "Patient Cards"
         ordering = ['last_name', 'first_name']
-
 
 class PatientNote(models.Model):
     # Patient Information
@@ -192,7 +199,6 @@ class PatientNote(models.Model):
 
     def __str__(self):
         return f"{self.patient.first_name} - {self}"
-
 
 class Stock(models.Model):
     stock_name = models.CharField(max_length=100, blank=True, null=True)
@@ -386,17 +392,12 @@ class TaskAssignment(models.Model):
     )  # Görev atanacak çalışan
 
     # Fields for the task assignment
-    task_name = models.CharField(max_length=200, blank=True, null=True, verbose_name="Görev")  # Çalışan görevi
+    task_name = models.CharField(max_length=200, blank=True, null=True, verbose_name="Görev Yeri")  # Çalışan görevi
     start_time = models.TimeField(blank=True, null=True, verbose_name="Başlangıç Saati")  # Başlangıç saati
     end_time = models.TimeField(blank=True, null=True, verbose_name="Bitiş Saati")  # Bitiş saati
-    description = models.TextField(blank=True, null=True, verbose_name="İş Tanımı")  # İş tanımı
-    date = models.DateField(blank=True, null=True, verbose_name="Son Kontrol Tarihi")  # Tarih
-    cheked_person = models.CharField(max_length=200, blank=True, null=True, verbose_name="Son Kontrol Eden")  # İş tanımı
 
-    situation = models.CharField(max_length=200, blank=True, null=True, verbose_name="İş Durumu")  # İş tanımı
     def __str__(self):
         return f"{self.task_name} - {self.person.first_name} {self.person.last_name}" if self.task_name else f"{self.person.first_name} {self.person.last_name}"
-
 
 class TaskCheck(models.Model):
     # ForeignKey relationship to Person model
@@ -412,10 +413,8 @@ class TaskCheck(models.Model):
     date = models.DateField(blank=True, null=True, verbose_name="Son Kontrol Tarihi")  # Tarih
     cheked_person = models.CharField(max_length=200, blank=True, null=True, verbose_name="Son Kontrol Eden")  # İş tanımı
 
-    situation = models.CharField(max_length=200, blank=True, null=True, verbose_name="İş Durumu")  # İş tanımı
     def __str__(self):
         return f"{self.task} - {self.task_check}"
-
 
 class WorkingHours(models.Model):
     person = models.ForeignKey(
@@ -466,6 +465,15 @@ class PatientPhoto(models.Model):
     )
     file_name = models.CharField(max_length=60, blank=True, null=True)
     file = models.FileField(blank=True, null=True,upload_to='images/patient_photos/')
+
+class PatientFiles(models.Model):
+    person = models.ForeignKey(
+        PatientCard,
+        on_delete=models.CASCADE,
+        related_name="patient_files",
+    )
+    file_name = models.CharField(max_length=60, blank=True, null=True)
+    file = models.FileField(blank=True, null=True,upload_to='images/patient_files/')
 
 class Poll(models.Model):
     person = models.ForeignKey(
