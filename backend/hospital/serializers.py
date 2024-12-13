@@ -146,7 +146,7 @@ class PatientCardSerializer(serializers.ModelSerializer):
     patient_note = PatientNoteSerializer(many=True, read_only=True)
     patient_poll = PollSerializer(many=True, read_only=True)
     patient_photos = PatientPhotoSerializer(many=True, read_only=True)
-    patient_files = PatientPhotoSerializer(many=True, read_only=True)
+    patient_files = PatientFilesSerializer(many=True, read_only=True)
 
     patient_image = serializers.ImageField(
         max_length=None, use_url=True,
