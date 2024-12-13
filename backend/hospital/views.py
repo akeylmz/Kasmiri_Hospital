@@ -57,15 +57,37 @@ class StockSummaryView(APIView):
         # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
         stock_data = (
             Stock.objects
-            .values('stock_name', 'stock_skt')
+            .values('stock_name', 'stock_skt', 'stcok_group')
             .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
         )
         
         # Serializer aracılığıyla veriyi JSON formatına dönüştür
-        serializer = StockSerializer(stock_data, many=True)
-        return Response(serializer.data)
+        return Response(stock_data)
 
+class StockWarehouseSummaryView(APIView):
+    def get(self, request):
+        # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
+        stock_data = (
+            Stock.objects
+            .values('stock_name', 'stock_skt', 'stock_ut', 'stock_wharehouse')
+            .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
+        )
+        
+        # Serializer aracılığıyla veriyi JSON formatına dönüştür
+        return Response(stock_data)
 
+class StockTotalSummaryView(APIView):
+    def get(self, request):
+        # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
+        stock_data = (
+            Stock.objects
+            .values('stock_name')
+            .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
+        )
+        
+        # Serializer aracılığıyla veriyi JSON formatına dönüştür
+        return Response(stock_data)
+    
 class NoteListCreateAPIView(generics.ListCreateAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
