@@ -186,16 +186,8 @@ class PatientNote(models.Model):
     protocol_number = models.CharField(null=True, blank=True, max_length=50, verbose_name="Protokol No")
 
     # Kellik seviyesi (Erkek)
-    level_male_1 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 1")
-    level_male_2 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 2")
-    level_male_3 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 3")
-    level_male_4 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 4")
-    level_male_5 = models.BooleanField(default=False, verbose_name="Erkek Kellik Seviyesi 5")
+    bold_type = models.CharField(null=True, blank=True, max_length=50, verbose_name="Kellik seviyesi")
 
-    # Kellik seviyesi (Kadın)
-    level_female_1 = models.BooleanField(default=False, verbose_name="Kadın Kellik Seviyesi 1")
-    level_female_2 = models.BooleanField(default=False, verbose_name="Kadın Kellik Seviyesi 2")
-    level_female_3 = models.BooleanField(default=False, verbose_name="Kadın Kellik Seviyesi 3")
 
     def __str__(self):
         return f"{self.patient.first_name} - {self}"
