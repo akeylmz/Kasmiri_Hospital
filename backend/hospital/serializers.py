@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WhareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.models import  Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -264,7 +264,7 @@ class StockSerializer(serializers.ModelSerializer):
         instance.stock_haved = validated_data.get('stock_haved', instance.stock_haved)
         instance.stock_ut = validated_data.get('stock_ut', instance.stock_ut)
         instance.stock_skt = validated_data.get('stock_skt', instance.stock_skt)
-        instance.stock_wharehouse = validated_data.get('stock_wharehouse', instance.stock_wharehouse)
+        instance.stock_warehouse = validated_data.get('stock_warehouse', instance.stock_warehouse)
         instance.stock_pozition = validated_data.get('stock_pozition', instance.stock_pozition)
         instance.stcok_group = validated_data.get('stcok_group', instance.stcok_group)
 
@@ -508,20 +508,20 @@ class WorkerSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-class WhareHouseSerializer(serializers.ModelSerializer):
+class WareHouseSerializer(serializers.ModelSerializer):
     wh_stocks = StockSerializer(many=True, read_only=True)
 
     wh_orders = OrderSerializer(many=True, read_only=True)
 
     class Meta:
-        model = WhareHouse
+        model = WareHouse
         fields = '__all__'
 
     def create(self, validated_data):
         """
         Yeni bir Worker nesnesi oluşturmak için özelleştirilmiş metot.
         """
-        wh = WhareHouse.objects.create(**validated_data)
+        wh = WareHouse.objects.create(**validated_data)
         return wh
 
     def update(self, instance, validated_data):

@@ -21,7 +21,7 @@ urlpatterns = [
     path('order/', views.OrderListCreateAPIView.as_view(), name='order-list'),
     path('order/<int:pk>/', views.OrderDetailAPIView.as_view(), name='order-detail'),
     path('stock-summary/', StockSummaryView.as_view(), name='stock-summary'),
-    path('stock-warehouse-summary/', StockWarehouseSummaryView.as_view(), name='stock-wharehouse-summary'),
+    path('stock-warehouse-summary/', StockWarehouseSummaryView.as_view(), name='stock-warehouse-summary'),
 
     path('stock-total-summary/', StockTotalSummaryView.as_view(), name='stock-total-summary'),
 
@@ -50,7 +50,7 @@ urlpatterns = [
 
     path('poll/', views.PollListCreateAPIView.as_view(), name='poll-list'),
     path('poll/<int:pk>/', views.PollDetailAPIView.as_view(), name='poll-detail'),
-    path('wharehouse/', views.WhareHouseListCreateAPIView.as_view(), name='wharehouse-list'),
-    path('wharehouse/<int:pk>/', views.WhareHouseDetailAPIView.as_view(), name='wharehouse-detail'),
+    path('warehouse/', views.WareHouseListCreateAPIView.as_view(), name='warehouse-list'),
+    path('warehouse/<int:pk>/', views.WareHouseDetailAPIView.as_view(), name='warehouse-detail'),
     path('webhook/', views.webhook, name='webhook'),
 ]
