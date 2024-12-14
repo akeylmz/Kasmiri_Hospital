@@ -53,6 +53,7 @@ def webhook(request):
     # Eğer POST isteği değilse
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
+#Filters
 class StockFilter(filters.FilterSet):
     total_haved__lte = filters.NumberFilter(field_name='stock_haved', lookup_expr='lte')  # Küçük veya eşit
 
@@ -70,6 +71,51 @@ class StockFilter(filters.FilterSet):
             },
         }
 
+class PatientCardFilter(filters.FilterSet):
+    class Meta:
+        model = PatientCard
+        exclude = ['patient_image']
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
+
+class OrderFilter(filters.FilterSet):
+    class Meta:
+        model = Order
+        fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
+
+class WorkerFilter(filters.FilterSet):
+    class Meta:
+        model = Worker
+        exclude = ['worker_image']
+        filter_overrides = {
+            models.CharField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+            models.TextField: {
+                'filter_class': filters.CharFilter,
+                'extra': lambda f: {'lookup_expr': 'icontains'},
+            },
+        }
+#Summaries
 class StockSummaryView(APIView):
     def get(self, request):
         # Filtreyi uygula
@@ -142,7 +188,9 @@ class StockTotalSummaryView(APIView):
         
         # Sayfalı veriyi döndür
         return paginator.get_paginated_response(paginated_data)
-    
+
+#Views
+
 class NoteListCreateAPIView(generics.ListCreateAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
@@ -151,20 +199,6 @@ class NoteDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
 
-class PatientCardFilter(filters.FilterSet):
-    class Meta:
-        model = PatientCard
-        exclude = ['patient_image']
-        filter_overrides = {
-            models.CharField: {
-                'filter_class': filters.CharFilter,
-                'extra': lambda f: {'lookup_expr': 'icontains'},
-            },
-            models.TextField: {
-                'filter_class': filters.CharFilter,
-                'extra': lambda f: {'lookup_expr': 'icontains'},
-            },
-        }
 class PatientCardListCreateAPIView(generics.ListCreateAPIView):
     queryset= PatientCard.objects.all()
     serializer_class=PatientCardSerializer
@@ -204,20 +238,7 @@ class StockDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Stock.objects.all()
     serializer_class=StockSerializer
 
-class OrderFilter(filters.FilterSet):
-    class Meta:
-        model = Order
-        fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
-        filter_overrides = {
-            models.CharField: {
-                'filter_class': filters.CharFilter,
-                'extra': lambda f: {'lookup_expr': 'icontains'},
-            },
-            models.TextField: {
-                'filter_class': filters.CharFilter,
-                'extra': lambda f: {'lookup_expr': 'icontains'},
-            },
-        }
+
 class OrderListCreateAPIView(generics.ListCreateAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
@@ -229,20 +250,7 @@ class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
 
-class WorkerFilter(filters.FilterSet):
-    class Meta:
-        model = Worker
-        exclude = ['worker_image']
-        filter_overrides = {
-            models.CharField: {
-                'filter_class': filters.CharFilter,
-                'extra': lambda f: {'lookup_expr': 'icontains'},
-            },
-            models.TextField: {
-                'filter_class': filters.CharFilter,
-                'extra': lambda f: {'lookup_expr': 'icontains'},
-            },
-        }
+
         
 class WorkerListCreateAPIView(generics.ListCreateAPIView):
     queryset= Worker.objects.all()
