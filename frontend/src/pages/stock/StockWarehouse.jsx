@@ -7,7 +7,7 @@ import { createModal } from '../../components/Utils/Modal';
 
 const StockWarehouse = () => {
     const { t } = useTranslation()
-    const [ activeWarehouse, setActiveWarehouse ] = useState("ANADEPO")
+    const [ activeWarehouse, setActiveWarehouse ] = useState(1)
 
     const { data, error, isLoading } = useGetAllStocksQuery({
         page: 1,
@@ -36,6 +36,8 @@ const StockWarehouse = () => {
     ])
     if(isLoading){
         return <div>Yükleniyor...</div>
+    }if(!data){
+        return <div>Hata Oluştu...</div>
     }
 
     return (
@@ -51,7 +53,7 @@ const StockWarehouse = () => {
                         <li 
                             key={item.id} 
                             className={`${activeWarehouse === item.name ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} 
-                            onClick={()=>setActiveWarehouse(item.name)}
+                            onClick={()=>setActiveWarehouse(item.id)}
                         >
                             {item.name}
                         </li>

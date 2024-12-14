@@ -1,13 +1,15 @@
 import React from 'react'
 import { destroyModal } from '../Utils/Modal'
 import { useFormik } from 'formik';
-import { useCreateStockOrderMutation, useGetStockOrdersQuery } from '../../store/patient2';
+import { useCreateStockOrderMutation, useGetStockOrdersQuery, useGetWarehouseQuery } from '../../store/patient2';
 import { Check } from 'lucide-react';
 
 const StockOrderModal = () => {
 
   const [createStockOrder] = useCreateStockOrderMutation()
-  const { refetch } = useGetStockOrdersQuery()
+  const {data, isLoading, error} = useGetWarehouseQuery()
+console.log(data);
+
 
   const submit = async (values, actions) => {
     try {
@@ -19,7 +21,6 @@ const StockOrderModal = () => {
       await createStockOrder(formData).unwrap()
       actions.resetForm()
       destroyModal()
-      refetch()
     } catch (error) {
       console.log(error)      
     }
@@ -32,6 +33,7 @@ const StockOrderModal = () => {
       order_wharehouse: '',
       order_pozition: '',
       order_group: '',
+      order_stuation: 'Bekliyor',
       order_startdate: new Date().toLocaleDateString('en-CA'),
     },
     onSubmit: submit,
@@ -86,13 +88,19 @@ const StockOrderModal = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Depo</label>
-                <input
-                  type="text"
+                <select 
+                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                   name="order_wharehouse"
                   value={values.order_wharehouse}
                   onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                />
+                >
+                {
+                data && 
+                  data.results.map((item, index) => (
+                    <option key={index} value={item.id}>{item.wh_name}</option>
+                  ))
+                }
+                </select>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-500">Pozisyon</label>

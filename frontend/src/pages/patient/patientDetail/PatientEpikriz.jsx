@@ -6,15 +6,26 @@ import { stockFormSchemas } from "../../../schemas/stockFormSchemas";
 import FaceSchema from "../../../assets/icons/FaceSchema";
 import BodySchema from "../../../assets/icons/BodySchema";
 import ToothSchema from "../../../assets/icons/ToothSchema";
+import { useGetPatientIdQuery } from "../../../store/patient2";
+import { useParams } from "react-router-dom";
+import { capitalizeWords } from "../../../components/Utils/capitalizeWords";
+import { formatISODate } from "../../../components/Utils/DateFormat";
+import { calculateAge } from "../../../components/Utils/calculateAge";
 
 
 const PatientEpikriz = () => {
-    const [anket, setAnket] = useState("dis") 
+    const {patientId} = useParams()
+    const { data: patient, isLoading } = useGetPatientIdQuery(patientId, {
+        skip: !patientId,
+    });
+    console.log(patient);
+    console.log(patient.patient_note[0].note_type);
+    
   return (
     <div  className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>
-        {anket === "dis" && <TethForm setAnket={setAnket} /> }
-        {anket === "body" && <BodyForm setAnket={setAnket} />}
-        {anket === "head" && <HeadForm setAnket={setAnket} />}
+        {patient.patient_note[0].note_type === "tooth" && <TethForm patient={patient} values={patient.patient_note[0]} /> }
+        {patient.patient_note[0].note_type === "body" && <BodyForm patient={patient} values={patient.patient_note[0]} />}
+        {patient.patient_note[0].note_type === "hair" && <HeadForm patient={patient} values={patient.patient_note[0]} />}
     </div>
   )
 }
@@ -24,74 +35,21 @@ export default PatientEpikriz
 
 
 
-const TethForm = ({ setAnket }) => {
-
-    const submit = (values, actions) => {
-        console.log(JSON.stringify(values, null, 2))      
-        destroyModal()
-      }
-      const { values, errors, handleChange, handleSubmit} = useFormik({
-        initialValues: {
-          stock_name: "",
-          stock_buyed: "",
-          stock_haved: 10,
-          stock_ut: "",
-          stock_skt: "",
-          stock_wharehouse: "",
-          stock_position: "",
-          stock_group: ""
-        },
-        validationSchema : stockFormSchemas,
-        onSubmit: submit
-      })
+const TethForm = ({ values, patient }) => {
 
     return(
-        <form onSubmit={handleSubmit} className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8 relative">
+        <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8 relative">
             {/* <div className="absolute bg-white border border-cyan-600 border-r-0  rounded-l-md top-4 -left-0 transform -translate-x-full ">Diş</div> */}
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>
-                <div className="flex gap-x-4">
-                    <button
-                        onClick={()=> setAnket("dis")}
-                        type="button" 
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Diş
-                    </button>
-                    <button 
-                        onClick={()=> setAnket("body")}
-                        type="button"
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Plastik
-                    </button>
-                    <button 
-                        onClick={()=> setAnket("head")}
-                        type="button" 
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Saç
-                    </button>                    
-                </div>
-                <button
-                onClick={() => destroyModal()}
-                className="text-gray-400 hover:text-gray-600"
-                >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                >
-                    <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
+                <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>                
+                <div className="flex items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
+                    <input
+                        type="date"
+                        name="stock_ut"
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                     />
-                </svg>
-                </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
@@ -99,73 +57,61 @@ const TethForm = ({ setAnket }) => {
                     <div className="ml-3">
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Hasta Adı :</label>
-                            <p className="text-gray-600 ml-2">Mehmet Enes Doğan</p>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.first_name + " " + patient.last_name)}</p>
+                        </div>
+                        <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">TC/Pasaport No :</label>
+                            <p className="text-gray-600 ml-2">{patient.national_id}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Ülke :</label>
-                            <p className="text-gray-600 ml-2">Türkiye</p>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.country)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
-                            <p className="text-gray-600 ml-2">13</p>
+                            <p className="text-gray-600 ml-2">{calculateAge(patient.date_of_birth)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Paylaşım İzni :</label>
-                            <p className="text-gray-600 ml-2">Evet</p>
+                            <p className="text-gray-600 ml-2">{patient.sharing_permission ? "Evet" : "Hayır"}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Sigara :</label>
-                            <p className="text-gray-600 ml-2">Evet</p>
+                            <p className="text-gray-600 ml-2">{patient.smoker ? "Evet" : "Hayır"}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Alerji :</label>
-                            <p className="text-gray-600 ml-2">Hayır</p>
+                            <p className="text-gray-600 ml-2">{patient.allergies}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Kayıt Tarihi :</label>
-                            <p className="text-gray-600 ml-2">12.12.2024</p>
+                            <p className="text-gray-600 ml-2">{formatISODate(patient.created_at)}</p>
                         </div>
                     </div>
                     <div>                        
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 ml-3">Yapılacak Ameliyatlar</label>
-                            <textarea
-                                className='bg-slate-100 mt-1 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' 
-                                placeholder='Yapılacak Ameliyatlar' 
-                                name="info_note" id="">
-                            </textarea>
+                            <label className="block font-medium text-gray-700 ml-3 mb-1">Yapılacak Ameliyatlar</label>
+                            <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
+                                {values.upcoming_surgeries}
+                            </p>                           
                         </div>  
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 ml-3">Geçirdiği Ameliyatlar</label>
-                            <textarea
-                                className='bg-slate-100 mt-1 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' 
-                                placeholder='Geçirdiği Ameliyatlar' 
-                                name="info_note" id="">
-                            </textarea>
+                            <label className="block font-medium text-gray-700 ml-3 mb-1">Geçirdiği Ameliyatlar</label>
+                            <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
+                                {values.past_surgeries}
+                            </p> 
                         </div>    
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 ml-3">Doktor Notu</label>
-                            <textarea
-                                className='bg-slate-100 mt-1 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' 
-                                placeholder='Doktor Notu' 
-                                name="info_note" id="">
-                            </textarea>
+                            <label className="block font-medium text-gray-700 ml-3 mb-1">Doktor Notu</label>
+                            <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
+                                {values.doctor_notes}
+                            </p>
                         </div>              
                     </div>
                 </div>
-                <div className="flex flex-col items-end pr-5">
-                    <div className="flex items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                        <input
-                        type="date"
-                        name="stock_ut"
-                        value={values.stock_ut}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
-                    </div>
+                <div className="flex flex-col items-end pr-5">                    
                     <div className="w-auto h-auto">
-                        <ToothSchema />
+                        <ToothSchema values={values} />
                     </div>
                 </div>
             </div>
@@ -182,73 +128,23 @@ const TethForm = ({ setAnket }) => {
         </form>
     )    
 }
-const BodyForm = ({ setAnket }) => {
-    const submit = (values, actions) => {
-        console.log(JSON.stringify(values, null, 2))      
-        destroyModal()
-    }
-    const { values, errors, handleChange, handleSubmit} = useFormik({
-        initialValues: {
-        stock_name: "",
-        stock_buyed: "",
-        stock_haved: 10,
-        stock_ut: "",
-        stock_skt: "",
-        stock_wharehouse: "",
-        stock_position: "",
-        stock_group: ""
-      },
-      validationSchema : stockFormSchemas,
-      onSubmit: submit
-    })
+const BodyForm = ({ values, patient }) => {
+   
     const [faceImgLoad, setFaceImgLoad] = useState(false)
     const [bodyImgLoad, setBodyImgLoad] = useState(false)
+    
     return(
-        <form onSubmit={handleSubmit} className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
+        <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>
-                <div className="flex gap-x-4">
-                    <button
-                        onClick={()=> setAnket("dis")}
-                        type="button" 
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Diş
-                    </button>
-                    <button 
-                        onClick={()=> setAnket("body")}
-                        type="button"
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Plastik
-                    </button>
-                    <button 
-                        onClick={()=> setAnket("head")}
-                        type="button" 
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Saç
-                    </button>                    
-                </div>
-                <button
-                onClick={() => destroyModal()}
-                className="text-gray-400 hover:text-gray-600"
-                >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                >
-                    <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
+                <div className="flex items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
+                    <input
+                        type="date"
+                        name="stock_ut"
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                     />
-                </svg>
-                </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
@@ -256,81 +152,69 @@ const BodyForm = ({ setAnket }) => {
                     <div className="ml-3">
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Hasta Adı :</label>
-                            <p className="text-gray-600 ml-2">Mehmet Enes Doğan</p>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.first_name + " " + patient.last_name)}</p>
+                        </div>
+                        <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">TC/Pasaport No :</label>
+                            <p className="text-gray-600 ml-2">{patient.national_id}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Ülke :</label>
-                            <p className="text-gray-600 ml-2">Türkiye</p>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.country)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
-                            <p className="text-gray-600 ml-2">13</p>
+                            <p className="text-gray-600 ml-2">{calculateAge(patient.date_of_birth)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Paylaşım İzni :</label>
-                            <p className="text-gray-600 ml-2">Evet</p>
+                            <p className="text-gray-600 ml-2">{patient.sharing_permission ? "Evet" : "Hayır"}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Sigara :</label>
-                            <p className="text-gray-600 ml-2">Evet</p>
+                            <p className="text-gray-600 ml-2">{patient.smoker ? "Evet" : "Hayır"}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Alerji :</label>
-                            <p className="text-gray-600 ml-2">Hayır</p>
+                            <p className="text-gray-600 ml-2">{patient.allergies}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Kayıt Tarihi :</label>
-                            <p className="text-gray-600 ml-2">12.12.2024</p>
+                            <p className="text-gray-600 ml-2">{formatISODate(patient.created_at)}</p>
                         </div>
                     </div>
                     <div>                        
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 ml-3">Yapılacak Ameliyatlar</label>
-                            <textarea
-                                className='bg-slate-100 mt-1 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' 
-                                placeholder='Yapılacak Ameliyatlar' 
-                                name="info_note" id="">
-                            </textarea>
+                            <label className="block font-medium text-gray-700 ml-3 mb-1">Yapılacak Ameliyatlar</label>
+                            <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
+                                {values.upcoming_surgeries}
+                            </p>                           
                         </div>  
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 ml-3">Geçirdiği Ameliyatlar</label>
-                            <textarea
-                                className='bg-slate-100 mt-1 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' 
-                                placeholder='Geçirdiği Ameliyatlar' 
-                                name="info_note" id="">
-                            </textarea>
+                            <label className="block font-medium text-gray-700 ml-3 mb-1">Geçirdiği Ameliyatlar</label>
+                            <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
+                                {values.past_surgeries}
+                            </p> 
                         </div>    
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 ml-3">Doktor Notu</label>
-                            <textarea
-                                className='bg-slate-100 mt-1 p-3 rounded-2xl drop-shadow-md w-full h-[150px] outline-none' 
-                                placeholder='Doktor Notu' 
-                                name="info_note" id="">
-                            </textarea>
-                        </div>              
+                            <label className="block font-medium text-gray-700 ml-3 mb-1">Doktor Notu</label>
+                            <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
+                                {values.doctor_notes}
+                            </p>
+                        </div>                 
                     </div>
                 </div>
-                <div className="flex flex-col items-end pr-5">
-                    <div className="flex items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                        <input
-                        type="date"
-                        name="stock_ut"
-                        value={values.stock_ut}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
-                    </div>
+                <div className="flex flex-col items-end pr-5">                   
                     <div className="w-auto h-[650px] overflow-y-scroll mx-auto">
                         <div className="relative select-none">
                             {faceImgLoad && <div className="absolute left-0 top-0">
-                                <FaceSchema />
+                                <FaceSchema values={values} />
                             </div>}
                             <img className="w-[450px]" src="/img/face.png" alt="" onLoad={() => setFaceImgLoad(true)} />
                         </div>   
                         <div className="relative select-none">
                             {bodyImgLoad && <div className="absolute left-0 top-0">
-                                <BodySchema />
+                                <BodySchema values={values} />
                             </div>}
                             <img className="w-[450px] mt-3" src="/img/anatomi.png" alt="" onLoad={() => setBodyImgLoad(true)} />
                         </div>                     
@@ -350,71 +234,20 @@ const BodyForm = ({ setAnket }) => {
     </form>
     )    
 }
-const HeadForm = ({setAnket}) => {
-    const submit = (values, actions) => {
-        console.log(JSON.stringify(values, null, 2))      
-        destroyModal()
-    }
-    const { values, errors, handleChange, handleSubmit} = useFormik({
-        initialValues: {
-        stock_name: "",
-        stock_buyed: "",
-        stock_haved: 10,
-        stock_ut: "",
-        stock_skt: "",
-        stock_wharehouse: "",
-        stock_position: "",
-        stock_group: ""
-      },
-      validationSchema : stockFormSchemas,
-      onSubmit: submit
-    })
+const HeadForm = ({values, patient}) => {
+    
     return(
-        <form onSubmit={handleSubmit} className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
+        <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>
-                <div className="flex gap-x-4">
-                    <button
-                        onClick={()=> setAnket("dis")}
-                        type="button" 
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Diş
-                    </button>
-                    <button 
-                        onClick={()=> setAnket("body")}
-                        type="button"
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Plastik
-                    </button>
-                    <button 
-                        onClick={()=> setAnket("head")}
-                        type="button" 
-                        className="px-4 py-1 boorder border-gray-400 rounded-xl bg-cyan-500 hover:bg-cyan-600 text-white"
-                    >
-                        Saç
-                    </button>                    
-                </div>
-                <button
-                onClick={() => destroyModal()}
-                className="text-gray-400 hover:text-gray-600"
-                >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                >
-                    <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
+                <div className="flex items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
+                    <input
+                        type="date"
+                        name="stock_ut"
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                     />
-                </svg>
-                </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
@@ -422,35 +255,35 @@ const HeadForm = ({setAnket}) => {
                     <div className="ml-3">
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Hasta Adı :</label>
-                            <p className="text-gray-600 ml-2">Mehmet Enes Doğan</p>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.first_name + " " + patient.last_name)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">TC/Pasaport No :</label>
-                            <p className="text-gray-600 ml-2">12345678900</p>
+                            <p className="text-gray-600 ml-2">{patient.national_id}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Ülke :</label>
-                            <p className="text-gray-600 ml-2">Türkiye</p>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.country)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
-                            <p className="text-gray-600 ml-2">23</p>
+                            <p className="text-gray-600 ml-2">{calculateAge(patient.date_of_birth)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Paylaşım İzni :</label>
-                            <p className="text-gray-600 ml-2">Evet</p>
+                            <p className="text-gray-600 ml-2">{patient.sharing_permission ? "Evet" : "Hayır"}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Sigara :</label>
-                            <p className="text-gray-600 ml-2">Evet</p>
+                            <p className="text-gray-600 ml-2">{patient.smoker ? "Evet" : "Hayır"}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Alerji :</label>
-                            <p className="text-gray-600 ml-2">Hayır</p>
+                            <p className="text-gray-600 ml-2">{patient.allergies}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Kayıt Tarihi :</label>
-                            <p className="text-gray-600 ml-2">12.12.2024</p>
+                            <p className="text-gray-600 ml-2">{formatISODate(patient.created_at)}</p>
                         </div>
                     </div>
                     <div className="grid grid-cols-2 gap-x-6 gap-y-4">   

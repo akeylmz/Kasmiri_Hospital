@@ -18,6 +18,8 @@ export const patientFormSchemas = yup.object().shape({
     patient_type: yup.string().required("*"),
     country: yup.string().required("*"),
     city: yup.string().required("*"),
+    patient_part: yup.string().required("*"),
+    check_worker: yup.string().required("*"),
 
 
     address: yup.string().required("*"),

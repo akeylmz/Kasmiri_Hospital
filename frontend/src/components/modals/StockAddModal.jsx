@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { destroyModal } from '../Utils/Modal';
 import { useFormik } from 'formik';
 import { Check } from 'lucide-react';
-import { useCreateStockMutation, useGetStockOrdersByIDQuery } from '../../store/patient2';
+import { useCreateStockMutation, useGetStockOrdersByIDQuery, useUpdateStockOrderMutation } from '../../store/patient2';
 
 const StockAddModal = ({data: ID}) => {
 
   const {data} = useGetStockOrdersByIDQuery(ID)
   const [ createStock ] = useCreateStockMutation()
+  const [ updateStockOrder ] = useUpdateStockOrderMutation()
 
-  // console.log(data)
+   console.log(data)
 
   const submit = async (values, actions) => {
+    console.log(values);
+    
     //  console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
     
     try {
@@ -20,6 +23,9 @@ const StockAddModal = ({data: ID}) => {
         formData.append(key, values[key])
       })
       await createStock(formData).unwrap()
+      const updateFormData = new FormData();
+      updateFormData.append("order_stuation", "Tamamlandı")
+      await updateStockOrder({newOrder: updateFormData, orderID:data.id}).unwrap();
       actions.resetForm()
       destroyModal()
       // refetch()

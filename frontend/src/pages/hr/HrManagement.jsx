@@ -84,15 +84,17 @@ const HrManagement = () => {
             {worker.duty_place}
           </button>,          
           (() => {
-            const processResult = processDays(worker.working_hours[0].working_days)
-            const [dayCount, ...rest] = processResult.split(", ")
-            const dayDetails = rest.join(", ")
-            return (
-                <span>
-                    <span className="text-cyan-500 font-semibold mr-1">{dayCount},</span>
-                    <span>{dayDetails}</span>
-                </span>
-            )
+            if(worker.working_hours[0]){
+              const processResult = processDays(worker.working_hours[0].working_days)
+              const [dayCount, ...rest] = processResult.split(", ")
+              const dayDetails = rest.join(", ")
+              return (
+                  <span>
+                      <span className="text-cyan-500 font-semibold mr-1">{dayCount},</span>
+                      <span>{dayDetails}</span>
+                  </span>
+              )
+            }            
         })(),
          <p>sonkontrol</p>,
         ])}

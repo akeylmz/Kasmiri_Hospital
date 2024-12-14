@@ -32,7 +32,7 @@ const PatientIDInformation = () => {
                         </div>
                         <div className='flex flex-col gap-2 justify-center items-center'>
                             <p className='text-gray-500 font-semibold'>Kimlik Türü</p>
-                            <p className='font-semibold text-lg text-gray-700'>TC Kimlik</p> {/* Bu alan sabit olarak kalabilir */}
+                            <p className='font-semibold text-lg text-gray-700'>TC Kimlik</p>
                         </div>
                         <div className='flex flex-col gap-2 justify-center items-center'>
                             <p className='text-gray-500 font-semibold'>Pasaport No</p>

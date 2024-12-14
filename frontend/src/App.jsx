@@ -43,6 +43,8 @@ import Deneme from './UI/Deneme'
 import Anket from './pages/Anket'
 import Bodro from './pages/Bodro'
 import PatientEpikriz from './pages/patient/patientDetail/PatientEpikriz'
+import PatientPhotos from './pages/patient/patientDetail/PatientPhotos'
+import LoginPage from './pages/LoginPage'
 
 function App() {  
 
@@ -50,7 +52,7 @@ function App() {
     { path: "/",
       element: <RootLayout />,
       children: [
-        {path: "/", element: <HomePage />},
+        {path: "/", element: <Navigate to="/login" />},
         { path : "/calendar", element: <Calender />},
         { path : "/patients", 
           element : <PatientLayout /> ,
@@ -67,6 +69,7 @@ function App() {
                 { path: "epikriz", element: <PatientEpikriz />},
                 { path: "files", element: <PatientFiles /> },
                 { path: "bill", element: <PatientBill /> },
+                { path: "photos", element: <PatientPhotos /> },
                 { path: "poll", element: <Anket />},
                 { index: true, element: <Navigate to="overview" replace /> }
               ]
@@ -116,9 +119,10 @@ function App() {
         { path: "reporting", element: <Reports />},
         { path: "settings", element: <SettingsPage />},
         { path: "bodro", element: <Bodro />},   
-        { path: "deneme", element: <Deneme />},     
+        { path: "deneme", element: <Deneme />},          
       ]
-    }
+    },
+    { path: "login", element: <LoginPage/>}   
   ])
 
   return (

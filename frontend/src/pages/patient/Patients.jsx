@@ -6,6 +6,7 @@ import { useDeletePatientMutation, useGetPatientIdQuery, useGetPatientsQuery } f
 import { createModal } from '../../components/Utils/Modal';
 import TableComp2 from '../../UI/TableComp2';
 import { useNavigate } from 'react-router-dom';
+import { formatISODate } from '../../components/Utils/DateFormat';
 
 
 const Patients = () => {
@@ -32,8 +33,7 @@ const Patients = () => {
         }
     }, [patient, patientLoading, editToggle]);
   
-     if (error) return <div>Failed to load patients</div>
-     if (isLoading) return <div>Loading...</div>
+    
 
      const thead = [
         { name: t('name'), sortable: true, minWidth: 180 },
@@ -58,8 +58,19 @@ const Patients = () => {
             initial={{opacity:0}}   
             animate={{opacity:1}}
             className='w-full h-full flex flex-col items-center justify-evenly'>       
-            
-           <div className='w-[95%] h-[95%]'>
+            {isLoading && 
+                <div className='flex flex-col items-center gap-5'>
+                    <div className="loading-container">
+                        <div className="asd"></div>
+                        <div className="asd"></div>
+                        <div className="asd"></div>
+                        <div className="asd"></div>
+                        <div className="asd"></div>
+                    </div>
+                    {/* <p className='text-cyan-500 text-lg font-semibold'>Yükleniyor...</p> */}
+                </div>
+            }
+           {patients && <div className='w-[95%] h-[95%]'>
                 <TableComp2
                     thead={thead}
                     tbody={patients.results.map((user) => [        
@@ -71,17 +82,17 @@ const Patients = () => {
                         <p>{user.first_name}</p>
                     </button>,              
                     user.last_name,        
-                    user.ilgilenenDoktor,       
+                    user.check_worker,       
                     user.mobile_phone1, 
                     user.email,
                     user.city,                 
                     user.national_id || '',   
-                    user.hastaBolumu || '',
-                    user.kayitAcan || '',   
-                    user.onaylayanDoktor || '', 
-                    user.girisTarih || '',  
-                    user.taburcuTarih || '', 
-                    user.sigorta || '',   
+                    user.patient_part || '',
+                    user.start_worker || '',   
+                    user.onaylayan_doktor || '', 
+                    formatISODate(user.created_at) || '',  
+                    user.discharge_date || '', 
+                    user.insurance_info || '',   
                     <div className='flex gap-x-2'>
                         <button 
                             key="edit" 
@@ -113,7 +124,7 @@ const Patients = () => {
                 activePage = {activePage}
                 setActivePage = {setActivePage}
             />
-           </div>
+           </div>}
         </motion.div>
     );
 }

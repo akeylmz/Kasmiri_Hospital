@@ -9,17 +9,10 @@ import { patientFormSchemas } from "../../schemas/patientFormSchemas.jsx";
 
 const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
   const { t } = useTranslation()
-  // console.log("data:", data);
-  const formDataToJson = (formData) => {
-    const jsonObject = {};
-    formData.forEach((value, key) => {
-        jsonObject[key] = value;
-    });
-    return jsonObject;
-  }
+   //console.log("data:", selectedPatient);
+ 
   const [createPatient, { isLoading, isError, error}] = useCreatePatientMutation()
   const [updatePatient, {}] = useUpdatePatientMutation()
-  const { refetch } = useGetPatientsQuery();
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
   const [isCitizen, setIsCitizen] = useState(true); 
@@ -36,7 +29,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
   const submit = async (values, actions) => {    
     try {
       
-      console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+      //console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
       const formData = new FormData()
       
       
@@ -55,12 +48,10 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
           formData.append(key, values[key]);
         }
       });
-      if(isEdit){   
+      if(isEdit){  
         await updatePatient({ newPatient: formData, patientID }).unwrap()
-        refetch() 
       }else{
         await createPatient(formData).unwrap()
-        refetch() 
       }    
       actions.resetForm()
       destroyModal()
@@ -113,6 +104,10 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
       past_surgeries: "",
       allergies: "",
       post_surgery_address: "",
+      patient_part: "",
+      check_worker: "",
+      start_worker: "",
+      sharing_permission: false,
     }, 
     validationSchema: patientFormSchemas,
     validateOnMount:false, 
@@ -162,6 +157,10 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
         past_surgeries: selectedPatient.past_surgeries || "",
         allergies: selectedPatient.allergies || "",
         post_surgery_address: selectedPatient.post_surgery_address || "",
+        patient_part: selectedPatient.patient_part || "",
+        check_worker: selectedPatient.check_worker || "",
+        start_worker: selectedPatient.start_worker || "",
+        sharing_permission: selectedPatient.sharing_permission || false,
       });
     } else {
       setValues({
@@ -204,6 +203,10 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
         past_surgeries: "",
         allergies: "",
         post_surgery_address: "",
+        patient_part: "",
+        check_worker: "",
+        start_worker: "",
+        sharing_permission: false,
       });
     }
   }, [selectedPatient, setValues]);
@@ -514,18 +517,30 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Patient's Department")}</label>
+                <label className={`block text-sm font-medium ${errors.patient_part && touched.patient_part ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Patient's Department")}
+                  {errors.patient_part && touched.patient_part && <span>{errors.patient_part}</span>}
+                </label>
                 <input
                   type="text"
-                  name="city"
+                  name="patient_part"
+                  value={values.patient_part}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-500">{t("Doctor's Name")}</label>
+                <label className={`block text-sm font-medium ${errors.check_worker && touched.check_worker ? "text-red-500" : "text-gray-500"}`}>
+                  {t("Doctor's Name")}
+                  {errors.check_worker && touched.check_worker && <span>{errors.check_worker}</span>}
+                </label>
                 <input
                   type="text"
-                  name="city"
+                  name="check_worker"
+                  value={values.check_worker}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                 />
               </div>

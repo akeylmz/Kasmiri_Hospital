@@ -171,35 +171,6 @@ const WorkerCheck = () => {
         </div>
         </div>
 
-        <div>            
-            <div className="flex items-center h-full mt-2">
-                <label className="inline-flex items-center mr-4">
-                <input
-                    type="radio"
-                    name="approval4"
-                    className="form-radio h-6 w-6 text-green-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✔ </span>
-                </label>
-                <label className="inline-flex items-center">
-                <input
-                    type="radio"
-                    name="approval4"
-                    className="form-radio h-6 w-6 text-red-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✘ </span>
-                </label>
-            </div>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            name="place_of_birth"
-            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-          />
-        </div>
-
 
       </div>
 

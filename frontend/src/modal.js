@@ -15,6 +15,8 @@ import WorkerHoursAddModal from "./components/modals/WorkerHoursAddModal";
 import ToothNotesAddModal from "./components/modals/ToothNotesAddModal";
 import TransferProductModal from "./components/modals/TransferProductModal";
 import WarehouseAddModal from "./components/modals/WarehouseAddModal";
+import ShowPhotosModal from "./components/modals/ShowPhotosModal";
+import PhotooAddModal from "./components/modals/PhotooAddModal";
 
 const modals = [
     {
@@ -76,6 +78,14 @@ const modals = [
     {
         name: "warehouse-modal",
         element: WarehouseAddModal
+    },
+    {
+        name: "photo-modal",
+        element: ShowPhotosModal
+    },
+    {
+        name: "photo-add-modal",
+        element: PhotooAddModal
     }
 ]
 

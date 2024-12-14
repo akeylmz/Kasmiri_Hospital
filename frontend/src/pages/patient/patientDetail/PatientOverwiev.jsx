@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetPatientIdQuery } from '../../../store/patient2';
 import { createModal } from '../../../components/Utils/Modal';
+import { formatDateToShow } from '../../../components/Utils/DateFormat';
+import { calculateAge } from '../../../components/Utils/calculateAge';
 
 const PatientOverwiev = () => {
     const { t } = useTranslation();
@@ -29,11 +31,11 @@ const PatientOverwiev = () => {
                         <div className='flex w-full justify-evenly mt-1'>
                             <div className='flex flex-col items-center gap-1'>
                                 <span className='text-gray-500'>{t("birth_date")}</span>
-                                <span className='font-semibold text-gray-700'>{patient.date_of_birth}</span>
+                                <span className='font-semibold text-gray-700'>{formatDateToShow(patient.date_of_birth)}</span>
                             </div>
                             <div className='flex flex-col items-center gap-1'>
                                 <span className='text-gray-500'>{t("age")}</span>
-                                <span className='font-semibold text-gray-700'>{patient.age || '-'}</span>
+                                <span className='font-semibold text-gray-700'>{calculateAge(patient.date_of_birth)}</span>
                             </div>
                         </div>
                     </div>
@@ -109,23 +111,15 @@ const PatientOverwiev = () => {
                         <div className='border-b p-4 flex justify-between items-center bg-white sticky top-0 left-0'>
                             <span className='text-lg font-semibold text-gray-600'>{t("notes")}</span>
                             <button
-                                onClick={() => createModal("tooth-modal")}
+                                onClick={() => createModal("tooth-modal", patient)}
                                 className='text-blue-500'
                             >
                                 <CiCirclePlus size={30} strokeWidth={0.5} />
                             </button>
                         </div>
                         <div className='p-4'>
-                            <p className='text-gray-500 font-semibold mb-2'>02.06.2023</p>
-                            <p className='text-gray-600 text-lg'>{t("sample_note_1")}</p>
-                        </div>
-                        <div className='p-4'>
-                            <p className='text-gray-500 font-semibold mb-2'>01.03.2024</p>
-                            <p className='text-gray-600 text-lg'>{t("sample_note_2")}</p>
-                        </div>
-                        <div className='p-4'>
-                            <p className='text-gray-500 font-semibold mb-2'>23.11.2024</p>
-                            <p className='text-gray-600 text-lg'>{t("sample_note_3")}</p>
+                            {/* <p className='text-gray-500 font-semibold mb-2'>02.06.2023</p> */}
+                            <p className='text-gray-600 text-lg'>{patient.patient_note[0]?.doctor_notes}</p>
                         </div>
                     </div>
                     <div className='h-[40%] bg-white rounded-xl shadow-md flex justify-evenly items-center'>
