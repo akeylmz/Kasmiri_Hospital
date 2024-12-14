@@ -2,7 +2,7 @@
 
 from django.urls import path
 from . import views
-from .views import StockSummaryView
+from .views import StockSummaryView, StockWarehouseSummaryView, StockTotalSummaryView
 
 urlpatterns = [
     path('notes/', views.NoteListCreateAPIView.as_view(), name='item-list'),
@@ -21,6 +21,9 @@ urlpatterns = [
     path('order/', views.OrderListCreateAPIView.as_view(), name='order-list'),
     path('order/<int:pk>/', views.OrderDetailAPIView.as_view(), name='order-detail'),
     path('stock-summary/', StockSummaryView.as_view(), name='stock-summary'),
+    path('stock-warehouse-summary/', StockWarehouseSummaryView.as_view(), name='stock-wharehouse-summary'),
+
+    path('stock-total-summary/', StockTotalSummaryView.as_view(), name='stock-total-summary'),
 
     path('worker/', views.WorkerListCreateAPIView.as_view(), name='worker-list'),
     path('worker/<int:pk>/', views.WorkerDetailAPIView.as_view(), name='worker-detail'),
@@ -40,6 +43,10 @@ urlpatterns = [
 
     path('patient-photo/', views.PatientPhotoListCreateAPIView.as_view(), name='patient-photo-list'),
     path('patient-photo/<int:pk>/', views.PatientPhotoDetailAPIView.as_view(), name='patient-photo-detail'),
+
+    path('patient-files/', views.PatientFilesListCreateAPIView.as_view(), name='patient-files-list'),
+    path('patient-files/<int:pk>/', views.PatientFilesDetailAPIView.as_view(), name='patient-files-detail'),
+
 
     path('poll/', views.PollListCreateAPIView.as_view(), name='poll-list'),
     path('poll/<int:pk>/', views.PollDetailAPIView.as_view(), name='poll-detail'),

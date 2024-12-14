@@ -10,8 +10,8 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, TaskCheckSerializer, WhareHouseSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WhareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientFilesSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, TaskCheckSerializer, WhareHouseSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WhareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -57,15 +57,37 @@ class StockSummaryView(APIView):
         # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
         stock_data = (
             Stock.objects
-            .values('stock_name', 'stock_skt')
+            .values('stock_name', 'stock_skt', 'stcok_group')
             .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
         )
         
         # Serializer aracılığıyla veriyi JSON formatına dönüştür
-        serializer = StockSerializer(stock_data, many=True)
-        return Response(serializer.data)
+        return Response(stock_data)
 
+class StockWarehouseSummaryView(APIView):
+    def get(self, request):
+        # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
+        stock_data = (
+            Stock.objects
+            .values('stock_name', 'stock_skt', 'stock_ut', 'stock_wharehouse')
+            .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
+        )
+        
+        # Serializer aracılığıyla veriyi JSON formatına dönüştür
+        return Response(stock_data)
 
+class StockTotalSummaryView(APIView):
+    def get(self, request):
+        # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
+        stock_data = (
+            Stock.objects
+            .values('stock_name')
+            .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
+        )
+        
+        # Serializer aracılığıyla veriyi JSON formatına dönüştür
+        return Response(stock_data)
+    
 class NoteListCreateAPIView(generics.ListCreateAPIView):
     queryset= Note.objects.all()
     serializer_class=NoteSerializer
@@ -240,6 +262,14 @@ class PatientPhotoDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PatientPhoto.objects.all()
     serializer_class=PatientPhotoSerializer
 
+class PatientFilesListCreateAPIView(generics.ListCreateAPIView):
+    queryset= PatientFiles.objects.all()
+    serializer_class=PatientFilesSerializer
+
+class PatientFilesDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= PatientFiles.objects.all()
+    serializer_class=PatientFilesSerializer
+
 class PollListCreateAPIView(generics.ListCreateAPIView):
     queryset= Poll.objects.all()
     serializer_class=PollSerializer
@@ -257,7 +287,7 @@ class WhareHouseDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class=WhareHouseSerializer
 
 class TaskCheckListCreateAPIView(generics.ListCreateAPIView):
-    queryset= TaskCheck.objects.all()
+    queryset= TaskCheck.objects.all().order_by('-date')
     serializer_class=TaskCheckSerializer
 
 class TaskCheckDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
