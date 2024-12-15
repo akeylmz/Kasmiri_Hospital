@@ -265,11 +265,18 @@ class TaskCheckSerializer(serializers.ModelSerializer):
         return instance
 
 class TaskAssignmentSerializer(serializers.ModelSerializer):
-    task_checks = TaskCheckSerializer(many=True, read_only=True)
+    task_checks = serializers.SerializerMethodField()
     class Meta:
         model = TaskAssignment
         fields = '__all__'
 
+    def get_task_checks(self, obj):
+        """
+        TaskCheck ilişkisini belirli bir alana göre sıralı döndürmek için özelleştirilmiş metot.
+        """
+        task_checks = obj.task_checks.all().order_by('-date')  # `related_name` ile erişim
+        return TaskCheckSerializer(task_checks, many=True).data
+    
     def create(self, validated_data):
         """
         Yeni bir görev atama oluşturulurken çalışacak özelleştirilmiş metot.

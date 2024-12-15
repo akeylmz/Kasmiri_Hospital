@@ -1,3 +1,5 @@
+from datetime import datetime
+from sqlite3 import Date
 from django.db import models
 from django.forms import ValidationError
 from django.utils import timezone
@@ -394,15 +396,15 @@ class TaskAssignment(models.Model):
 class TaskCheck(models.Model):
     # ForeignKey relationship to Person model
     task = models.ForeignKey(
-        TaskAssignment, 
-        on_delete=models.CASCADE, 
+        TaskAssignment,
+        on_delete=models.CASCADE,
         related_name="task_checks",
     )  # Görev atanacak çalışan
 
     # Fields for the task assignment
-    task_check =models.BooleanField(default=False) 
+    task_check =models.BooleanField(default=False)
     description = models.TextField(blank=True, null=True, verbose_name="İş Tanımı")  # İş tanımı
-    date = models.DateField(blank=True, null=True, verbose_name="Son Kontrol Tarihi")  # Tarih
+    date = models.DateField(default=Date.today, verbose_name="Son Kontrol Tarihi")  # Tarih
     cheked_person = models.CharField(max_length=200, blank=True, null=True, verbose_name="Son Kontrol Eden")  # İş tanımı
 
     def __str__(self):
