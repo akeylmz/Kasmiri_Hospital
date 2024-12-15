@@ -420,7 +420,7 @@ class WorkerSerializer(serializers.ModelSerializer):
         """
         TaskCheck ilişkisini belirli bir alana göre sıralı döndürmek için özelleştirilmiş metot.
         """
-        task_assignments = obj.task_assignments.all().order_by('-end_time')  # `related_name` ile erişim
+        task_assignments = obj.task_assignments.all().order_by('end_time')  # `related_name` ile erişim
         return TaskAssignmentSerializer(task_assignments, many=True).data
 
     def get_working_hours(self, obj):
