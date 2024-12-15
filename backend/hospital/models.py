@@ -3,7 +3,7 @@ from django.forms import ValidationError
 from django.utils import timezone
 
 # Create your models here.
-class WhareHouse(models.Model):
+class WareHouse(models.Model):
     wh_name = models.CharField(max_length=63)
     def __str__(self):
         return f"{self.wh_name}"
@@ -198,7 +198,7 @@ class Stock(models.Model):
     stock_haved = models.IntegerField(default=0, blank=True, null=True)
     stock_ut = models.DateField(blank=True, null=True)
     stock_skt = models.DateField(blank=True, null=True)
-    stock_wharehouse = models.ForeignKey(WhareHouse, on_delete=models.SET_NULL, blank=True, null=True, related_name="wh_stocks")
+    stock_warehouse = models.ForeignKey(WareHouse, on_delete=models.SET_NULL, blank=True, null=True, related_name="wh_stocks")
     stock_pozition = models.CharField(max_length=100, blank=True, null=True)
     stcok_group = models.CharField(max_length=100, blank=True, null=True)
     def __str__(self):
@@ -207,7 +207,7 @@ class Stock(models.Model):
 class Order(models.Model):
     order_name = models.CharField(max_length=100, blank=True, null=True)
     order_number = models.IntegerField(default=0, blank=True, null=True)
-    order_wharehouse = models.ForeignKey(WhareHouse, on_delete=models.SET_NULL, blank=True, null=True, related_name="wh_orders")
+    order_warehouse = models.ForeignKey(WareHouse, on_delete=models.SET_NULL, blank=True, null=True, related_name="wh_orders")
     order_pozition = models.CharField(max_length=100, blank=True, null=True)
     order_group = models.CharField(max_length=100, blank=True, null=True)
     order_startdate = models.DateField(default=timezone.now)
@@ -440,6 +440,7 @@ class Leave(models.Model):
         return f"{self.person.first_name} {self.person.last_name} - {self.leave_days} Gün İzin"
 
 class WorkerFile(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
     person = models.ForeignKey(
         Worker,
         on_delete=models.CASCADE,
@@ -459,6 +460,8 @@ class PatientPhoto(models.Model):
     file = models.FileField(blank=True, null=True,upload_to='images/patient_photos/')
 
 class PatientFiles(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
     person = models.ForeignKey(
         PatientCard,
         on_delete=models.CASCADE,
