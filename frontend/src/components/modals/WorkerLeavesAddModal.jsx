@@ -26,6 +26,8 @@ const WorkerLeavesAddModal = () => {
     
     const submit = async (values, actions) => {
           console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+          console.log(calculateLeaveDays(state[0].startDate, state[0].endDate));
+          
         
         try {
           const formData = new FormData();
@@ -35,7 +37,6 @@ const WorkerLeavesAddModal = () => {
           await createWorkerLeaves(formData).unwrap()
           actions.resetForm()
           destroyModal()
-          //refetch()
         } catch (error) {
           console.log(error)      
         }
@@ -44,28 +45,34 @@ const WorkerLeavesAddModal = () => {
     const [state, setState] = useState([
       {
         startDate: new Date(),
-        endDate: null,
+        endDate: new Date(),
         key: 'selection'
       }
     ])
+
+    const calculateLeaveDays = (startDate, endDate) => {
+      const diffTime = Math.abs(new Date(endDate) - new Date(startDate));
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+    };
 
     const {values, errors, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
       initialValues: {
         "start_date": format(new Date(state[0].startDate), "yyyy-MM-dd"),
         "end_date": format(new Date(state[0].endDate), "yyyy-MM-dd"),
-        "leave_days": "",
+        "leave_days": calculateLeaveDays(state[0].startDate, state[0].endDate),
         "person": "",
       },
       onSubmit: submit,
     })
-
     useEffect(() => {
       setFieldValue("start_date", format(new Date(state[0].startDate), "yyyy-MM-dd"));
       setFieldValue("end_date", format(new Date(state[0].endDate), "yyyy-MM-dd"));
+      setFieldValue("leave_days", calculateLeaveDays(state[0].startDate, state[0].endDate));
+
     }, [state])    
 
     return (
-      <div className="add-modal z-50 absolute top-0 right-0 min-w-[650px] h-screen">
+      <div className="add-modal z-50 absolute top-0 right-0 min-w-[350px] h-screen">
         <form onSubmit={handleSubmit} className="bg-white rounded-l-3xl p-6 w-full h-full ">
           <div className="flex justify-between items-center pb-3 border-b mb-5 border-gray-200">
             <h2 className="text-lg font-semibold text-cyan-500">İZİN OLUŞTUR</h2>
@@ -90,7 +97,7 @@ const WorkerLeavesAddModal = () => {
             </button>
           </div>
           
-          <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-4 py-6">
             <div>
             <label className="block text-sm font-medium text-gray-500">Çalışan</label>
                 <CustomerCombobox 
@@ -99,29 +106,18 @@ const WorkerLeavesAddModal = () => {
                     customers={leaves} 
                 />
             </div>
-            <div className='col-span-2'>
+            <div className='mt-14'>
               <DateRange
                 editableDateInputs={true}
                 onChange={item => setState([item.selection])}
                 moveRangeOnFirstSelection={false}
                 ranges={state}
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-500">İzin Süresi</label>
-              <input
-                type="text"
-                name="leave_days"
-                value={values.leave_days}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-              />
-            </div>
-                        
+            </div>                        
           </div>
           <button
             type="submit"
-            className="mx-auto bg-cyan-500 flex items-center justify-around text-white rounded-md px-10 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+            className="w-full mt-32 bg-cyan-500 flex items-center justify-center text-white rounded-md px-10 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
           >
             <Check className="mr-1" size={20} />
             Kaydet

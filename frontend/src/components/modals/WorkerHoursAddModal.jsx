@@ -22,19 +22,35 @@ const WorkerHoursAddModal = () => {
     if(isLoading){
     return <div>Yükleniyor...</div>
     }
+
+    const calculateWeeklyHours = (startTime, endTime, workingDays) => {
+      const [startHour, startMinute] = startTime.split(":").map(Number);
+      const [endHour, endMinute] = endTime.split(":").map(Number);
+      const startMinutes = startHour * 60 + startMinute;
+
+      const endMinutes = endHour * 60 + endMinute;
+      const dailyMinutes = endMinutes - startMinutes;
+      const daysCount = workingDays.split(", ").length;
+
+      const weeklyMinutes = dailyMinutes * daysCount;
+      const weeklyHours = weeklyMinutes / 60;
+    
+      return weeklyHours;
+    };
     
     const submit = async (values, actions) => {
-          //console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+      
+        console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
         
         try {
           const formData = new FormData();
           Object.keys(values).forEach((key) => {
             formData.append(key, values[key])
           })
+          formData.append("weekly_hours", calculateWeeklyHours(values.start_time, values.end_time, values.working_days))
           await createWorkerHours(formData).unwrap()
           actions.resetForm()
           destroyModal()
-          //refetch()
         } catch (error) {
           console.log(error)      
         }
@@ -44,7 +60,6 @@ const WorkerHoursAddModal = () => {
         "start_time": "",
         "end_time": "",
         "working_days": "",
-        "weekly_hours": "",
         "date": "",
         "person": ""
       },
@@ -55,7 +70,7 @@ const WorkerHoursAddModal = () => {
       <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[650px]">
         <form onSubmit={handleSubmit} className="bg-white rounded-lg p-6 w-full ">
           <div className="flex justify-between items-center pb-3 border-b mb-5 border-gray-200">
-            <h2 className="text-lg font-semibold text-cyan-500">İZİN OLUŞTUR</h2>
+            <h2 className="text-lg font-semibold text-cyan-500">ÇALIŞMA SAATİ</h2>
             <button
               onClick={() => destroyModal()}
               className="text-gray-400 hover:text-gray-600"
@@ -119,17 +134,7 @@ const WorkerHoursAddModal = () => {
             <div>
               <label className="block text-sm font-medium text-gray-500">Çalışma Günleri</label>
                 <DaySelector value={values.working_days} setFieldValue={setFieldValue} name={"working_days"} />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-500">Haftalık Çalışma</label>
-              <input
-                type="text"
-                name="weekly_hours"
-                value={values.weekly_hours}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-              />
-            </div>            
+            </div>                       
           </div>
           <button
             type="submit"

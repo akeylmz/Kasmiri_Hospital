@@ -202,7 +202,7 @@ const HrWorkingHours = () => {
   if(isLoading){
     return <div>Yükleniyor...</div>
   }
-  console.log(data.results);
+ // console.log(data.results);
       
   return (
     <motion.div

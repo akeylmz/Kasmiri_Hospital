@@ -2,8 +2,22 @@ import React from 'react'
 import { t } from "i18next";
 import { Check, ArrowRight, ArrowLeft } from "lucide-react";
 import { destroyModal } from "../Utils/Modal";
+import WorkerTask from '../tools/WorkerTask';
+import { useGetWorkerByIdQuery } from '../../store/patient2';
+import { useFormik } from 'formik';
 
-const WorkerCheck = () => {
+const WorkerCheck = ({data: workerID}) => {
+
+  const { data: worker, isLoading } = useGetWorkerByIdQuery(workerID);
+  //console.log(worker);
+
+ 
+
+
+if(!worker){
+  return <p>sorun oluştu</p>
+}
+
   return (
     <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
     <div className="bg-lightGray rounded-lg shadow-lg w-full max-w-5xl p-8">
@@ -30,151 +44,23 @@ const WorkerCheck = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-4 gap-x-6 gap-y-4 py-6">
-        <div className='flex flex-col '>
-            <label className="block text-sm font-medium text-gray-500">Görev Yeri</label>
-            <span className='mt-2 text-lg font-semibold text-gray-600'>Hasta Karşılama</span>
-        </div>
-
-        <div>
-        <div className='flex flex-col '>
-          <label className="block text-sm font-medium text-gray-500">Saati</label>
-          <span className='mt-2 text-lg font-semibold text-gray-600'>08:00 - 10:30</span>
-        </div>
-        </div>
-
-        <div>            
-            <div className="flex items-center h-full mt-2">
-                <label className="inline-flex items-center mr-4">
-                <input
-                    type="radio"
-                    name="approval"
-                    className="form-radio h-6 w-6 text-green-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✔ </span>
-                </label>
-                <label className="inline-flex items-center">
-                <input
-                    type="radio"
-                    name="approval"
-                    className="form-radio h-6 w-6 text-red-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✘ </span>
-                </label>
-            </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-500">Yorum</label>
-          <input
-            type="text"
-            name="place_of_birth"
-            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-          />
-        </div>
-
-
+      <div className="grid grid-cols-5 gap-x-6 gap-y-4 pt-3">
+        <label className="block text-sm font-medium text-gray-500">Görev Yeri</label>
+        <label className="block text-sm font-medium text-gray-500">Saati</label>
+        <label className="block text-sm font-medium text-gray-500">Kontrol</label> 
+        <label className="block text-sm font-medium text-gray-500">Yorum</label>          
       </div>
+      {worker.task_assignments && worker.task_assignments.map((task) => (
+        <WorkerTask key={task.id} task={task} />
+      ))}
       
-      <div className="grid grid-cols-4 gap-x-6 gap-y-4 py-6">
-        <div className='flex flex-col '>
-            <span className='mt-2 text-lg font-semibold text-gray-600'>Hasta Bakımı</span>
-        </div>
+      <form className="grid grid-cols-4 items-center gap-x-6 gap-y-4 py-3 border-t mt-10 border-b border-gray-300">
+        <input className='text-lg border-b col-span-2 px-2 border-gray-600 bg-transparent font-semibold text-gray-600' type="text" placeholder='Görev' />     
+        <input className='text-lg border-b px-2 border-gray-600 bg-transparent font-semibold text-gray-600' type="text" placeholder='Saat' />                
+        <button className='bg-cyan-600 m-auto px-10 py-2 text-white rounded-full'>EKLE</button>
+      </form>
 
-        <div>
-        <div className='flex flex-col '>
-          <span className='mt-2 text-lg font-semibold text-gray-600'>10:30 - 12:00</span>
-        </div>
-        </div>
-
-        <div>            
-            <div className="flex items-center h-full mt-2">
-                <label className="inline-flex items-center mr-4">
-                <input
-                    type="radio"
-                    name="approval2"
-                    className="form-radio h-6 w-6 text-green-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✔ </span>
-                </label>
-                <label className="inline-flex items-center">
-                <input
-                    type="radio"
-                    name="approval2"
-                    className="form-radio h-6 w-6 text-red-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✘ </span>
-                </label>
-            </div>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            name="place_of_birth"
-            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-          />
-        </div>
-
-
-      </div>
-      <div className="grid grid-cols-4 gap-x-6 gap-y-4 py-6">
-        <div className='flex flex-col '>
-            <span className='mt-2 text-lg font-semibold text-gray-600'>Güzellik Birimi</span>
-        </div>
-
-        <div>
-        <div className='flex flex-col '>
-          <span className='mt-2 text-lg font-semibold text-gray-600'>13:00 - 15:00</span>
-        </div>
-        </div>
-
-        <div>            
-            <div className="flex items-center h-full mt-2">
-                <label className="inline-flex items-center mr-4">
-                <input
-                    type="radio"
-                    name="approval3"
-                    className="form-radio h-6 w-6 text-green-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✔ </span>
-                </label>
-                <label className="inline-flex items-center">
-                <input
-                    type="radio"
-                    name="approval3"
-                    className="form-radio h-6 w-6 text-red-500 border-gray-300 rounded focus:ring-cyan-500 focus:border-cyan-500"
-                />
-                <span className="ml-2 text-lg text-gray-700">✘ </span>
-                </label>
-            </div>
-        </div>
-
-        <div>
-          <input
-            type="text"
-            name="place_of_birth"
-            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-          />
-        </div>
-
-
-      </div>
-      <div className="grid grid-cols-4 gap-x-6 gap-y-4 py-6">
-        <div className='flex flex-col '>
-            <span className='mt-2 text-lg font-semibold text-gray-600'>Laborant</span>
-        </div>
-
-        <div>
-        <div className='flex flex-col '>
-          <span className='mt-2 text-lg font-semibold text-gray-600'>15:00 - 17:00</span>
-        </div>
-        </div>
-
-
-      </div>
-
-      <div className="flex justify-between pt-2">
+      {/* <div className="flex justify-between pt-2">
         <button
         onClick={destroyModal}
           className="ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
@@ -182,7 +68,7 @@ const WorkerCheck = () => {
           <Check className="mr-1" size={20} />
           {t("save")}
         </button>
-      </div>
+      </div> */}
     </div>
   </div>
   )

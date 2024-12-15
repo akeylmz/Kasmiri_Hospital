@@ -12,7 +12,7 @@ const HrManagement = () => {
 
   const [ activePage, setActivePage] = useState(1)
   const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
-  console.log(data);
+  //console.log(data);
   
   const tableData = [
       {
@@ -79,7 +79,7 @@ const HrManagement = () => {
             {capitalizeWords(worker.first_name + " " + worker.last_name)}
           </div>,
           <button              
-            onClick={() => createModal("worker-check")}
+            onClick={() => createModal("worker-check", worker.id)}
           >
             {worker.duty_place}
           </button>,          

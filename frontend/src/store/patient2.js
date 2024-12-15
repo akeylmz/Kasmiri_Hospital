@@ -29,6 +29,7 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'Patient', id: 'LIST' }],
         }),
+
         getPatientFile: builder.query({
             query: ({ page = 1 }) => `patient-files/?page=${page}`,
             providesTags: (result) => {
@@ -38,6 +39,7 @@ const patientAPI = createApi({
                 return result.data.map(({ id }) => ({ type: 'PatientFile', id }));
               },
         }),
+
         getFileSize: builder.query({
             query: (fileUrl) => ({
               url: fileUrl,
@@ -47,7 +49,8 @@ const patientAPI = createApi({
               const size = meta.response.headers.get("content-length"); // Byte cinsinden boyut
               return size ? (size / 1024).toFixed(1) : null; // KB'ye çevir
             },
-          }),
+        }),
+
         createPatientFile: builder.mutation({
             query: (newFile) => ({
                 url: 'patient-files/',
@@ -95,10 +98,12 @@ const patientAPI = createApi({
                 return result.data.map(({ id }) => ({ type: 'Order', id }));
               },
         }),
+
         getStockOrdersByID: builder.query({
             query: (ID) =>`order/${ID}/`,
             providesTags: (result, error, id) => [{ type: 'Order', id }],
         }),
+
         createStockOrder: builder.mutation({
             query: (newOrder) => ({
                 url: 'order/',
@@ -119,9 +124,6 @@ const patientAPI = createApi({
         
         // --------- STOCK -------------
         
-        // getAllStocks: builder.query({
-        //     query: (page = 1) => `stock/?page=${page}`
-        // }),
         createStock: builder.mutation({
             query: (newStock) => ({
                 url: 'stock/',
@@ -129,6 +131,7 @@ const patientAPI = createApi({
                 body: newStock
             })
         }),
+
         getAllStocks: builder.query({
             query: ({ page = 1, stock_wharehouse, type } = {}) => {                
                 let params = new URLSearchParams({ page });
@@ -157,9 +160,11 @@ const patientAPI = createApi({
         getAllWorker: builder.query({
             query: ({ page = 1 }) => `worker/?page=${page}`
         }),
+
         getWorkerById: builder.query({
             query: ( workerID ) => `worker/${workerID}/`
         }),
+
         createWorker: builder.mutation({
             query: (newWorker) => ({
                 url: 'worker/',
@@ -167,6 +172,7 @@ const patientAPI = createApi({
                 body: newWorker
             })
         }),
+
         createWorkerFile: builder.mutation({
             query: (files) => ({
                 url: `worker-file/`,
@@ -174,6 +180,7 @@ const patientAPI = createApi({
                 body: files,
             })
         }),
+
         createWorkerLeaves: builder.mutation({
             query: (newLeave) => ({
                 url: "leave/",
@@ -181,6 +188,7 @@ const patientAPI = createApi({
                 body: newLeave
             })
         }),
+
         createWorkerHours: builder.mutation({
             query: (newHours) => ({
                 url: "working-hours/",
@@ -188,6 +196,11 @@ const patientAPI = createApi({
                 body: newHours
             })
         }),
+
+        // getTaskCheck: builder.query({
+        //     query: ( taskID ) => `task-check/`
+        // }),
+
         createWorkerTask: builder.mutation({
             query: (newTask)=> ({
                 url: "task-assignment/",
@@ -195,6 +208,15 @@ const patientAPI = createApi({
                 body: newTask
             })
         }),
+
+        createTaskCheck: builder.mutation({
+            query: (newCheck) => ({
+                url: "task-check/",
+                method: "POST",
+                body: newCheck
+            })
+        }),
+
 
         // --------- Doctor Note -------------
 
@@ -216,7 +238,7 @@ const patientAPI = createApi({
             })
         }),
 
-        // --------- Patient Photos -------------
+        // --------- Warehouse -------------
 
         getWarehouse: builder.query({
             query: () => `wharehouse`
@@ -250,7 +272,8 @@ export const {  useGetPatientsQuery,
                 useUpdateStockOrderMutation,
                 useCreatePatientFileMutation,
                 useGetPatientFileQuery,
-                useGetFileSizeQuery
+                useGetFileSizeQuery,
+                useCreateTaskCheckMutation,
                 
            } = patientAPI; 
 export default patientAPI;
