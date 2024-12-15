@@ -46,7 +46,7 @@ console.log(data);
         initial={"hidden"}   
         animate={"visible"}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">      
-      {data && data.map((item, index) => (
+      {data && data.results.map((item, index) => (
         <motion.div
         className='h-full'
             variants={itemMotion}
