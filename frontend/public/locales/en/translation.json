@@ -138,7 +138,7 @@
     "Session Time": "Session Time",
     "Product Name": "Product Name",
     "Stock": "Stock",
-    "Expiry Date": "Expiry Date",
+    "Expiry Date": "E.X.P.",
     "PRODUCTS": "PRODUCTS",
     "Product Group": "Product Group",
     "PRODUCT": "PRODUCT",
@@ -212,7 +212,8 @@
     "Leave Management": "Leave Management",
     "Working Hours": "Working Hours",
     "Employee":  "Employee",
-    "Management": "Management"
+    "Management": "Management",
+    "Product Date": "M.F.G."
 
 
     

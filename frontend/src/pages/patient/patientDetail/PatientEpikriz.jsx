@@ -19,7 +19,12 @@ const PatientEpikriz = () => {
         skip: !patientId,
     });
     console.log(patient);
-    console.log(patient.patient_note[0].note_type);
+
+    if(isLoading){
+        return <p>Yükleniyor...</p>
+    }else if(!patient.patient_note[0]){
+        return <p>Bir Sorun Oluştu</p>
+    }
     
   return (
     <div  className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>

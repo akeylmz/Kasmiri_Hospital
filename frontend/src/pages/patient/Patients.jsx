@@ -82,7 +82,7 @@ const Patients = () => {
                         <p>{user.first_name}</p>
                     </button>,              
                     user.last_name,        
-                    user.check_worker,       
+                    user.relevant_worker,       
                     user.mobile_phone1, 
                     user.email,
                     user.city,                 

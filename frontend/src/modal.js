@@ -17,6 +17,7 @@ import TransferProductModal from "./components/modals/TransferProductModal";
 import WarehouseAddModal from "./components/modals/WarehouseAddModal";
 import ShowPhotosModal from "./components/modals/ShowPhotosModal";
 import PhotooAddModal from "./components/modals/PhotooAddModal";
+import PatientFileAddModal from "./components/modals/PatientFileAddModal";
 
 const modals = [
     {
@@ -86,6 +87,10 @@ const modals = [
     {
         name: "photo-add-modal",
         element: PhotooAddModal
+    },
+    {
+        name: "patient-file-modal",
+        element: PatientFileAddModal
     }
 ]
 

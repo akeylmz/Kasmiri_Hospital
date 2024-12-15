@@ -94,6 +94,7 @@ console.log(data);
                   value={values.order_wharehouse}
                   onChange={handleChange}
                 >
+                  <option value="" disabled selected>Depo Seç</option>
                 {
                 data && 
                   data.results.map((item, index) => (

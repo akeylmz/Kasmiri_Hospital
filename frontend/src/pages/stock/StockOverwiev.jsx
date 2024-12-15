@@ -1,6 +1,7 @@
 import React from 'react'
 import StatCard from '../../UI/StatCard';
 import { motion } from 'framer-motion'
+import { useGetAllStocksQuery } from '../../store/patient2';
 const StockOverwiev = () => {
 
     const containerMotion = {        
@@ -22,7 +23,13 @@ const StockOverwiev = () => {
         }
     }
 
-    const data = [
+    const { data, error, isLoading } = useGetAllStocksQuery({
+            page: 1,
+            type: "total",
+        })
+console.log(data);
+
+    const data2 = [
         { percentage: 0.57, title: "ISOLYTE DENGELİ", subtitle: "500 ML (TURKFLEKS)" },
         { percentage: 0.9, title: "BIOFLEX", subtitle: "%0.9 IZOTONIK SODYUM KLORUR SOL. 500 ML" },
         { percentage: 8.5, title: "PF IZOLEN M", subtitle: "500 ML" },
@@ -39,16 +46,15 @@ const StockOverwiev = () => {
         initial={"hidden"}   
         animate={"visible"}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">      
-      {data.map((item, index) => (
+      {data && data.map((item, index) => (
         <motion.div
         className='h-full'
             variants={itemMotion}
         >
             <StatCard
             key={index}
-            percentage={item.percentage}
-            title={item.title}
-            subtitle={item.subtitle}
+            percentage={(item.total_haved / item.total_buyed)*100}
+            title={item.stock_name}
             />
         </motion.div>
       ))}

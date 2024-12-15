@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const patientAPI = createApi({
     reducerPath: 'patientAPI', 
     baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api' }),
-    tagTypes: ['Patient', 'Stock', 'Order', 'Worker'],
+    tagTypes: ['Patient', 'Stock', 'Order', 'Worker', "PatientFile"],
     endpoints: (builder) => ({
 
         getPatients: builder.query({
@@ -28,6 +28,33 @@ const patientAPI = createApi({
                 body: newPatient
             }),
             invalidatesTags: [{ type: 'Patient', id: 'LIST' }],
+        }),
+        getPatientFile: builder.query({
+            query: ({ page = 1 }) => `patient-files/?page=${page}`,
+            providesTags: (result) => {
+                if (!result || !result.data) {
+                  return [{ type: 'PatientFile', id: 'LIST' }];
+                }
+                return result.data.map(({ id }) => ({ type: 'PatientFile', id }));
+              },
+        }),
+        getFileSize: builder.query({
+            query: (fileUrl) => ({
+              url: fileUrl,
+              method: 'HEAD',
+            }),
+            transformResponse: (response, meta) => {
+              const size = meta.response.headers.get("content-length"); // Byte cinsinden boyut
+              return size ? (size / 1024).toFixed(1) : null; // KB'ye çevir
+            },
+          }),
+        createPatientFile: builder.mutation({
+            query: (newFile) => ({
+                url: 'patient-files/',
+                method: 'POST',
+                body: newFile
+            }),
+            invalidatesTags: [{ type: 'PatientFile', id: 'LIST' }],
         }),
 
         updatePatient: builder.mutation({
@@ -103,12 +130,24 @@ const patientAPI = createApi({
             })
         }),
         getAllStocks: builder.query({
-            query: ({ page = 1, stock_wharehouse } = {}) => {
+            query: ({ page = 1, stock_wharehouse, type } = {}) => {                
                 let params = new URLSearchParams({ page });
-                if (stock_wharehouse) {
-                    params.append("stock_wharehouse", stock_wharehouse);
+                switch (type) {
+                    case "total":
+                        return `stock-total-summary/?${params.toString()}`
+                    case "warehouse":
+                        
+                        break; 
+                    case "skt":
+                        return `stock-summary/?${params.toString()}`
+                    default:
+                        
+                        if (stock_wharehouse) {
+                            params.append("stock_wharehouse", stock_wharehouse);
+                        }
+                        return `stock-warehouse-summary/?stock_wharehouse=${4}`
                 }
-                return `stock/?${params.toString()}`;
+                
             }
         }),
 
@@ -209,6 +248,9 @@ export const {  useGetPatientsQuery,
                 useCreatePtientPhotoMutation,
                 useGetWarehouseQuery,
                 useUpdateStockOrderMutation,
+                useCreatePatientFileMutation,
+                useGetPatientFileQuery,
+                useGetFileSizeQuery
                 
            } = patientAPI; 
 export default patientAPI;

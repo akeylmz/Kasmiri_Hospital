@@ -3,13 +3,14 @@ import TableComp2 from '../../UI/TableComp2'
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion'
 import { useGetAllStocksQuery } from '../../store/patient2'
+import { formatDateToShow } from '../../components/Utils/DateFormat';
 
 const StockProducts = () => {
 
   const { t } = useTranslation()
 
   const [ activePage, setActivePage] = useState(1)
-  const { data, isLoading, error } = useGetAllStocksQuery({page:activePage})
+  const { data, isLoading, error } = useGetAllStocksQuery({page:activePage, type:"skt"})
   console.log(data);
   
     const thead = [
@@ -29,12 +30,12 @@ const StockProducts = () => {
         animate={{opacity:1}}
         className="w-[98%] h-[99%] flex items-center justify-center">
           {isLoading && <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>}
-        {!isLoading && <TableComp2
+        {!isLoading && data && <TableComp2
             thead={thead}
-            tbody={data.results.map(row => [
+            tbody={data.map(row => [
             row.stock_name,
-            row.stock_haved, 
-            row.stock_skt,
+            row.total_haved, 
+            formatDateToShow(row.stock_skt),
             row.stcok_group,
             ])}
             searchable={true}

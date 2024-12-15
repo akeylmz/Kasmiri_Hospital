@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { useGetAllStocksQuery } from '../../store/patient2';
 import { createModal } from '../../components/Utils/Modal';
+import { formatDateToShow } from '../../components/Utils/DateFormat';
 
 const StockWarehouse = () => {
     const { t } = useTranslation()
@@ -22,7 +23,7 @@ const StockWarehouse = () => {
         { name: t("QUANTITY PURCHASED"), sortable: true },
         { name: t("MANUFACTURING DATE"), sortable: true },
         { name: t("EXPIRY DATE"), sortable: true },
-        { name: t("POSITION"), sortable: true },
+        // { name: t("POSITION"), sortable: true },
         { name: t("AVAILABLE"), sortable: true },
     ]
     const [warehouses, setWarehouses] = useState([
@@ -68,13 +69,12 @@ const StockWarehouse = () => {
                 className="w-5/6 min-w-[calc(100%-200px)] h-full ">
                 <TableComp2
                     thead={thead}
-                    tbody={data.results.map(row => [
+                    tbody={data.map(row => [
                         <button type='button' onClick={()=> createModal("tranfer-product", row)}>{row.stock_name}</button>,
-                        row.stock_buyed,
-                        row.stock_ut,
-                        row.stock_skt,
-                        row.stock_pozition,
-                        row.stock_haved
+                        row.total_buyed,
+                        formatDateToShow(row.stock_ut),
+                        formatDateToShow(row.stock_skt),
+                        row.total_haved
                     ])}
                     searchable={true}
                     tableTitle={"SİPARİŞLER"}  

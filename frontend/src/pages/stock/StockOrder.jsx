@@ -13,7 +13,6 @@ const StockOrder = () => {
     const [ activePage, setActivePage] = useState(1)
     const {data, isLoading} = useGetStockOrdersQuery(activePage)
     console.log(data);
-    console.log(activePage);
     
 
     const thead = [
@@ -47,13 +46,17 @@ const StockOrder = () => {
                 order?.order_wharehouse || "",
                 order?.order_pozition || "",
                 order?.order_group || "",
-                <button
+                <button      
+                disabled={order?.order_stuation === "Tamamlandı"}              
                     onClick={()=>{
                         createModal("stock", order.id)
                     }}
-                    className='bg-cyan-600 text-white px-2 py-1 rounded-lg hover:bg-cyan-700'
+                    className={` text-white px-2 py-1 rounded-lg 
+                        ${order?.order_stuation === "Bekliyor" && "bg-yellow-600"}
+                        ${order?.order_stuation === "Tamamlandı" && "bg-green-600"}
+                    `}
                 >
-                    Tamamla
+                    {order?.order_stuation}
                 </button>
             ])}
             searchable={true}

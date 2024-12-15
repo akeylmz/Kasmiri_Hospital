@@ -105,7 +105,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
       allergies: "",
       post_surgery_address: "",
       patient_part: "",
-      check_worker: "",
+      relevant_worker: "",
       start_worker: "",
       sharing_permission: false,
     }, 
@@ -158,7 +158,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
         allergies: selectedPatient.allergies || "",
         post_surgery_address: selectedPatient.post_surgery_address || "",
         patient_part: selectedPatient.patient_part || "",
-        check_worker: selectedPatient.check_worker || "",
+        relevant_worker: selectedPatient.relevant_worker || "",
         start_worker: selectedPatient.start_worker || "",
         sharing_permission: selectedPatient.sharing_permission || false,
       });
@@ -204,7 +204,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
         allergies: "",
         post_surgery_address: "",
         patient_part: "",
-        check_worker: "",
+        relevant_worker: "",
         start_worker: "",
         sharing_permission: false,
       });
@@ -531,14 +531,14 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
                 />
               </div>
               <div>
-                <label className={`block text-sm font-medium ${errors.check_worker && touched.check_worker ? "text-red-500" : "text-gray-500"}`}>
+                <label className={`block text-sm font-medium ${errors.relevant_worker && touched.relevant_worker ? "text-red-500" : "text-gray-500"}`}>
                   {t("Doctor's Name")}
-                  {errors.check_worker && touched.check_worker && <span>{errors.check_worker}</span>}
+                  {errors.relevant_worker && touched.relevant_worker && <span>{errors.relevant_worker}</span>}
                 </label>
                 <input
                   type="text"
-                  name="check_worker"
-                  value={values.check_worker}
+                  name="relevant_worker"
+                  value={values.relevant_worker}
                   onBlur={handleBlur}
                   onChange={handleChange}
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
