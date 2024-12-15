@@ -410,11 +410,18 @@ class WorkerSerializer(serializers.ModelSerializer):
     worker_files = WorkerFileSerializer(many=True, read_only=True)
     working_hours = serializers.SerializerMethodField()
     leaves = serializers.SerializerMethodField()
-    task_assignments = TaskAssignmentSerializer(many=True, read_only=True)
+    task_assignments = serializers.SerializerMethodField()
 
     class Meta:
         model = Worker
         fields = '__all__'
+    
+    def get_task_assignments(self, obj):
+        """
+        TaskCheck ilişkisini belirli bir alana göre sıralı döndürmek için özelleştirilmiş metot.
+        """
+        task_assignments = obj.task_assignments.all().order_by('-end_time')  # `related_name` ile erişim
+        return TaskAssignmentSerializer(task_assignments, many=True).data
 
     def get_working_hours(self, obj):
         """
