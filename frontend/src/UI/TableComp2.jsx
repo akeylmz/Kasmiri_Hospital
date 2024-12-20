@@ -69,16 +69,16 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
           <div className='my-4 px-3 w-full shadow-md bg-gray-100 flex items-center border border-gray-300 rounded-lg'>
             <Search className="w-4 h-4 text-gray-500" />
             <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchable}
+              onChange={(e) => setSearchable(e.target.value)}
               type='text'
               placeholder={t("search")}
               className='h-10 outline-none bg-gray-100 text-sm px-4 w-full border-gray-300 rounded-lg'
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setSearchable(search)                  
-                }
-              }}
+              // onKeyDown={(e) => {
+              //   if (e.key === "Enter") {
+              //     setSearchable(search)                  
+              //   }
+              // }}
             />
             <button
             type='button'

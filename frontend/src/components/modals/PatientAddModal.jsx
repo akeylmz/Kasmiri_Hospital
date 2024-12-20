@@ -9,6 +9,8 @@ import { patientFormSchemas } from "../../schemas/patientFormSchemas.jsx";
 
 const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
   const { t } = useTranslation()
+  console.log(isEdit);
+  
    //console.log("data:", selectedPatient);
  
   const [createPatient, { isLoading, isError, error}] = useCreatePatientMutation()
@@ -26,7 +28,9 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
   const [step, setStep] = useState(1)
  // console.log(patientID);
 
-  const submit = async (values, actions) => {    
+  const submit = async (values, actions) => {  
+    console.log("submit");
+      
     try {
       
       //console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
@@ -51,7 +55,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
       if(isEdit){  
         await updatePatient({ newPatient: formData, patientID }).unwrap()
       }else{
-        await createPatient(formData).unwrap()
+        await createPatient({newPatient: formData}).unwrap()
       }    
       actions.resetForm()
       destroyModal()
@@ -69,7 +73,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
       national_id: "",
       first_name: "",
       last_name: "",
-      patient_image: null,
+      patient_image: "",
       place_of_birth: "",
       date_of_birth: "",
       gender: "",
@@ -109,7 +113,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
       start_worker: "",
       sharing_permission: false,
     }, 
-    validationSchema: patientFormSchemas,
+    //validationSchema: patientFormSchemas,
     validateOnMount:false, 
     validateOnBlur:true,
     validateOnChange:true, 
@@ -263,7 +267,9 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
                     accept="image/*"
                     onBlur={handleBlur}
                     onChange={(event) => {
-                      const file = event.currentTarget.files[0];                      
+                      const file = event.currentTarget.files[0];  
+                      console.log(file);
+                                          
                       setFieldValue("patient_image", file);
                     }}
                     className="mt-2 w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"

@@ -6,6 +6,8 @@ const patientAPI = createApi({
     tagTypes: ['Patient', 'Stock', 'Order', 'Worker', "PatientFile"],
     endpoints: (builder) => ({
 
+        // --------- PATİENTS -------------
+
         getPatients: builder.query({
             query: ({ page = 1 , filters="" }) => `patientcard/?page=${page}&first_name=${filters}`,
             providesTags: (result) => {
@@ -22,7 +24,7 @@ const patientAPI = createApi({
         }),
 
         createPatient: builder.mutation({
-            query: (newPatient) => ({
+            query: ({newPatient}) => ({
                 url: 'patientcard/',
                 method: 'POST',
                 body: newPatient
@@ -87,6 +89,24 @@ const patientAPI = createApi({
             }
         }),
 
+        createPtientPhoto: builder.mutation({
+            query: (newPhoto)=> ({
+                url: "patient-photo/",
+                method: "POST",
+                body: newPhoto
+            })
+        }),
+
+        // --------- Doctor Note -------------
+
+        createDoctorNote: builder.mutation({
+            query: (newNote)=> ({
+                url: "patientnote/",
+                method: "POST",
+                body: newNote
+            })
+        }),
+ 
         // --------- STOCK ORDER -------------
         
         getStockOrders: builder.query({
@@ -133,37 +153,52 @@ const patientAPI = createApi({
         }),
 
         getAllStocks: builder.query({
-            query: ({ page = 1, stock_wharehouse, type } = {}) => {                
+            query: ({ page = 1, stock_warehouse, type } = {}) => {                
                 let params = new URLSearchParams({ page });
                 switch (type) {
                     case "total":
                         return `stock-total-summary/?${params.toString()}`
+
                     case "warehouse":
-                        
-                        break; 
+                        params.append("stock_warehouse", stock_warehouse);
+                        return `stock-warehouse-summary/?${params.toString()}`;
+
                     case "skt":
                         return `stock-summary/?${params.toString()}`
-                    default:
-                        
-                        if (stock_wharehouse) {
-                            params.append("stock_wharehouse", stock_wharehouse);
-                        }
-                        return `stock-warehouse-summary/?stock_wharehouse=${4}`
+
+                    default:                        
+                       
                 }
                 
             }
+        }),
+
+        // --------- WAREHOUSE -------------
+
+        getWarehouse: builder.query({
+            query: () => `warehouse`
         }),
 
         // --------- KPI -------------
 
 
         getAllWorker: builder.query({
-            query: ({ page = 1 }) => `worker/?page=${page}`
+            query: ({ type, value, page = 1 }) => {
+                const params = new URLSearchParams({
+                  page,
+                  [type]: value,
+                });
+              console.log(`worker/?${params.toString()}`);
+              
+                return `worker/?${params.toString()}`;
+              } 
         }),
 
         getWorkerById: builder.query({
-            query: ( workerID ) => `worker/${workerID}/`
+            query: ( workerID ) => `worker/${workerID}/`,
+            providesTags: (result, error, id) => [{ type: 'Worker', id }],
         }),
+        
 
         createWorker: builder.mutation({
             query: (newWorker) => ({
@@ -197,16 +232,17 @@ const patientAPI = createApi({
             })
         }),
 
-        // getTaskCheck: builder.query({
-        //     query: ( taskID ) => `task-check/`
-        // }),
-
         createWorkerTask: builder.mutation({
             query: (newTask)=> ({
                 url: "task-assignment/",
                 method: "POST",
                 body: newTask
-            })
+            }),
+            invalidatesTags: (result) => {
+                return [
+                    { type: 'Worker', id: result.person }
+                ];
+            }
         }),
 
         createTaskCheck: builder.mutation({
@@ -214,35 +250,13 @@ const patientAPI = createApi({
                 url: "task-check/",
                 method: "POST",
                 body: newCheck
-            })
+            }),
+            invalidatesTags: (result, error) => {                
+                return [{ type: 'Worker', id: result.person }]
+            }
         }),
 
-
-        // --------- Doctor Note -------------
-
-        createDoctorNote: builder.mutation({
-            query: (newNote)=> ({
-                url: "patientnote/",
-                method: "POST",
-                body: newNote
-            })
-        }),
-
-        // --------- Patient Photos -------------
-
-        createPtientPhoto: builder.mutation({
-            query: (newPhoto)=> ({
-                url: "patient-photo/",
-                method: "POST",
-                body: newPhoto
-            })
-        }),
-
-        // --------- Warehouse -------------
-
-        getWarehouse: builder.query({
-            query: () => `wharehouse`
-        })
+        
 
     }),      
     keepUnusedDataFor: 30,

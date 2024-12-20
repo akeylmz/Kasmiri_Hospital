@@ -7,6 +7,8 @@ import { createModal } from '../../components/Utils/Modal';
 import TableComp2 from '../../UI/TableComp2';
 import { useNavigate } from 'react-router-dom';
 import { formatISODate } from '../../components/Utils/DateFormat';
+import Loading from '../../components/tools/Loading';
+import { capitalizeWords } from '../../components/Utils/capitalizeWords';
 
 
 const Patients = () => {
@@ -59,18 +61,9 @@ const Patients = () => {
             animate={{opacity:1}}
             className='w-full h-full flex flex-col items-center justify-evenly'>       
             {isLoading && 
-                <div className='flex flex-col items-center gap-5'>
-                    <div className="loading-container">
-                        <div className="asd"></div>
-                        <div className="asd"></div>
-                        <div className="asd"></div>
-                        <div className="asd"></div>
-                        <div className="asd"></div>
-                    </div>
-                    {/* <p className='text-cyan-500 text-lg font-semibold'>Yükleniyor...</p> */}
-                </div>
+               <Loading />
             }
-           {patients && <div className='w-[95%] h-[95%]'>
+           {patients && !isLoading && <div className='w-[95%] h-[95%]'>
                 <TableComp2
                     thead={thead}
                     tbody={patients.results.map((user) => [        
@@ -79,17 +72,17 @@ const Patients = () => {
                         onClick={ () => navigate(`/patients/${user.id}`) }
                         className='flex items-center gap-x-3 w-full'>
                         <img src={user.patient_image} alt={`${user.first_name} avatar`} className="w-10 h-10 rounded-full" />
-                        <p>{user.first_name}</p>
+                        <p>{capitalizeWords(user.first_name)}</p>
                     </button>,              
-                    user.last_name,        
-                    user.relevant_worker,       
+                    capitalizeWords(user.last_name),        
+                    capitalizeWords(user.relevant_worker),       
                     user.mobile_phone1, 
                     user.email,
                     user.city,                 
                     user.national_id || '',   
                     user.patient_part || '',
-                    user.start_worker || '',   
-                    user.onaylayan_doktor || '', 
+                    capitalizeWords(user.start_worker) || '',   
+                    capitalizeWords(user.onaylayan_doktor) || '', 
                     formatISODate(user.created_at) || '',  
                     user.discharge_date || '', 
                     user.insurance_info || '',   

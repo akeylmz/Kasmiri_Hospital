@@ -6,13 +6,14 @@ import { formatDateToShow } from '../../components/Utils/DateFormat';
 import { ImBoxRemove } from "react-icons/im";
 import { createModal } from '../../components/Utils/Modal';
 import { useTranslation } from 'react-i18next';
+import Loading from '../../components/tools/Loading';
 
 const StockOrder = () => {
     const { t } = useTranslation()
 
     const [ activePage, setActivePage] = useState(1)
     const {data, isLoading} = useGetStockOrdersQuery(activePage)
-    console.log(data);
+    //console.log(data);
     
 
     const thead = [
@@ -27,9 +28,9 @@ const StockOrder = () => {
     ];
 
     
-    if(isLoading) {
-        return <div>Yükleniyor...</div>
-    }
+    if(isLoading){
+        return <Loading />
+      }
 
   return (
     <motion.div 

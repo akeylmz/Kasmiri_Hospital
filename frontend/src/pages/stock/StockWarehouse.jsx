@@ -2,20 +2,14 @@ import React, { useState } from 'react';
 import TableComp2 from '../../UI/TableComp2';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { useGetAllStocksQuery } from '../../store/patient2';
+import { useGetAllStocksQuery, useGetWarehouseQuery } from '../../store/patient2';
 import { createModal } from '../../components/Utils/Modal';
 import { formatDateToShow } from '../../components/Utils/DateFormat';
+import Loading from '../../components/tools/Loading';
 
 const StockWarehouse = () => {
     const { t } = useTranslation()
     const [ activeWarehouse, setActiveWarehouse ] = useState(1)
-
-    const { data, error, isLoading } = useGetAllStocksQuery({
-        page: 1,
-        stock_wharehouse: activeWarehouse
-    })
-    console.log(data);
-    
 
     const thead = [
         { name: "none"},
@@ -26,18 +20,15 @@ const StockWarehouse = () => {
         // { name: t("POSITION"), sortable: true },
         { name: t("AVAILABLE"), sortable: true },
     ]
-    const [warehouses, setWarehouses] = useState([
-        {id: 1, name: "ANADEPO"},
-        {id: 2, name: "DEPO-1"},
-        {id: 3, name: "DEPO-2"},
-        {id: 4, name: "DEPO-3"},
-        {id: 5, name: "DEPO-4"},
-        {id: 6, name: "DEPO-5"},
-        {id: 7, name: "DEPO-6"},
-    ])
-    if(isLoading){
-        return <div>Yükleniyor...</div>
-    }if(!data){
+
+    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1, stock_warehouse: activeWarehouse, type: "warehouse" })
+    const { data: warehouses, error: wareError, isloading: wareLoading} = useGetWarehouseQuery() 
+    //console.log(data);
+    //console.log(warehouses);
+    
+    if(isLoading || wareLoading){
+        return <Loading />
+    }if(!data || !warehouses){
         return <div>Hata Oluştu...</div>
     }
 
@@ -47,16 +38,16 @@ const StockWarehouse = () => {
             <div className="w-1/6 max-w-[200px] bg-cyan-600 h-full flex flex-col p-4 rounded-3xl mr-3 ">
                 <h2 className="text-white w-full text-center text-lg pt-2 mb-4">
                     DEPOLAR 
-                    <button onClick={()=> createModal("warehouse-modal")} type='button' className='border-2 text-xl border-white rounded-full w-8 h-8 ml-4'>+</button>
+                    {/* <button onClick={()=> createModal("warehouse-modal")} type='button' className='border-2 text-xl border-white rounded-full w-8 h-8 ml-4'>+</button> */}
                 </h2>
                 <ul className="stock-list relative text-white space-y-2 border-t border-slate-300 pt-5 overflow-y-auto">
-                    {warehouses.map((item) => (
+                    {warehouses.results && warehouses.results.map((item) => (
                         <li 
                             key={item.id} 
-                            className={`${activeWarehouse === item.name ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} 
+                            className={`${activeWarehouse === item.id ? "bg-cyan-500 hover:!bg-cyan-500" : ""}`} 
                             onClick={()=>setActiveWarehouse(item.id)}
                         >
-                            {item.name}
+                            {item.wh_name}
                         </li>
                     ))}
                 </ul>
@@ -69,7 +60,7 @@ const StockWarehouse = () => {
                 className="w-5/6 min-w-[calc(100%-200px)] h-full ">
                 <TableComp2
                     thead={thead}
-                    tbody={data.map(row => [
+                    tbody={data.results && data.results.map(row => [
                         <button type='button' onClick={()=> createModal("tranfer-product", row)}>{row.stock_name}</button>,
                         row.total_buyed,
                         formatDateToShow(row.stock_ut),
