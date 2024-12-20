@@ -22,6 +22,8 @@ from channels.layers import get_channel_layer
 from django.db.models import Sum
 from django.db import models
 from rest_framework.pagination import PageNumberPagination
+import django_filters
+from django.db.models import Q
 
 def webhook(request):
     if request.method == 'POST':
@@ -56,6 +58,7 @@ def webhook(request):
 #Filters
 class StockFilter(filters.FilterSet):
     total_haved__lte = filters.NumberFilter(field_name='stock_haved', lookup_expr='lte')  # Küçük veya eşit
+    default_filter = django_filters.CharFilter(method='filter_by_default')
 
     class Meta:
         model = Stock
@@ -70,8 +73,20 @@ class StockFilter(filters.FilterSet):
                 'extra': lambda f: {'lookup_expr': 'icontains'},
             },
         }
-
+    def filter_by_default(self, queryset, name, value):
+        """
+        Kullanıcının gönderdiği kelimeleri `first_name`, `last_name`, ve `national_id`
+        alanlarında arar.
+        """
+        search_terms = value.split()
+        query = Q()
+        for term in search_terms:
+            query |= Q(stock_name__icontains=term) | Q(stcok_group__icontains=term)
+        return queryset.filter(query)
+    
 class PatientCardFilter(filters.FilterSet):
+    default_filter = django_filters.CharFilter(method='filter_by_default')
+
     class Meta:
         model = PatientCard
         exclude = ['patient_image']
@@ -85,8 +100,20 @@ class PatientCardFilter(filters.FilterSet):
                 'extra': lambda f: {'lookup_expr': 'icontains'},
             },
         }
-
+    def filter_by_default(self, queryset, name, value):
+        """
+        Kullanıcının gönderdiği kelimeleri `first_name`, `last_name`, ve `national_id`
+        alanlarında arar.
+        """
+        search_terms = value.split()
+        query = Q()
+        for term in search_terms:
+            query |= Q(first_name__icontains=term) | Q(last_name__icontains=term) | Q(national_id__icontains=term) | Q(patient_number__icontains=term)
+        return queryset.filter(query)
+    
 class OrderFilter(filters.FilterSet):
+    default_filter = django_filters.CharFilter(method='filter_by_default')
+
     class Meta:
         model = Order
         fields = '__all__'  # Tüm alanları filtrelemeye dahil eder
@@ -100,8 +127,19 @@ class OrderFilter(filters.FilterSet):
                 'extra': lambda f: {'lookup_expr': 'icontains'},
             },
         }
-
+    def filter_by_default(self, queryset, name, value):
+        """
+        Kullanıcının gönderdiği kelimeleri `first_name`, `last_name`, ve `national_id`
+        alanlarında arar.
+        """
+        search_terms = value.split()
+        query = Q()
+        for term in search_terms:
+            query |= Q(order_name__icontains=term) | Q(order_group__icontains=term) | Q(order_pozition__icontains=term)
+        return queryset.filter(query)
 class WorkerFilter(filters.FilterSet):
+    default_filter = django_filters.CharFilter(method='filter_by_default')
+
     class Meta:
         model = Worker
         exclude = ['worker_image']
@@ -115,6 +153,16 @@ class WorkerFilter(filters.FilterSet):
                 'extra': lambda f: {'lookup_expr': 'icontains'},
             },
         }
+    def filter_by_default(self, queryset, name, value):
+            """
+            Kullanıcının gönderdiği kelimeleri `first_name`, `last_name`, ve `national_id`
+            alanlarında arar.
+            """
+            search_terms = value.split()
+            query = Q()
+            for term in search_terms:
+                query |= Q(first_name__icontains=term) | Q(last_name__icontains=term) | Q(department__icontains=term)
+            return queryset.filter(query)
 #Summaries
 class StockSummaryView(APIView):
     def get(self, request):
@@ -226,7 +274,6 @@ class PopulationCardDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= PopulationCard.objects.all()
     serializer_class=PopulationCardSerializer
 
-
 class StockListCreateAPIView(generics.ListCreateAPIView):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
@@ -238,7 +285,6 @@ class StockDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Stock.objects.all()
     serializer_class=StockSerializer
 
-
 class OrderListCreateAPIView(generics.ListCreateAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
@@ -249,8 +295,6 @@ class OrderListCreateAPIView(generics.ListCreateAPIView):
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
-
-
         
 class WorkerListCreateAPIView(generics.ListCreateAPIView):
     queryset= Worker.objects.all()
@@ -278,7 +322,6 @@ class WorkingHoursListCreateAPIView(generics.ListCreateAPIView):
 class WorkingHoursDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= WorkingHours.objects.all()
     serializer_class=WorkingHoursSerializer
-
 
 class LeaveListCreateAPIView(generics.ListCreateAPIView):
     queryset = Leave.objects.all().order_by('-start_date')  # start_date azalan sırada

@@ -36,14 +36,14 @@ class Note(models.Model):
         super().save(*args, **kwargs)
 
 class PatientCard(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
-    patient_number = models.CharField(max_length=50, unique=True, blank=True, null=True)
-    national_id = models.CharField(max_length=11, unique=True, blank=True, null=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="created_date")
+    patient_number = models.CharField(max_length=50, blank=True, null=True)
+    national_id = models.CharField(max_length=11, blank=True, null=True)
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
-    patient_image = models.ImageField(upload_to='images/patient_images/')
+    patient_image = models.FileField(upload_to='images/patient_images/', blank=True, null=True)
     place_of_birth = models.CharField(max_length=100, blank=True, null=True)
-    date_of_birth = models.DateField(blank=True, null=True)
+    date_of_birth = models.CharField(max_length=100, blank=True, null=True)
     gender = models.CharField(max_length=10, blank=True, null=True)
     nationality = models.CharField(max_length=100, blank=True, null=True)
     mother_name = models.CharField(max_length=100, blank=True, null=True)
@@ -82,11 +82,11 @@ class PatientCard(models.Model):
     start_worker = models.CharField(max_length=100, blank=True, null=True, verbose_name="Kayıt Acan")#
     relevant_worker = models.CharField(max_length=100, blank=True, null=True, verbose_name="ilgilenen doktor")#
 
-    discharge_date = models.DateField(null=True, blank=True, verbose_name="Discharge Date")
+    discharge_date = models.DateTimeField(null=True, blank=True, verbose_name="Discharge Date")
     sharing_permission = models.BooleanField(default=False, verbose_name="Sharing Permission")    
-    registration_date = models.DateField(default=timezone.now, verbose_name="Registration Date")
+    registration_date = models.DateTimeField( blank=True, null=True, verbose_name="Registration Date")
 
-    flight_date = models.DateField(default=timezone.now, verbose_name="Flight Date")
+    flight_date = models.DateTimeField(blank=True, null=True,verbose_name="Flight Date")
     stayed_hotel = models.CharField(max_length=100, blank=True, null=True, verbose_name="Kaldığı Otel")#
     tour_operator = models.CharField(max_length=100, blank=True, null=True, verbose_name="Tur operatoru")#
 
@@ -192,7 +192,7 @@ class PatientNote(models.Model):
 
 
     def __str__(self):
-        return f"{self.patient.first_name} - {self}"
+        return f"{self.patient.first_name} - {self.id}"
 
 class Stock(models.Model):
     stock_name = models.CharField(max_length=100, blank=True, null=True)
@@ -462,7 +462,7 @@ class PatientPhoto(models.Model):
     file = models.FileField(blank=True, null=True,upload_to='images/patient_photos/')
 
 class PatientFiles(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateField(auto_now_add=True)
 
     person = models.ForeignKey(
         PatientCard,

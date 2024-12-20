@@ -124,14 +124,8 @@ class PatientNoteSerializer(serializers.ModelSerializer):
         return instance
 
 class PatientCardSerializer(serializers.ModelSerializer):
-    patient_note = PatientNoteSerializer(many=True, read_only=True)
-    patient_poll = PollSerializer(many=True, read_only=True)
-    patient_photos = PatientPhotoSerializer(many=True, read_only=True)
-    patient_files = PatientFilesSerializer(many=True, read_only=True)
 
-    patient_image = serializers.ImageField(
-        max_length=None, use_url=True,
-        )
+
     class Meta:      
 
         model = PatientCard
@@ -139,24 +133,46 @@ class PatientCardSerializer(serializers.ModelSerializer):
 
     
     def create(self, validated_data):
-        # Bugünün tarihi
-        today = datetime.today()
-
-        # Bugüne ait tüm PatientCard kayıtlarını al
-        today_patient_count = PatientCard.objects.filter(
-            created_at__year=today.year,
-            created_at__month=today.month,
-            created_at__day=today.day
-        ).count()
-
-        # O gün için kaçıncı hasta olduğunu belirle
-        new_patient_number = f"{today.strftime('%d%m%Y')}{today_patient_count + 1:02d}"
-
-        # Patient number'ı validated_data'ya ekle
-        validated_data['patient_number'] = new_patient_number
-
         # Yeni PatientCard kaydı oluştur
-        return PatientCard.objects.create(**validated_data)
+        instance = PatientCard.objects.create(**validated_data)
+
+        # Bugünün tarihi (gün-ay-yıl formatında)
+        today = datetime.now().strftime("%d%m%Y")
+        zero = 0
+        # PatientCard ID'si ile birleştirerek patient_number oluştur
+        if instance.id < 5000:
+            random_number = (instance.id*2) + 1
+            if random_number < 10:
+                new_number = f"{zero}{zero}{zero}{random_number}"
+            elif random_number < 100:
+                new_number = f"{zero}{zero}{random_number}"
+            elif random_number < 1000:
+                new_number = f"{zero}{random_number}"
+            else:
+                new_number = random_number
+        
+        else:
+            random_number = (instance.id*2) + 1
+            random_number = random_number%10000
+            print(random_number)
+            if random_number < 10:
+                new_number = f"{zero}{zero}{zero}{random_number}"
+                print("10")
+            elif random_number < 100:
+                new_number = f"{zero}{zero}{random_number}"
+                print("100")
+            elif random_number < 1000:
+                new_number = f"{zero}{random_number}"
+                print("1000")
+            else:
+                new_number = random_number
+                print("new_number")
+        print(new_number)
+        instance.patient_number = f"{today}{new_number}"
+
+        # Güncellenmiş instance'ı kaydet
+        instance.save()
+        return instance
     
     def update(self, instance, validated_data):
         """
