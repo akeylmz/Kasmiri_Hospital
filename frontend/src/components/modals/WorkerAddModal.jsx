@@ -58,6 +58,8 @@ const WorkerAddModal = () => {
   }
 
   const submit = async (values, actions) => {
+    //console.log(JSON.stringify(values, null, 2))   
+    
     const formData = new FormData()
     formData.append("worker_image", values.worker_image)
     Object.keys(values).forEach((key) => {
@@ -1034,7 +1036,7 @@ const WorkerAddModal = () => {
                     <input 
                         name='is_contract_personnel'
                         value={values.is_contract_personnel}
-                        onVolumeChange={handleChange}
+                        onChange={handleChange}
                         type="checkbox" 
                         className="h-8 w-8 text-indigo-600 border border-gray-400 rounded-xl" 
                     />

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion'
 import { useGetAllStocksQuery } from '../../store/patient2'
 import { formatDateToShow } from '../../components/Utils/DateFormat';
+import Loading from '../../components/tools/Loading';
 
 const StockProducts = () => {
 
@@ -11,7 +12,7 @@ const StockProducts = () => {
 
   const [ activePage, setActivePage] = useState(1)
   const { data, isLoading, error } = useGetAllStocksQuery({page:activePage, type:"skt"})
-  console.log(data);
+  //console.log(data);
   
     const thead = [
         { name: t("Product Name"), sortable: true },
@@ -20,19 +21,21 @@ const StockProducts = () => {
         { name: t("Product Group"), sortable: true },
     ]
 
-    if(error){
-      return <div>Bir Hata Oluştu...</div>
-    }
+  if(isLoading){
+    return <Loading />
+  }
+  if(error){
+    return <div>Bir Hata Oluştu...</div>
+  }
 
   return (
     <motion.div 
         initial={{opacity:0}}   
         animate={{opacity:1}}
         className="w-[98%] h-[99%] flex items-center justify-center">
-          {isLoading && <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>}
-        {!isLoading && data && <TableComp2
+        {!isLoading && data.results && <TableComp2
             thead={thead}
-            tbody={data.map(row => [
+            tbody={data.results.map(row => [
             row.stock_name,
             row.total_haved, 
             formatDateToShow(row.stock_skt),

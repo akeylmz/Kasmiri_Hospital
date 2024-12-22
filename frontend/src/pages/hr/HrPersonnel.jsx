@@ -1,145 +1,44 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { IoMailOutline } from "react-icons/io5";
 import TableComp2 from '../../UI/TableComp2';
 import { useGetAllWorkerQuery } from '../../store/patient2';
 import { useTranslation } from 'react-i18next';
+import Loading from '../../components/tools/Loading';
 
 const HrPersonnel = () => {
   const { t } = useTranslation()
 
   const navigate = useNavigate()
+  const [searchable, setSearchable] = useState(''); 
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [ activePage, setActivePage] = useState(1)
-  const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
-  console.log(data?.results);    
-  
-    const tbody = [
-        {
-          fullName: ['https://via.placeholder.com/40', 'Selim GÜRSES'],
-          email: 'selim@domain.com',
-          contact: '05369863247',
-          department: 'Yönetici',
-          actions: (            
-            <div className='flex gap-5'>
-              <button>
-                <IoMailOutline size={30} color='blue' />
-              </button>
-                <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
-                &gt;
-              </button>
-            </div>
-          )
-        },
-        {
-          fullName: ['https://via.placeholder.com/40', 'Cemre YALÇINSOY'],
-          email: 'cemre@domain.com',
-          contact: '05426987832',
-          department: 'Yönetici',
-          actions: (
-            <div className='flex gap-5'>
-              <button>
-                <IoMailOutline size={30} color='blue' />
-              </button>
-                <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
-                &gt;
-              </button>
-            </div>
-          )
-        },
-        {
-          fullName: ['https://via.placeholder.com/40', 'Seçkin SEYMEN'],
-          email: 'seckin@domain.com',
-          contact: '05318521496',
-          department: 'Muhasebe',
-          actions: (
-            <div className='flex gap-5'>
-              <button>
-                <IoMailOutline size={30} color='blue' />
-              </button>
-                <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
-                &gt;
-              </button>
-            </div>
-          )
-        },
-        {
-          fullName: ['https://via.placeholder.com/40', 'Ahmet KAPAKÇI'],
-          email: 'ahmet@domain.com',
-          contact: '05336547893',
-          department: 'Muhasebe',
-          actions: (
-            <div className='flex gap-5'>
-              <button>
-                <IoMailOutline size={30} color='blue' />
-              </button>
-                <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
-                &gt;
-              </button>
-            </div>
-          )
-        },
-        {
-          fullName: ['https://via.placeholder.com/40', 'Yalçın SELİMOĞLU'],
-          email: 'yalcin@domain.com',
-          contact: '05465989832',
-          department: 'Muhasebe',
-          actions: (
-            <div className='flex gap-5'>
-              <button>
-                <IoMailOutline size={30} color='blue' />
-              </button>
-                <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
-                &gt;
-              </button>
-            </div>
-          )
-        },
-        {
-          fullName: ['https://via.placeholder.com/40', 'Nazan SATIŞOĞLU'],
-          email: 'nazan@domain.com',
-          contact: '05556985478',
-          department: 'Pazarlama',
-          actions: (
-            <div className='flex gap-5'>
-              <button>
-                <IoMailOutline size={30} color='blue' />
-              </button>
-                <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
-                &gt;
-              </button>
-            </div>
-          )
-        },
-        {
-          fullName: ['https://via.placeholder.com/40', 'Alper ÜNLÜ'],
-          email: 'alper@domain.com',
-          contact: '05052587413',
-          department: 'Pazarlama',
-          actions: (
-            <div className='flex gap-5'>
-              <button>
-                <IoMailOutline size={30} color='blue' />
-              </button>
-                <button onClick={()=> navigate("/KPI-personnel")} key="details-1" className="h-8 px-4 flex items-center justify-center rounded bg-cyan-500 text-white">
-                &gt;
-              </button>
-            </div>
-          )
-        }
-      ];
+  const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage, value: debouncedSearchTerm, type:"first_name"})
+  //console.log(data?.results);    
 
-      const thead = [
-        { name: t("Full Name"), sortable: true },
-        { name: t("Email"), sortable: true },
-        { name: t("Contact") },
-        { name: t("Department"), sortable: true },
-        { name: '', width: 120 }, // İşlemler sütunu için genişlik
-      ];
+  useEffect
+  (() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchable);
+    }, 500);
 
-      if(isLoading){
-        return <div>Yükleniyor</div>
-      }
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchable]);
+ 
+  const thead = [
+    { name: t("Full Name"), sortable: true },
+    { name: t("Email"), sortable: true },
+    { name: t("Contact") },
+    { name: t("Department"), sortable: true },
+    { name: '', width: 120 },
+  ];
+
+  if(isLoading){
+    return <Loading />
+  }
       
 
   return (
@@ -169,7 +68,8 @@ const HrPersonnel = () => {
             </div>
             ])}
             modal={"workerAdd"}
-            searchable={true}
+            searchable = {searchable}
+            setSearchable = {setSearchable}
             tableTitle= {t("EMPLOYEE LIST")}
             activePage = {activePage}
             setActivePage = {setActivePage}

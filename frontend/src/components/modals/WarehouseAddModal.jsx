@@ -11,7 +11,7 @@ import { stockFormSchemas } from "../../schemas/stockFormSchemas";
 const WarehouseAddModal = () => {
     
     const submit = (values, actions) => {
-      console.log(JSON.stringify(values, null, 2))      
+      //console.log(JSON.stringify(values, null, 2))      
       destroyModal()
     }
     const { values, errors, handleChange, handleSubmit} = useFormik({

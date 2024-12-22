@@ -3,7 +3,7 @@ import React from 'react'
 const BodySchema = ({values, setFieldValue}) => {
     
   return (
-    <svg width="450" height="455" viewBox="0 0 1179 1187" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg width="450" height="455" viewBox="0 0 1179 1187" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
         <rect width="1179" height="1187" fill="none"/>
         <path
             id="Vector 1" d="M147 256C128.563 253.395 118.492 255.67 99.5 256C96.4931 270.643 94.2287 276.122 90 285C85.2348 306.954 85.0298 318.556 99.5 335C104.917 340.238 108.581 343.017 117 347.5C130.115 343.79 137.347 340.472 150 332C163.281 321.813 167.194 315.757 169.5 304.5C171.92 282.513 168.953 271.362 147 256Z"

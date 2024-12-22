@@ -32,7 +32,7 @@ const HrSummaryFile = () => {
   const [files, setFiles] = useState([])
   const [currentWorkerFiles, setCurrrentWorkerFiles] = useState([])
  
- // console.log(data);
+ console.log(data);
   
   const submit = async (values, actions) => {
 
