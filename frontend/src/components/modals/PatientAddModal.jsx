@@ -9,14 +9,14 @@ import { patientFormSchemas } from "../../schemas/patientFormSchemas.jsx";
 
 const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
   const { t } = useTranslation()
-  console.log(isEdit);
-  
+  //console.log(isEdit);  
    //console.log("data:", selectedPatient);
  
   const [createPatient, { isLoading, isError, error}] = useCreatePatientMutation()
   const [updatePatient, {}] = useUpdatePatientMutation()
   const nextStep = () => setStep(step + 1);
   const prevStep = () => setStep(step - 1);
+  const [step, setStep] = useState(1)
   const [isCitizen, setIsCitizen] = useState(true); 
 
   const handleCheckboxChange = () => {
@@ -24,13 +24,18 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
     if(isCitizen){
       createModal("yabancı-modal")
     }
-  };
-  const [step, setStep] = useState(1)
- // console.log(patientID);
+  }
+  
+  const toggleDaySelection = (day) => {
+    setValues((prevValues) => {
+      const newDays = prevValues.seans_days.includes(day)
+        ? prevValues.seans_days.filter((selectedDay) => selectedDay !== day)
+        : [...prevValues.seans_days, day];
+      return { ...prevValues, seans_days: newDays };
+    });
+  }
 
-  const submit = async (values, actions) => {  
-    console.log("submit");
-      
+  const submit = async (values, actions) => {        
     try {
       
       //console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
@@ -65,9 +70,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
     }
   }
 
-
-
- const {values, errors, handleChange, handleSubmit, setFieldValue, handleBlur, setValues, touched } = useFormik({
+  const {values, errors, handleChange, handleSubmit, setFieldValue, handleBlur, setValues, touched } = useFormik({
     initialValues: {
       patient_number: "",
       national_id: "",
@@ -118,7 +121,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
     validateOnBlur:true,
     validateOnChange:true, 
     onSubmit: submit,
-  });
+  })
   useEffect(() => {
     if (selectedPatient) {    
       setValues({
@@ -626,7 +629,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
                       values.seans_days.includes(day)
                         ? "bg-cyan-500 text-white"
                         : "bg-white text-gray-700"
-                    } focus:outline-none focus:ring-2 focus:ring-cyan-500`}
+                    } focus:outline-none`}
                   >
                     {day}
                   </button>

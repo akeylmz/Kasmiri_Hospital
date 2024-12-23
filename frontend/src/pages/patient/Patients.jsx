@@ -6,7 +6,7 @@ import { useDeletePatientMutation, useGetPatientIdQuery, useGetPatientsQuery } f
 import { createModal } from '../../components/Utils/Modal';
 import TableComp2 from '../../UI/TableComp2';
 import { useNavigate } from 'react-router-dom';
-import { formatISODate } from '../../components/Utils/DateFormat';
+import { formatISODate, formatISODateUTC } from '../../components/Utils/DateFormat';
 import Loading from '../../components/tools/Loading';
 import { capitalizeWords } from '../../components/Utils/capitalizeWords';
 
@@ -82,9 +82,9 @@ const Patients = () => {
                     user.national_id || '',   
                     user.patient_part || '',
                     capitalizeWords(user.start_worker) || '',   
-                    capitalizeWords(user.onaylayan_doktor) || '', 
+                    capitalizeWords(user.check_worker) || '', 
                     formatISODate(user.created_at) || '',  
-                    user.discharge_date || '', 
+                    formatISODateUTC(user.discharge_date) || '',  
                     user.insurance_info || '',   
                     <div className='flex gap-x-2'>
                         <button 

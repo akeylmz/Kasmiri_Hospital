@@ -6,111 +6,35 @@ import { stockFormSchemas } from "../../../schemas/stockFormSchemas";
 import FaceSchema from "../../../assets/icons/FaceSchema";
 import BodySchema from "../../../assets/icons/BodySchema";
 import ToothSchema from "../../../assets/icons/ToothSchema";
-import { useGetPatientIdQuery } from "../../../store/patient2";
+import { useGetPatientIdQuery, useUpdatePatientMutation } from "../../../store/patient2";
 import { useParams } from "react-router-dom";
 import { capitalizeWords } from "../../../components/Utils/capitalizeWords";
-import { formatISODate } from "../../../components/Utils/DateFormat";
+import { formatDateToShow, formatISODate, formatISODateUTC } from "../../../components/Utils/DateFormat";
 import { calculateAge } from "../../../components/Utils/calculateAge";
+import Loading from "../../../components/tools/Loading";
+import { destroyModal } from "../../../components/Utils/Modal";
 
 
 const PatientEpikriz = () => {
     const {patientId} = useParams()
-    const { data: patient, isLoading } = useGetPatientIdQuery(patientId, {
+    const { data: patient, isLoading, error } = useGetPatientIdQuery(patientId, {
         skip: !patientId,
     });
-    console.log(patient);
+    //console.log(patient);
 
-    // if(isLoading){
-    //     return <p>Yükleniyor...</p>
-    // }else if(!Array.isArray(patient.patient_note)){
-    //     return <p></p>
-    // }
-
-    const noteee = [
-        {
-            "id": 6,
-            "note_type": "body",
-            "upcoming_surgeries": "Yanak Çene ve göğüs ameliyatı",
-            "past_surgeries": "Geçirdiği Ameliyat yok",
-            "doctor_notes": "Doktor Notu",
-            "number_11": false,
-            "number_12": false,
-            "number_13": false,
-            "number_14": false,
-            "number_15": false,
-            "number_16": false,
-            "number_17": false,
-            "number_18": false,
-            "number_21": false,
-            "number_22": false,
-            "number_23": false,
-            "number_24": false,
-            "number_25": false,
-            "number_26": false,
-            "number_27": false,
-            "number_28": false,
-            "number_31": false,
-            "number_32": false,
-            "number_33": false,
-            "number_34": false,
-            "number_35": false,
-            "number_36": false,
-            "number_37": false,
-            "number_38": false,
-            "number_41": false,
-            "number_42": false,
-            "number_43": false,
-            "number_44": false,
-            "number_45": false,
-            "number_46": false,
-            "number_47": false,
-            "number_48": false,
-            "forehead": false,
-            "right_temple": false,
-            "left_temple": false,
-            "nose": false,
-            "right_ear": false,
-            "left_ear": false,
-            "upper_lip": false,
-            "lower_lip": false,
-            "right_cheek": true,
-            "left_cheek": true,
-            "chin": true,
-            "neck": false,
-            "right_under_eye": false,
-            "left_under_eye": false,
-            "right_eyebrow": false,
-            "left_eyebrow": false,
-            "right_leg": false,
-            "left_leg": false,
-            "right_arm": false,
-            "left_arm": false,
-            "right_breast": true,
-            "left_breast": true,
-            "right_hip": false,
-            "left_hip": false,
-            "abdomen": false,
-            "back": false,
-            "first_application_date": null,
-            "planned_procedure_date": null,
-            "diagnosis": null,
-            "previous_transplant": false,
-            "session_number": null,
-            "method": null,
-            "graft_count": null,
-            "protocol_number": null,
-            "bold_type": null,
-            "patient": 10
-        }
-      ]
+    if(isLoading){
+        return <Loading />
+    }else if(error){
+        return <p>Hata Oluştu</p>
+    }
     
-  return (
-    <div  className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>
-        {/* {patient.patient_note[0]?.note_type === "tooth" && <TethForm patient={patient} values={patient.patient_note[0]} /> } */}
-        {noteee[0]?.note_type === "body" && <BodyForm patient={patient} values={noteee[0]} />}
-        {/* {patient.patient_note[0]?.note_type === "hair" && <HeadForm patient={patient} values={patient.patient_note[0]} />} */}
-    </div>
-  )
+    return (
+        <div  className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>
+            {patient.patient_note[0]?.note_type === "tooth" && <TethForm patient={patient} values={patient.patient_note[0]} /> }
+            {patient.patient_note[0]?.note_type === "body" && <BodyForm patient={patient} values={patient.patient_note[0]} />}
+            {patient.patient_note[0]?.note_type === "hair" && <HeadForm patient={patient} values={patient.patient_note[0]} />}
+        </div>
+    )
 }
 
 export default PatientEpikriz
@@ -120,19 +44,39 @@ export default PatientEpikriz
 
 const TethForm = ({ values, patient }) => {
 
+    const [updatePatient] = useUpdatePatientMutation()
+    const [ dischardDate, setDischardDate ] = useState("")
+      
+    const submit = async () => {
+        //console.log(JSON.stringify(values, null, 2))   
+         console.log(dischardDate);
+        
+        const formData = new FormData()
+        formData.append("discharge_date", dischardDate)
+        await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
+    }
+
     return(
         <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8 relative">
             {/* <div className="absolute bg-white border border-cyan-600 border-r-0  rounded-l-md top-4 -left-0 transform -translate-x-full ">Diş</div> */}
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>                
-                <div className="flex items-center gap-x-4 mr-3">
-                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                    <input
-                        type="date"
-                        name="stock_ut"
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                    />
+                <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>      
+                <div className="flex flex-col justify-center items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
+                    <p className="mt-1">{patient.check_worker || ""}</p>
                 </div>
+                <div className="flex flex-col justify-between items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
+                    {!patient.discharge_date ? 
+                    <input
+                        type="datetime-local"
+                        name="stock_ut"
+                        value={dischardDate}
+                        onChange={ e => setDischardDate(e.target.value)}
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                    />:
+                    <p className="mt-1">{formatISODateUTC(patient.discharge_date)}</p>}
+                </div>   
             </div>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
@@ -149,6 +93,10 @@ const TethForm = ({ values, patient }) => {
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Ülke :</label>
                             <p className="text-gray-600 ml-2">{capitalizeWords(patient.country)}</p>
+                        </div>
+                        <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">Sigorta :</label>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.insurance_info)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
@@ -200,18 +148,36 @@ const TethForm = ({ values, patient }) => {
             </div>
 
             <div className="flex justify-between pt-2">
-                <button
-                type="submit"
-                className="ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                >
-                <Check className="mr-1" size={20} />
-                {t("save")}
-                </button>
+                {!patient.discharge_date && 
+                    <button
+                        type="button"
+                        disabled={dischardDate === ""}
+                        onClick={() => submit()}
+                        className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none ${
+                            dischardDate === "" ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                        }`}
+                    >
+                        <Check className="mr-1" size={20} />
+                        {t("save")}
+                    </button>
+                }
             </div>
         </form>
     )    
 }
 const BodyForm = ({ values, patient }) => {
+
+    const [updatePatient] = useUpdatePatientMutation()
+    const [ dischardDate, setDischardDate ] = useState("")
+      
+    const submit = async () => {
+          //console.log(JSON.stringify(values, null, 2))   
+           console.log(dischardDate);
+          
+          const formData = new FormData()
+          formData.append("discharge_date", dischardDate)
+          await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
+    }
    
     const [faceImgLoad, setFaceImgLoad] = useState(false)
     const [bodyImgLoad, setBodyImgLoad] = useState(false)
@@ -220,14 +186,22 @@ const BodyForm = ({ values, patient }) => {
         <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>
-                <div className="flex items-center gap-x-4 mr-3">
-                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                    <input
-                        type="date"
-                        name="stock_ut"
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                    />
+                <div className="flex flex-col justify-center items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
+                    <p className="mt-1">{patient.check_worker || ""}</p>
                 </div>
+                <div className="flex flex-col justify-between items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
+                    {!patient.discharge_date ? 
+                    <input
+                        type="datetime-local"
+                        name="stock_ut"
+                        value={dischardDate}
+                        onChange={ e => setDischardDate(e.target.value)}
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                    />:
+                    <p className="mt-1">{formatISODateUTC(patient.discharge_date)}</p>}
+                </div>   
             </div>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
@@ -310,31 +284,62 @@ const BodyForm = ({ values, patient }) => {
             </div>
 
             <div className="flex justify-between pt-2">
-                <button
-                type="submit"
-                className="ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
-                >
-                <Check className="mr-1" size={20} />
-                {t("save")}
-                </button>
+                {!patient.discharge_date && 
+                    <button
+                        type="button"
+                        disabled={dischardDate === ""}
+                        onClick={() => submit()}
+                        className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none ${
+                            dischardDate === "" ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                        }`}
+                    >
+                        <Check className="mr-1" size={20} />
+                        {t("save")}
+                    </button>
+                }
             </div>
     </form>
     )    
 }
 const HeadForm = ({values, patient}) => {
+
+    const options = {
+        Androjenik_Alopesi: "Androjenik Alopesi",
+        Skatrisyel_Alopesi: "Skatrisyel Alopesi",
+        Diger: "Diğer",
+    }
+    const [updatePatient] = useUpdatePatientMutation()
+    const [ dischardDate, setDischardDate ] = useState("")
+      
+    const submit = async () => {
+        //console.log(JSON.stringify(values, null, 2))   
+         console.log(dischardDate);
+        
+        const formData = new FormData()
+        formData.append("discharge_date", dischardDate)
+        await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
+    }
     
     return(
         <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>
-                <div className="flex items-center gap-x-4 mr-3">
-                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                    <input
-                        type="date"
-                        name="stock_ut"
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                    />
+                <div className="flex flex-col justify-center items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
+                    <p className="mt-1">{patient.check_worker || ""}</p>
                 </div>
+                <div className="flex flex-col justify-between items-center gap-x-4 mr-3">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
+                    {!patient.discharge_date ? 
+                    <input
+                        type="datetime-local"
+                        name="stock_ut"
+                        value={dischardDate}
+                        onChange={ e => setDischardDate(e.target.value)}
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                    />:
+                    <p className="mt-1">{formatISODateUTC(patient.discharge_date)}</p>}
+                </div>               
             </div>
 
             <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
@@ -351,6 +356,10 @@ const HeadForm = ({values, patient}) => {
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Ülke :</label>
                             <p className="text-gray-600 ml-2">{capitalizeWords(patient.country)}</p>
+                        </div>
+                        <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">Sigorta :</label>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.insurance_info)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
@@ -373,92 +382,78 @@ const HeadForm = ({values, patient}) => {
                             <p className="text-gray-600 ml-2">{formatISODate(patient.created_at)}</p>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-4">   
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-4 my-10">   
                         <div className="mt-7">
-                            <label className="block font-medium text-sm text-gray-700 ml-3">İlk Mürcaat Tarihi</label>
-                            <input
-                                type="date"
-                                name=""
-                                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
+                            <label className="block font-medium text-sm text-gray-700 w-full text-center">İlk Mürcaat Tarihi</label>
+                            <p className="w-full text-center mt-1">{formatDateToShow(values.first_application_date)}</p>
                         </div>                      
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 text-sm ml-3">Hastanın Tanısı</label>
-                            <select className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2" name="" id="">
-                                <option value="">Androjenik Alopesi</option>
-                                <option value="">Skatrisyel Alopesi</option>
-                                <option value="">Diğer</option>
-                            </select>
+                            <label className="block font-medium text-gray-700 text-sm w-full text-center">Hastanın Tanısı</label>
+                            <p className="w-full text-center mt-1">{options[values.diagnosis] || ""}</p>                            
                         </div>  
                         <div className="mt-7">
-                            <label className="block font-medium text-sm text-gray-700 ml-3">Daha Önce Saç Ekimi Yapılmış mı?</label>
-                            <select className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2" name="" id="">
-                                <option value="">Evet</option>
-                                <option value="">Hayır</option>
-                            </select>
+                            <label className="block font-medium text-sm text-gray-700 w-full text-center">Daha Önce Saç Ekimi Yapılmış mı?</label>
+                            <p className="w-full text-center mt-1">{values.previous_transplant ? "Evet" : "Hayır"}</p> 
                         </div>    
                         <div className="mt-7">
-                            <label className="block font-medium text-sm text-gray-700 ml-3">Kaçıncı Seans</label>
-                            <input
-                                type="text"
-                                name=""
-                                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
+                            <label className="block font-medium text-sm text-gray-700 w-full text-center">Kaçıncı Seans</label>
+                            <p className="w-full text-center mt-1">{values.session_number}</p> 
                         </div>    
                         <div className="mt-7">
-                            <label className="block font-medium text-sm text-gray-700 ml-3">Saç Ekim İşlemi Uygulanacak Tarih</label>
-                            <input
-                                type="date"
-                                name=""
-                                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
+                            <label className="block font-medium text-sm text-gray-700 w-full text-center">Saç Ekim İşlemi Uygulanacak Tarih</label>
+                            <p className="w-full text-center mt-1">{formatDateToShow(values.planned_procedure_date)}</p> 
                         </div>      
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 text-sm ml-3">Saç Ekiminde Uygulacak Metod</label>
-                            <input
-                                type="text"
-                                name=""
-                                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
+                            <label className="block font-medium text-gray-700 text-sm w-full text-center">Saç Ekiminde Uygulacak Metod</label>
+                            <p className="w-full text-center mt-1">{values.method}</p> 
                         </div> 
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 text-sm ml-3">Ekimi Planlanan Kök Sayısı</label>
-                            <input
-                                type="text"
-                                name=""
-                                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
+                            <label className="block font-medium text-gray-700 text-sm w-full text-center">Ekimi Planlanan Kök Sayısı</label>
+                            <p className="w-full text-center mt-1">{values.graft_count}</p> 
                         </div>  
                         <div className="mt-7">
-                            <label className="block font-medium text-gray-700 text-sm ml-3">Saç Ekim Birimi Protokol No</label>
-                            <input
-                                type="text"
-                                name=""
-                                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
+                            <label className="block font-medium text-gray-700 text-sm w-full text-center">Saç Ekim Birimi Protokol No</label>
+                            <p className="w-full text-center mt-1">{values.protocol_number}</p> 
                         </div>   
                     </div>
                 </div>
                 <div className="flex flex-col items-end pr-5">
-                    <div className="flex items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                        <input
-                        type="date"
-                        name="stock_ut"
-                        value={values.stock_ut}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
-                    </div>
+                   
                     <div className="w-auto mt-5 h-[650px] overflow-y-scroll mx-auto flex flex-wrap">
-                        {Array.from({ length: 14 }).map((_, index) => (
+                    {Array.from({ length: 5 }).map((_, index) => (
                             <label
-                            key={index}
-                            htmlFor={`hair-${index + 1}`}
-                            className={`flex flex-col items-center gap-y-2 ${index + 1 == 8 ? "w-[calc(43.33%-10px)]" :"w-[calc(33.33%-10px)]"}`}
+                                key={index}
+                                htmlFor={`hair-${index + 1}`}
+                                className={`flex flex-col items-center justify-center gap-y-2 
+                                    ${index + 1 == 5 ? "w-[calc(43.33%-10px)]" :"w-[calc(33.33%-10px)]"}`}
                             >
-                            <img className="w-14" src={`/img/hair/${index + 1}.png`} alt="" />
-                            <input id={`hair-${index + 1}`} name="hair" type="radio" />
+                                <img className="w-24" src={`/img/hair/${index + 1}.png`} alt="" />
+                                <input
+                                    className="appearance-none w-6 h-6 border-2 border-blue-500 rounded-full checked:bg-blue-500 checked:ring-2 checked:ring-blue-300 pointer-events-none"
+                                    id={`hair-${index + 1}`}
+                                    name="hair"
+                                    type="radio"
+                                    disabled
+                                    checked={values.bold_type === `hair-${index + 1}`}
+                                />
+                            </label>
+                        ))}
+                        {Array.from({ length: 3 }).map((_, index) => (
+                            <label
+                                key={index}
+                                htmlFor={`hair-${index + 6}`}
+                                className={`flex flex-col items-center justify-center gap-y-2 ${
+                                    index + 1 === 8 ? "w-[calc(43.33%-10px)]" : "w-[calc(33.33%-10px)]"}`}
+                            >
+                                <img className="w-24" src={`/img/hair/${index + 6}.png`} alt="" />
+                                <input 
+                                    className="appearance-none w-6 h-6 border-2 border-blue-500 rounded-full checked:bg-blue-500 checked:ring-2 checked:ring-blue-300 pointer-events-none"
+                                    id={`hair-${index + 6}`}
+                                    name="hair"
+                                    type="radio"
+                                    disabled
+                                    checked={values.bold_type === `hair-${index + 6}`}
+                                />
                             </label>
                         ))}
                     </div>                  
@@ -466,13 +461,18 @@ const HeadForm = ({values, patient}) => {
             </div>
 
             <div className="flex justify-between pt-2">
+                {!patient.discharge_date && 
                 <button
-                type="submit"
-                className="ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
+                    type="button"
+                    disabled={dischardDate === ""}
+                    onClick={() => submit()}
+                    className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none ${
+                        dischardDate === "" ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                    }`}
                 >
-                <Check className="mr-1" size={20} />
-                {t("save")}
-                </button>
+                    <Check className="mr-1" size={20} />
+                    {t("save")}
+                </button>}
             </div>
     </form>
     )  

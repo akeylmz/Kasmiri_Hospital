@@ -12,22 +12,29 @@ import BodySchema from "../../assets/icons/BodySchema";
 import { capitalizeWords } from "../Utils/capitalizeWords";
 import { calculateAge } from "../Utils/calculateAge";
 import { formatISODate } from "../Utils/DateFormat";
-import { useCreateDoctorNoteMutation } from "../../store/patient2";
+import { useCreateDoctorNoteMutation, useUpdatePatientMutation } from "../../store/patient2";
 
 
 
 const TethForm = ({ setAnket, data }) => {
     // const [createDoctorNote, { isLoading, isError, isSuccess, data }] = useCreateDoctorNoteMutation()
-     const [createDoctorNote] = useCreateDoctorNoteMutation()
+    const [createDoctorNote] = useCreateDoctorNoteMutation()
+    const [updatePatient] = useUpdatePatientMutation()
+    const [ checkDoktror, setCheckDoktor ] = useState("")
 
-    const submit = (values, actions) => {
+    const submit = async (values, actions) => {
         //console.log(JSON.stringify(values, null, 2))   
         const formData = new FormData()
 
         Object.keys(values).forEach(key => {
             formData.append(key, values[key]);
         })
-        createDoctorNote(formData)
+        await createDoctorNote(formData)
+
+        const patientFormData = new FormData()
+        patientFormData.append("check_worker", checkDoktror)
+        await updatePatient({ newPatient: patientFormData, patientID: data.id }).unwrap()
+
         destroyModal()
       }
       const { values, errors, handleChange, handleSubmit, setFieldValue} = useFormik({
@@ -101,6 +108,16 @@ const TethForm = ({ setAnket, data }) => {
                         Saç
                     </button>                    
                 </div>
+                <div className="flex flex-col items-center gap-x-4 ">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
+                    <input
+                        type="text"
+                        name="check_worker"
+                        value={checkDoktror}
+                        onChange={(e)=> setCheckDoktor(e.target.value)}
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                    />
+                </div>   
                 <button
                 onClick={() => destroyModal()}
                 className="text-gray-400 hover:text-gray-600"
@@ -121,7 +138,7 @@ const TethForm = ({ setAnket, data }) => {
                 </svg>
                 </button>
             </div>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[692px] ">
                 <div className="overflow-y-scroll">
                     <div className="ml-3">
                         <div className="flex items-center">
@@ -192,28 +209,7 @@ const TethForm = ({ setAnket, data }) => {
                     </div>
                 </div>
                 <div className="flex flex-col items-end pr-5">
-                    <div className="flex gap-x-4">
-                        <div className="flex flex-col items-center gap-x-4">
-                            <label className="block text-sm font-medium text-nowrap text-gray-500">Doktor Adı</label>
-                            <input
-                            type="text"
-                            //name="date"
-                            // value={values.date}
-                            // onChange={handleChange}
-                            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
-                        </div>
-                        <div className="flex flex-col items-center gap-x-4">
-                            <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                            <input
-                            type="date"
-                            name="date"
-                            value={values.date}
-                            onChange={handleChange}
-                            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                            />
-                        </div>
-                    </div>
+                   
                     <div className="w-auto h-auto">
                         <ToothSchema values={values} setFieldValue={setFieldValue} />
                     </div>
@@ -236,15 +232,22 @@ const BodyForm = ({ setAnket, data }) => {
     const [faceImgLoad, setFaceImgLoad] = useState(false)
     const [bodyImgLoad, setBodyImgLoad] = useState(false)
     const [createDoctorNote] = useCreateDoctorNoteMutation()
+    const [updatePatient] = useUpdatePatientMutation()
+    const [ checkDoktror, setCheckDoktor ] = useState("")
 
-    const submit = (values, actions) => {
+    const submit = async (values, actions) => {
         console.log(JSON.stringify(values, null, 2))     
         const formData = new FormData()
 
         Object.keys(values).forEach(key => {
             formData.append(key, values[key]);
         }) 
-        createDoctorNote(formData)
+        await createDoctorNote(formData)
+
+        const patientFormData = new FormData()
+        patientFormData.append("check_worker", checkDoktror)
+        await updatePatient({ newPatient: patientFormData, patientID: data.id }).unwrap()
+
         destroyModal()
     }
     const { values, errors, handleChange, handleSubmit, setFieldValue} = useFormik({
@@ -313,6 +316,16 @@ const BodyForm = ({ setAnket, data }) => {
                         Saç
                     </button>                    
                 </div>
+                <div className="flex flex-col items-center gap-x-4 ">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
+                        <input
+                            type="text"
+                            name="check_worker"
+                            value={checkDoktror}
+                            onChange={(e)=> setCheckDoktor(e.target.value)}
+                            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                        />
+                </div>   
                 <button
                 onClick={() => destroyModal()}
                 className="text-gray-400 hover:text-gray-600"
@@ -334,7 +347,7 @@ const BodyForm = ({ setAnket, data }) => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[700px] ">
                 <div className="overflow-y-scroll">
                     <div className="ml-3">
                        <div className="flex items-center">
@@ -404,29 +417,7 @@ const BodyForm = ({ setAnket, data }) => {
                         </div>             
                     </div>
                 </div>
-                <div className="flex flex-col items-end pr-5">
-                <div className="flex gap-x-4">
-                    <div className="flex flex-col items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Doktor Adı</label>
-                        <input
-                        type="text"
-                        //name="date"
-                        // value={values.date}
-                        // onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
-                    </div>
-                    <div className="flex flex-col items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                        <input
-                        type="date"
-                        name="date"
-                        value={values.date}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
-                    </div>
-                    </div>
+                <div className="flex flex-col items-end pr-5">                    
                     <div className="w-auto h-[650px] overflow-y-scroll mx-auto">
                         <div className="relative select-none">
                             {faceImgLoad && <div className="absolute left-0 top-0">
@@ -444,7 +435,7 @@ const BodyForm = ({ setAnket, data }) => {
                 </div>
             </div>
 
-            <div className="flex justify-between pt-2">
+            <div className="flex justify-between">
                 <button
                 type="submit"
                 className="ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
@@ -457,14 +448,28 @@ const BodyForm = ({ setAnket, data }) => {
     )    
 }
 const HeadForm = ({setAnket, data}) => {
-    const submit = (values, actions) => {
-        console.log(JSON.stringify(values, null, 2))      
+    const [createDoctorNote] = useCreateDoctorNoteMutation()
+    const [updatePatient] = useUpdatePatientMutation()
+    const [ checkDoktror, setCheckDoktor ] = useState("")
+
+    const submit = async (values, actions) => {
+        //console.log(JSON.stringify(values, null, 2))   
+        const formData = new FormData()
+
+        Object.keys(values).forEach(key => {
+            formData.append(key, values[key]);
+        })
+        await createDoctorNote(formData)
+
+        const patientFormData = new FormData()
+        patientFormData.append("check_worker", checkDoktror)
+        await updatePatient({ newPatient: patientFormData, patientID: data.id }).unwrap()
+        
         destroyModal()
-    }
+      }
     const { values, errors, handleChange, handleSubmit, setFieldValue} = useFormik({
         initialValues: {
             patient: data.id,
-            date: "",
             note_type: "hair",
             first_application_date: "",
             planned_procedure_date: "",
@@ -474,16 +479,8 @@ const HeadForm = ({setAnket, data}) => {
             method: "",
             graft_count: "",
             protocol_number: "",
-            level_male_1: false,
-            level_male_2: false,
-            level_male_3: false,
-            level_male_4: false,
-            level_male_5: false,
-            level_female_1: false,
-            level_female_2: false,
-            level_female_3: false,
+            bold_type: ""
         },
-        validationSchema : stockFormSchemas,
         onSubmit: submit
     })
     return(
@@ -513,6 +510,16 @@ const HeadForm = ({setAnket, data}) => {
                         Saç
                     </button>                    
                 </div>
+                <div className="flex flex-col items-center gap-x-4 ">
+                    <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
+                    <input
+                        type="text"
+                        name="check_worker"
+                        value={checkDoktror}
+                        onChange={(e)=> setCheckDoktor(e.target.value)}
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                    />
+                </div>   
                 <button
                 onClick={() => destroyModal()}
                 className="text-gray-400 hover:text-gray-600"
@@ -534,7 +541,7 @@ const HeadForm = ({setAnket, data}) => {
                 </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[692px] ">
                 <div className="overflow-y-scroll">
                     <div className="ml-3">
                                               
@@ -611,7 +618,7 @@ const HeadForm = ({setAnket, data}) => {
                         <div className="mt-7">
                             <label className="block font-medium text-sm text-gray-700 ml-3">Kaçıncı Seans</label>
                             <input
-                                type="text"
+                                type="number"
                                 name="session_number"
                                 onChange={handleChange}
                                 className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
@@ -655,29 +662,7 @@ const HeadForm = ({setAnket, data}) => {
                         </div>   
                     </div>
                 </div>
-                <div className="flex flex-col items-end pr-5">
-                <div className="flex gap-x-4">
-                    <div className="flex flex-col items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Doktor Adı</label>
-                        <input
-                        type="text"
-                        //name="date"
-                        // value={values.date}
-                        // onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
-                    </div>
-                    <div className="flex flex-col items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                        <input
-                        type="date"
-                        name="date"
-                        value={values.date}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
-                    </div>
-                    </div>
+                <div className="flex flex-col items-end pr-5">                
                     <div className="w-auto mt-5 h-[650px] overflow-y-scroll mx-auto flex flex-wrap">
                         {Array.from({ length: 5 }).map((_, index) => (
                             <label
@@ -687,20 +672,30 @@ const HeadForm = ({setAnket, data}) => {
                             >
                                 <img className="w-24" src={`/img/hair/${index + 1}.png`} alt="" />
                                 <input
-                                    id={`hair-${index + 1}`} 
-                                    name="hair" 
-                                    type="radio"
+                                   className="scale-150"
+                                   id={`hair-${index + 1}`}
+                                   name="hair"
+                                   type="radio"
+                                   value={`hair-${index + 1}`}
+                                   onChange={() => setFieldValue("bold_type", `hair-${index + 1}`)}
                                 />
                             </label>
                         ))}
                         {Array.from({ length: 3 }).map((_, index) => (
                             <label
-                            key={index}
-                            htmlFor={`hair-${index + 6}`}
-                            className={`flex flex-col items-center gap-y-2 w-[calc(33.33%-10px)]`}
+                                key={index}
+                                htmlFor={`hair-${index + 6}`}
+                                className={`flex flex-col items-center gap-y-2 w-[calc(33.33%-10px)]`}
                             >
-                            <img className="w-24" src={`/img/hair/${index + 6}.png`} alt="" />
-                            <input id={`hair-${index + 6}`} name="hair" type="radio" />
+                                <img className="w-24" src={`/img/hair/${index + 6}.png`} alt="" />
+                                <input 
+                                    className="scale-150"
+                                    id={`hair-${index + 6}`}
+                                    name="hair"
+                                    type="radio"
+                                    value={`hair-${index + 6}`}
+                                    onChange={() => setFieldValue("bold_type", `hair-${index + 6}`)}
+                                />
                             </label>
                         ))}
                     </div>                  
@@ -724,9 +719,6 @@ const ToothNotesAddModal = ({data}) => {
 console.log(data);
 
   const [anket, setAnket] = useState("dis") 
- 
-console.log("main çalıştı");
-
 
   return (
     <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
