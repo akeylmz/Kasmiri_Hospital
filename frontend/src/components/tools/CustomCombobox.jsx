@@ -56,11 +56,11 @@ export default function CustomCombobox({ customers, value, onChange, placeholder
               >
                 {({ selected, active }) => (
                   <>
-                    <img
+                    {customer.image && <img
                       src={customer.image}
                       alt={customer.name}
                       className="h-8 w-8 rounded-full border border-gray-300 object-cover"
-                    />
+                    />}
                     <span className="block truncate">{customer.name}</span>
                     {selected && (
                       <span

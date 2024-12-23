@@ -12,7 +12,7 @@ const Reply = () => {
     const submit = async (values, actions) => {
         try {
             const formData = new FormData()
-            formData.append("message", values.message)
+            formData.append("text", values.message)
             if (values.fileMessage) {
                 formData.append("attachments", values.fileMessage)
                 formData.append("text", values.message)
@@ -34,7 +34,7 @@ const Reply = () => {
     });
 
     return (
-        <footer className='h-[84px] flex flex-col items-center justify-center px-6 relative'>
+        <footer className='h-[84px] mt-auto flex flex-col items-center justify-center px-6 relative'>
            { values.fileMessage &&
             <div className='w-[98%] border bg-white border-gray-300 rounded-lg absolute -top-[152px] left-3 p-2 shadow-md'>
                 <div className='w-36 h-36 relative'>

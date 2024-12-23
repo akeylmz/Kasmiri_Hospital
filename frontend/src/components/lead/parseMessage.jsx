@@ -6,27 +6,32 @@ import classNames from "classnames";
 import { HiMiniGif } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 import { useGetAttachmentQuery } from "../../store/chatAPI";
+import { CiMenuKebab } from "react-icons/ci";
+import { createModal, destroyModal } from "../Utils/Modal";
 
 
 export const parseMessage = (message, showMessage, isLoading, imageUrl) => { 
-  //console.log(message);
+ // console.log(message);
 
 
-const { data, isLoading: isLoad } = useGetAttachmentQuery({
-  messageId: message?.id ,  
-  attachmentId: message?.attachments[0]?.id , // Eğer attachmentId yoksa null kullan
-}, {
-  skip: !message?.id || !message?.attachments?.[0]?.id,  // Eğer id ya da attachmentId yoksa sorguyu atla
-});
-if(!isLoading){
-  console.log(data);
-}
+// const { data, isLoading: isLoad } = useGetAttachmentQuery({
+//   messageId: message?.id ,  
+//   attachmentId: message?.attachments[0]?.id , // Eğer attachmentId yoksa null kullan
+// }, {
+//   skip: !message?.id || !message?.attachments?.[0]?.id,  // Eğer id ya da attachmentId yoksa sorguyu atla
+// });
+// if(!isLoading){
+//   //console.log(data);
+// }
 
 
   
     try {
         if(message?.attachments.length == 0){
+          
+          
             if(!message.text?.startsWith("-- Unipile cannot display")){
+               
                 if (showMessage) {
                     return ( 
                       <p 
@@ -49,8 +54,8 @@ if(!isLoading){
             const attachment = message.attachments[0]
               //console.log(attachment.type)
 
-             switch (attachment.type) {
-                case "video":
+            switch (attachment.type) {
+               case "video":
                   if(attachment.gif){
                      return <><HiMiniGif /> Gif</> 
                   }else{
@@ -73,34 +78,35 @@ if(!isLoading){
                     }else{
                       return <span className="flex items-center gap-x-1"><FaCamera /> Video</span>  
                     }               
-                  }
-                
-                case "file":
+                 }                
+               case "file":
                  
                   if (showMessage) {
                       return (
-                        <a href="" download>Download Attachment</a>
+                        <a href={imageUrl} download className={classNames({
+                          'min-h-[44px] mt-2 inline-flex items-center py-2 px-4 rounded-3xl text-blue-600': true,
+                          'border border-gray-200': !message.is_sender == 1,
+                          'bg-[#efefef]': message.is_sender == 1
+                  })}>Download File</a>
                       )
                   }else{
                     return <span><FaFileAlt /> Dosya</span> 
-                  }
-                     
-                
-                case "audio":                    
+                 }                     
+               case "audio":                    
                   if (showMessage) {
                      return <audio controls src={imageUrl}></audio>                 
                   }else{
                     return <span className="flex items-center gap-x-1"><SiAudiomack /> Ses</span> 
-                  }
-                case "img":
+                 }
+               case "img":
                   if(attachment.sticker){
                     if (showMessage) {
-                      return (
-                        <img                          
-                          src={imageUrl} 
-                          alt="Sticker" 
-                          className="w-40 h-40 object-contain"
-                        />
+                      return (                       
+                         <img                          
+                         src={imageUrl} 
+                         alt="Sticker" 
+                         className="w-40 h-40 object-contain"
+                       />
                       )
                     }else{
                       return <span className="flex items-center gap-x-1"><PiStickerFill size={17} /> Sticker</span>  
@@ -119,16 +125,20 @@ if(!isLoading){
                         >
                           <div className="animate-spin border-4 border-t-transparent border-gray-600 rounded-full w-12 h-12"></div> 
                         </div>
-                        : <img width="208" className='rounded-lg' src={imageUrl} alt="Loading image" />
+                        : <div className="relative">
+                            <button 
+                              onClick={()=> createModal("photo-add-modal", imageUrl)}
+                              className="absolute right-1 top-1 bg-white/70 p-2 rounded-full"><CiMenuKebab size={20} /></button>
+                            <img width="208" className='rounded-lg' src={imageUrl} alt="Loading image" />
+                          </div>
                       )
                     }else{
                       return <span className="flex items-center gap-x-1"><FaCamera /> Fotoğraf</span> 
                     }                     
-                  }
-              
-                default:
-                  return "Unknown"
-              }
+                 }             
+               default:
+                 return <p>{message.text}</p>
+            }
          }
     } catch (error) {
        console.log(error);       

@@ -137,6 +137,10 @@ const TethForm = ({ setAnket, data }) => {
                             <p className="text-gray-600 ml-2">{capitalizeWords(data.country)}</p>
                         </div>
                         <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">Sigorta :</label>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(data.insurance_info)}</p>
+                        </div>
+                        <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
                             <p className="text-gray-600 ml-2">{calculateAge(data.date_of_birth)}</p>
                         </div>
@@ -188,15 +192,27 @@ const TethForm = ({ setAnket, data }) => {
                     </div>
                 </div>
                 <div className="flex flex-col items-end pr-5">
-                    <div className="flex items-center gap-x-4">
-                        <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
-                        <input
-                        type="date"
-                        name="date"
-                        value={values.date}
-                        onChange={handleChange}
-                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                        />
+                    <div className="flex gap-x-4">
+                        <div className="flex flex-col items-center gap-x-4">
+                            <label className="block text-sm font-medium text-nowrap text-gray-500">Doktor Adı</label>
+                            <input
+                            type="text"
+                            //name="date"
+                            // value={values.date}
+                            // onChange={handleChange}
+                            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                            />
+                        </div>
+                        <div className="flex flex-col items-center gap-x-4">
+                            <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
+                            <input
+                            type="date"
+                            name="date"
+                            value={values.date}
+                            onChange={handleChange}
+                            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                            />
+                        </div>
                     </div>
                     <div className="w-auto h-auto">
                         <ToothSchema values={values} setFieldValue={setFieldValue} />
@@ -268,6 +284,7 @@ const BodyForm = ({ setAnket, data }) => {
         },
         onSubmit: submit
       })  
+      
     
     return(
         <form onSubmit={handleSubmit} className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
@@ -333,6 +350,10 @@ const BodyForm = ({ setAnket, data }) => {
                             <p className="text-gray-600 ml-2">{capitalizeWords(data.country)}</p>
                         </div>
                         <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">Sigorta :</label>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(data.insurance_info)}</p>
+                        </div>
+                        <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
                             <p className="text-gray-600 ml-2">{calculateAge(data.date_of_birth)}</p>
                         </div>
@@ -384,7 +405,18 @@ const BodyForm = ({ setAnket, data }) => {
                     </div>
                 </div>
                 <div className="flex flex-col items-end pr-5">
-                    <div className="flex items-center gap-x-4">
+                <div className="flex gap-x-4">
+                    <div className="flex flex-col items-center gap-x-4">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">Doktor Adı</label>
+                        <input
+                        type="text"
+                        //name="date"
+                        // value={values.date}
+                        // onChange={handleChange}
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                        />
+                    </div>
+                    <div className="flex flex-col items-center gap-x-4">
                         <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
                         <input
                         type="date"
@@ -393,6 +425,7 @@ const BodyForm = ({ setAnket, data }) => {
                         onChange={handleChange}
                         className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                         />
+                    </div>
                     </div>
                     <div className="w-auto h-[650px] overflow-y-scroll mx-auto">
                         <div className="relative select-none">
@@ -518,6 +551,10 @@ const HeadForm = ({setAnket, data}) => {
                             <p className="text-gray-600 ml-2">{capitalizeWords(data.country)}</p>
                         </div>
                         <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">Sigorta :</label>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(data.insurance_info)}</p>
+                        </div>
+                        <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>
                             <p className="text-gray-600 ml-2">{calculateAge(data.date_of_birth)}</p>
                         </div>
@@ -619,7 +656,18 @@ const HeadForm = ({setAnket, data}) => {
                     </div>
                 </div>
                 <div className="flex flex-col items-end pr-5">
-                    <div className="flex items-center gap-x-4">
+                <div className="flex gap-x-4">
+                    <div className="flex flex-col items-center gap-x-4">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">Doktor Adı</label>
+                        <input
+                        type="text"
+                        //name="date"
+                        // value={values.date}
+                        // onChange={handleChange}
+                        className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+                        />
+                    </div>
+                    <div className="flex flex-col items-center gap-x-4">
                         <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
                         <input
                         type="date"
@@ -629,6 +677,7 @@ const HeadForm = ({setAnket, data}) => {
                         className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
                         />
                     </div>
+                    </div>
                     <div className="w-auto mt-5 h-[650px] overflow-y-scroll mx-auto flex flex-wrap">
                         {Array.from({ length: 5 }).map((_, index) => (
                             <label
@@ -636,7 +685,7 @@ const HeadForm = ({setAnket, data}) => {
                                 htmlFor={`hair-${index + 1}`}
                                 className={`flex flex-col items-center gap-y-2 ${index + 1 == 5 ? "w-[calc(43.33%-10px)]" :"w-[calc(33.33%-10px)]"}`}
                             >
-                                <img className="w-14" src={`/img/hair/${index + 1}.png`} alt="" />
+                                <img className="w-24" src={`/img/hair/${index + 1}.png`} alt="" />
                                 <input
                                     id={`hair-${index + 1}`} 
                                     name="hair" 
@@ -650,7 +699,7 @@ const HeadForm = ({setAnket, data}) => {
                             htmlFor={`hair-${index + 6}`}
                             className={`flex flex-col items-center gap-y-2 w-[calc(33.33%-10px)]`}
                             >
-                            <img className="w-14" src={`/img/hair/${index + 6}.png`} alt="" />
+                            <img className="w-24" src={`/img/hair/${index + 6}.png`} alt="" />
                             <input id={`hair-${index + 6}`} name="hair" type="radio" />
                             </label>
                         ))}

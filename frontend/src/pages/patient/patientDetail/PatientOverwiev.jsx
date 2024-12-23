@@ -13,6 +13,7 @@ const PatientOverwiev = () => {
     const { data: patient, isLoading } = useGetPatientIdQuery(patientId, {
         skip: !patientId,
     });
+console.log(patient);
 
     
     if (!patient) {
@@ -119,7 +120,9 @@ const PatientOverwiev = () => {
                         </div>
                         <div className='p-4'>
                             {/* <p className='text-gray-500 font-semibold mb-2'>02.06.2023</p> */}
-                            <p className='text-gray-600 text-lg'>{patient.patient_note[0]?.doctor_notes}</p>
+                            {Array.isArray(patient.patient_note) && patient.patient_note[0]?.doctor_notes && (
+                                <p className='text-gray-600 text-lg'>{patient.patient_note[0]?.doctor_notes}</p>
+                            )}
                         </div>
                     </div>
                     <div className='h-[40%] bg-white rounded-xl shadow-md flex justify-evenly items-center'>

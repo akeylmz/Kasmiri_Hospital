@@ -1,55 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { UnipileClient } from "unipile-node-sdk"
+import React, { useEffect, useState } from 'react'
 import ChatRetrive from './ChatRetrive'
-import { ALL_KEYS, ALL_URL } from '../../constants'
+import { useGetAllChatsQuery } from '../../store/unipileClient'
 
-const ChatList = () => {
+const ChatList = ({ accountType }) => {
 
-// SDK setup
+const [requestCount, setRequestCount] = useState(0)
+const { data: allChats, error, isLoading } = useGetAllChatsQuery({ account_type: accountType });
+//console.log(allChats);
 
-// Inputs
-const [chats1, setChats] = useState([])
-const previousResponse = useRef(null)
+if (isLoading) return <p>Loading chats...</p>;
+if (error) return <p>Error: {error}</p>;
 
-// useEffect(() => {
- 
-//   const interval = setInterval(fetchData, 2000)
-//   return () => clearInterval(interval)
-// }, [])
-
-const fetchData = async () => {
-  try {
-    const client = new UnipileClient(ALL_URL.UNIPILE_URL, ALL_KEYS.UNIPILE_API_KEY)  
-    const allChats = await client.messaging.getAllChats()
-
-    if (JSON.stringify(allChats) !== JSON.stringify(previousResponse.current)) {
-      setChats(allChats);            
-      previousResponse.current = allChats
-    }
-    setChats(allChats.items)
-  } catch (error) {
-    console.log(error)
-  }
-};
-
-useEffect(() => {
-  fetchData();
-}, [])
-
-
-    
   return (
     <section className='h-[calc(100%-100px)] overflow-auto py-3'>
           <header className='flex items-center justify-between px-5 mb-1'>
             <h6 className='text-base font-semibold'>Messages</h6>
-            <button className='text-blue-600 text-sm font-semibold'>7 request</button>
+            {/* <button className='text-blue-600 text-sm font-semibold'>{requestCount} request</button> */}
           </header>
           
-         {chats1
+         {allChats
          .filter(chat => chat.provider_id !== "status@broadcast")
-         .map((chat)=>(
-            <ChatRetrive key={chat.id} chat={chat} />
-         ))}
+         .map((chat)=>{
+            return <ChatRetrive key={chat.id} chat={chat} />
+         })}
       </section>
   )
 }

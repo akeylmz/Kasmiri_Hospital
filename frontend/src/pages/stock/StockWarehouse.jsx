@@ -21,7 +21,7 @@ const StockWarehouse = () => {
         { name: t("AVAILABLE"), sortable: true },
     ]
 
-    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1, stock_warehouse: activeWarehouse, type: "warehouse" })
+    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1, stock_warehouse: activeWarehouse })
     const { data: warehouses, error: wareError, isloading: wareLoading} = useGetWarehouseQuery() 
     //console.log(data);
     //console.log(warehouses);
@@ -62,10 +62,10 @@ const StockWarehouse = () => {
                     thead={thead}
                     tbody={data.results && data.results.map(row => [
                         <button type='button' onClick={()=> createModal("tranfer-product", row)}>{row.stock_name}</button>,
-                        row.total_buyed,
+                        row.stock_buyed,
                         formatDateToShow(row.stock_ut),
                         formatDateToShow(row.stock_skt),
-                        row.total_haved
+                        row.stock_haved
                     ])}
                     searchable={true}
                     tableTitle={"SİPARİŞLER"}  

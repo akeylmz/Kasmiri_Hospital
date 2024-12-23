@@ -20,17 +20,95 @@ const PatientEpikriz = () => {
     });
     console.log(patient);
 
-    if(isLoading){
-        return <p>Yükleniyor...</p>
-    }else if(!patient.patient_note[0]){
-        return <p>Bir Sorun Oluştu</p>
-    }
+    // if(isLoading){
+    //     return <p>Yükleniyor...</p>
+    // }else if(!Array.isArray(patient.patient_note)){
+    //     return <p></p>
+    // }
+
+    const noteee = [
+        {
+            "id": 6,
+            "note_type": "body",
+            "upcoming_surgeries": "Yanak Çene ve göğüs ameliyatı",
+            "past_surgeries": "Geçirdiği Ameliyat yok",
+            "doctor_notes": "Doktor Notu",
+            "number_11": false,
+            "number_12": false,
+            "number_13": false,
+            "number_14": false,
+            "number_15": false,
+            "number_16": false,
+            "number_17": false,
+            "number_18": false,
+            "number_21": false,
+            "number_22": false,
+            "number_23": false,
+            "number_24": false,
+            "number_25": false,
+            "number_26": false,
+            "number_27": false,
+            "number_28": false,
+            "number_31": false,
+            "number_32": false,
+            "number_33": false,
+            "number_34": false,
+            "number_35": false,
+            "number_36": false,
+            "number_37": false,
+            "number_38": false,
+            "number_41": false,
+            "number_42": false,
+            "number_43": false,
+            "number_44": false,
+            "number_45": false,
+            "number_46": false,
+            "number_47": false,
+            "number_48": false,
+            "forehead": false,
+            "right_temple": false,
+            "left_temple": false,
+            "nose": false,
+            "right_ear": false,
+            "left_ear": false,
+            "upper_lip": false,
+            "lower_lip": false,
+            "right_cheek": true,
+            "left_cheek": true,
+            "chin": true,
+            "neck": false,
+            "right_under_eye": false,
+            "left_under_eye": false,
+            "right_eyebrow": false,
+            "left_eyebrow": false,
+            "right_leg": false,
+            "left_leg": false,
+            "right_arm": false,
+            "left_arm": false,
+            "right_breast": true,
+            "left_breast": true,
+            "right_hip": false,
+            "left_hip": false,
+            "abdomen": false,
+            "back": false,
+            "first_application_date": null,
+            "planned_procedure_date": null,
+            "diagnosis": null,
+            "previous_transplant": false,
+            "session_number": null,
+            "method": null,
+            "graft_count": null,
+            "protocol_number": null,
+            "bold_type": null,
+            "patient": 10
+        }
+      ]
     
   return (
     <div  className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>
-        {patient.patient_note[0].note_type === "tooth" && <TethForm patient={patient} values={patient.patient_note[0]} /> }
-        {patient.patient_note[0].note_type === "body" && <BodyForm patient={patient} values={patient.patient_note[0]} />}
-        {patient.patient_note[0].note_type === "hair" && <HeadForm patient={patient} values={patient.patient_note[0]} />}
+        {/* {patient.patient_note[0]?.note_type === "tooth" && <TethForm patient={patient} values={patient.patient_note[0]} /> } */}
+        {noteee[0]?.note_type === "body" && <BodyForm patient={patient} values={noteee[0]} />}
+        {/* {patient.patient_note[0]?.note_type === "hair" && <HeadForm patient={patient} values={patient.patient_note[0]} />} */}
     </div>
   )
 }
@@ -166,6 +244,10 @@ const BodyForm = ({ values, patient }) => {
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Ülke :</label>
                             <p className="text-gray-600 ml-2">{capitalizeWords(patient.country)}</p>
+                        </div>
+                        <div className="flex items-center">
+                            <label className="block font-nunito font-semibold">Sigorta :</label>
+                            <p className="text-gray-600 ml-2">{capitalizeWords(patient.insurance_info)}</p>
                         </div>
                         <div className="flex items-center">
                             <label className="block font-nunito font-semibold">Yaşı :</label>

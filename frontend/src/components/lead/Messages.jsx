@@ -14,17 +14,10 @@ const Messages = ({ messages = [] }) => {
     scrollToBottom();
   }, [messages]);
 
-  const handleScroll = (event) => {
-    const { scrollTop, clientHeight, scrollHeight } = event.target;
-    if (scrollHeight - scrollTop > clientHeight + 50) {
-      setShowScrollButton(true);
-    } else {
-      setShowScrollButton(false);
-    }
-  };
+ 
 
   return (
-    <div className='relative h-[calc(100%-144px)] px-4 overflow-auto flex flex-col gap-y-2' onScroll={handleScroll}>
+    <div className='relative h-[calc(100%-144px)] px-4 overflow-auto flex flex-col gap-y-2'>
       <div className='mb-auto' />
       {messages.map((message, key) => (
         <Message message={message} key={key} />
