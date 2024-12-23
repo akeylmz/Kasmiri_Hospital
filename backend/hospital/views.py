@@ -10,8 +10,8 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientFilesSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, TaskCheckSerializer, WareHouseSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
-from hospital.models import Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientFilesSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, TaskCheckSerializer, UsedStocksSerializer, WareHouseSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.models import Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, UsedStocks, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -386,3 +386,11 @@ class TaskCheckListCreateAPIView(generics.ListCreateAPIView):
 class TaskCheckDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= TaskCheck.objects.all()
     serializer_class=TaskCheckSerializer
+
+class UsedStocksListCreateAPIView(generics.ListCreateAPIView):
+    queryset= UsedStocks.objects.all().order_by('-used_at')
+    serializer_class=UsedStocksSerializer
+
+class UsedStocksDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset= UsedStocks.objects.all()
+    serializer_class=UsedStocksSerializer

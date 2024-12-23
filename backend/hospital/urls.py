@@ -47,6 +47,9 @@ urlpatterns = [
     path('patient-files/', views.PatientFilesListCreateAPIView.as_view(), name='patient-files-list'),
     path('patient-files/<int:pk>/', views.PatientFilesDetailAPIView.as_view(), name='patient-files-detail'),
 
+    path('used-stock/', views.UsedStocksListCreateAPIView.as_view(), name='used-stock-list'),
+    path('used-stock/<int:pk>/', views.UsedStocksDetailAPIView.as_view(), name='used-stock-detail'),
+    
 
     path('poll/', views.PollListCreateAPIView.as_view(), name='poll-list'),
     path('poll/<int:pk>/', views.PollDetailAPIView.as_view(), name='poll-detail'),

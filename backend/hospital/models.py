@@ -482,3 +482,17 @@ class Poll(models.Model):
     question2 =models.CharField(max_length=255, blank=True, null=True)
     question3 =models.CharField(max_length=255, blank=True, null=True)
     question4 =models.CharField(max_length=255, blank=True, null=True)    
+
+class UsedStocks(models.Model):
+    patient_used = models.ForeignKey(
+        PatientCard,
+        on_delete=models.CASCADE,
+        related_name="patient_uses",
+    )
+    stock_used = models.ForeignKey(
+        Stock,
+        on_delete=models.CASCADE,
+        related_name="patient_uses",
+    )
+    number_used = models.PositiveIntegerField(default=1)
+    used_at = models.DateTimeField(auto_now_add=True, verbose_name="used_at")

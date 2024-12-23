@@ -1,5 +1,6 @@
+from django.forms import ValidationError
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.models import  Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, UsedStocks, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -103,7 +104,38 @@ class PollSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class UsedStocksSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UsedStocks
+        fields = '__all__'
+
+
+    def create(self, validated_data):
+        stock = validated_data.get('stock_used')
+        number_used = validated_data.get('number_used')
+
+        # Stok yeterliliğini kontrol ediyoruz
+        if stock.stock_haved < number_used:
+            raise ValidationError({"error": "Yeterli stok yok. Stok miktarı: {}".format(stock.stock_haved)})
+
+        # Stok güncellemesi yapıyoruz
+        stock.stock_haved -= number_used
+        stock.save()
+        
+        leave = UsedStocks.objects.create(**validated_data)
+        return leave
+
+    def update(self, instance, validated_data):
+        """
+        Mevcut bir izin kaydını günceller.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
 class PatientNoteSerializer(serializers.ModelSerializer):
+    used_stocks = serializers.SerializerMethodField()
 
     class Meta:
         model = PatientNote
@@ -113,7 +145,11 @@ class PatientNoteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
      
         return PatientNote.objects.create(**validated_data)
-
+    
+    def get_used_stocks(self, obj):
+        used_stocks = UsedStocks.objects.filter(patient_used=obj.patient)
+        return UsedStocksSerializer(used_stocks, many=True).data
+    
     def update(self, instance, validated_data):
         """
         Var olan bir Worker nesnesini güncellemek için özelleştirilmiş metot.
@@ -124,7 +160,10 @@ class PatientNoteSerializer(serializers.ModelSerializer):
         return instance
 
 class PatientCardSerializer(serializers.ModelSerializer):
-
+    patient_note = PatientNoteSerializer(many=True, read_only=True)
+    patient_poll = PollSerializer(many=True, read_only=True)
+    patient_files = PatientFilesSerializer(many=True, read_only=True)
+    patient_photos = PatientPhotoSerializer(many=True, read_only=True)
 
     class Meta:      
 
@@ -493,3 +532,4 @@ class WareHouseSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
+
