@@ -5,7 +5,20 @@ from django.db.models import Max, Count
 from datetime import datetime
 
 
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Kullanıcıya ait bilgileri token'a ekle
+        token['name'] = user.first_name
+        token['is_admin'] = user.is_superuser  # Kullanıcının admin olup olmadığını ekle
+        token['groups'] = [group.name for group in user.groups.all()]  # Kullanıcının dahil olduğu gruplar
+
+        return token
 
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
