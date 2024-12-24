@@ -10,7 +10,7 @@ from rest_framework import generics
 
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect, get_object_or_404
-from hospital.serializers import  NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientFilesSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, TaskCheckSerializer, UsedStocksSerializer, WareHouseSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
+from hospital.serializers import  CustomTokenObtainPairSerializer, NoteSerializer, PatientCardSerializer, CommunicationCardSerializer, PatientFilesSerializer, PatientPhotoSerializer, PollSerializer, StockSerializer, TaskCheckSerializer, UsedStocksSerializer, WareHouseSerializer, WorkerFileSerializer, PatientNoteSerializer, WorkingHoursSerializer, LeaveSerializer, PopulationCardSerializer, OrderSerializer, WorkerSerializer, TaskAssignmentSerializer
 from hospital.models import Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, UsedStocks, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django_filters.rest_framework import DjangoFilterBackend
@@ -24,6 +24,17 @@ from django.db import models
 from rest_framework.pagination import PageNumberPagination
 import django_filters
 from django.db.models import Q
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.middleware.csrf import get_token
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 def webhook(request):
     if request.method == 'POST':
@@ -291,11 +302,15 @@ class OrderListCreateAPIView(generics.ListCreateAPIView):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = OrderFilter
     ordering_fields = [field.name for field in Order._meta.fields]  # Tüm alanlar
-
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
-        
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]    
+
 class WorkerListCreateAPIView(generics.ListCreateAPIView):
     queryset= Worker.objects.all()
     serializer_class=WorkerSerializer

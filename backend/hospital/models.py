@@ -89,6 +89,8 @@ class PatientCard(models.Model):
     flight_date = models.DateTimeField(blank=True, null=True,verbose_name="Flight Date")
     stayed_hotel = models.CharField(max_length=100, blank=True, null=True, verbose_name="Kaldığı Otel")#
     tour_operator = models.CharField(max_length=100, blank=True, null=True, verbose_name="Tur operatoru")#
+    session_time = models.CharField(max_length=29, blank=True, null=True, verbose_name="Seans Saati")#
+    session_date = models.DateField(blank=True, null=True, verbose_name="Seans Tarihi")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} ({self.national_id})"
@@ -101,7 +103,7 @@ class PatientCard(models.Model):
 class PatientNote(models.Model):
     # Patient Information
     patient = models.ForeignKey(PatientCard, on_delete=models.CASCADE, related_name='patient_note')
-    note_type =models.CharField(null=True, blank=True, max_length=15)
+    note_type = models.CharField(null=True, blank=True, max_length=15)
 
     # Surgeries
     upcoming_surgeries = models.TextField(null=True, blank=True, verbose_name="Upcoming Surgeries")
@@ -109,7 +111,10 @@ class PatientNote(models.Model):
 
     # Doctor Notes
     doctor_notes = models.TextField(null=True, blank=True, verbose_name="Doctor Notes")
-
+    consultation_date = models.DateTimeField(null=True, blank=True, auto_now_add=True, verbose_name="consultation_date")
+    surgery_date = models.CharField(null=True, blank=True, max_length=63)
+    control_1_date = models.CharField(null=True, blank=True, max_length=63)
+    control_2_date = models.CharField(null=True, blank=True, max_length=63)
     # Type: diş
     number_11 = models.BooleanField(default=False, verbose_name="11")
     number_12 = models.BooleanField(default=False, verbose_name="12")
@@ -450,7 +455,7 @@ class WorkerFile(models.Model):
         verbose_name="Çalışan"
     )
     file_name = models.CharField(max_length=60, blank=True, null=True)
-    file = models.FileField(blank=True, null=True,upload_to='images/worker_files/')
+    file = models.FileField(blank=True, null=True,upload_to='files/worker_files/')
 
 class PatientPhoto(models.Model):
     person = models.ForeignKey(
@@ -470,7 +475,7 @@ class PatientFiles(models.Model):
         related_name="patient_files",
     )
     file_name = models.CharField(max_length=60, blank=True, null=True)
-    file = models.FileField(blank=True, null=True,upload_to='images/patient_files/')
+    file = models.FileField(blank=True, null=True,upload_to='files/patient_files/')
 
 class Poll(models.Model):
     person = models.ForeignKey(

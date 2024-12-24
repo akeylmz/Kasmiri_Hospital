@@ -5,6 +5,7 @@ from . import views
 from .views import StockSummaryView, StockWarehouseSummaryView, StockTotalSummaryView
 
 urlpatterns = [
+    path('token/', views.CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('notes/', views.NoteListCreateAPIView.as_view(), name='item-list'),
     path('notes/<int:pk>/', views.NoteDetailAPIView.as_view(), name='item-detail'),
     path('patientcard/', views.PatientCardListCreateAPIView.as_view(), name='patientcard-list'),
@@ -56,4 +57,6 @@ urlpatterns = [
     path('warehouse/', views.WareHouseListCreateAPIView.as_view(), name='warehouse-list'),
     path('warehouse/<int:pk>/', views.WareHouseDetailAPIView.as_view(), name='warehouse-detail'),
     path('webhook/', views.webhook, name='webhook'),
+
 ]
+
