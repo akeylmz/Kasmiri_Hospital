@@ -34,7 +34,7 @@ const StockOrder = () => {
         7: "DEPO-6",
     }
     const {data, isLoading, error} = useGetStockOrdersQuery({page: activePage, filters: debouncedSearchTerm, orderValue: orderingValue})
-     console.log(data);
+     //console.log(data);
      
     useEffect
     (() => {

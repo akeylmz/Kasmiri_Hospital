@@ -3,7 +3,7 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { GiHamburgerMenu } from 'react-icons/gi'
 
 export default function HierarchtList({ data }) {
-    console.log(data)
+    //console.log(data)
     
   return (
     <Popover>
@@ -17,7 +17,7 @@ export default function HierarchtList({ data }) {
       >
         <div className="p-3 min-w-[250px] max-h-[300px] overflow-y-auto">
             {  data.people.map((item, index)=> (
-                    <a className="flex items-center gap-x-3 rounded-lg py-2 px-3 transition hover:bg-white/5" href="#">
+                    <a key={index} className="flex items-center gap-x-3 rounded-lg py-2 px-3 transition hover:bg-white/5" href="#">
                         <img className='rounded-full w-14' 
                             src={item.image} alt=""
                         />

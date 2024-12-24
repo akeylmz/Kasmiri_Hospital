@@ -6,6 +6,7 @@ import TableComp2 from '../../UI/TableComp2';
 import { useGetAllWorkerQuery } from '../../store/patient2';
 import { useTranslation } from 'react-i18next';
 import Loading from '../../components/tools/Loading';
+import { capitalizeWords } from '../../components/Utils/capitalizeWords';
 
 const HrPersonnel = () => {
   const { t } = useTranslation()
@@ -13,9 +14,18 @@ const HrPersonnel = () => {
   const navigate = useNavigate()
   const [searchable, setSearchable] = useState(''); 
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [orderingValue, setOrderingValue] = useState('first_name');  
   const [ activePage, setActivePage] = useState(1)
-  const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage, value: debouncedSearchTerm, type:"first_name"})
-  //console.log(data?.results);    
+  const thead = [
+    { name: t("Full Name"), sortable: true },
+    { name: t("Email"), sortable: true },
+    { name: t("Contact") },
+    { name: t("Department"), sortable: true },
+    { name: '', width: 120 },
+  ];
+
+  const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage, filters: debouncedSearchTerm, orderValue: orderingValue})
+  //console.log(data?.results);   
 
   useEffect
   (() => {
@@ -28,17 +38,8 @@ const HrPersonnel = () => {
     };
   }, [searchable]);
  
-  const thead = [
-    { name: t("Full Name"), sortable: true },
-    { name: t("Email"), sortable: true },
-    { name: t("Contact") },
-    { name: t("Department"), sortable: true },
-    { name: '', width: 120 },
-  ];
-
-  if(isLoading){
-    return <Loading />
-  }
+  if(isLoading) return <Loading />
+  if(error || !data) return <p>Hata Oluştu...</p>
       
 
   return (
@@ -53,11 +54,11 @@ const HrPersonnel = () => {
             tbody={data.results.map(worker => [
             <div className='flex items-center gap-x-1'>
               <img src={worker.worker_image} alt={`${worker.first_name} avatar`} className="w-10 h-10 rounded-full" />
-              {worker.first_name + " " + worker.last_name}
+              {capitalizeWords(worker.first_name + " " + worker.last_name)}
             </div>, 
             worker.email, 
             worker.phone_1, 
-            worker.department, 
+            capitalizeWords(worker.department), 
             <div className='flex gap-5'>
               <button>
                 <IoMailOutline size={30} color='blue' />
@@ -73,6 +74,8 @@ const HrPersonnel = () => {
             tableTitle= {t("EMPLOYEE LIST")}
             activePage = {activePage}
             setActivePage = {setActivePage}
+            orderingValue={orderingValue}
+            setOrderingValue={setOrderingValue}
         />  
     </motion.div>
   )

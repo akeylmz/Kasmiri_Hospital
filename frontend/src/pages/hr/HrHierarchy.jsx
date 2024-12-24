@@ -74,7 +74,7 @@ const HrHierarchy = () => {
         }
       ],
     },
-  ]);
+  ])
 
   return (
     <motion.div 
@@ -98,21 +98,21 @@ const HrHierarchy = () => {
         <ul>
         { data.map((item, index)=> (
           <li key={index}>
-            <div class="bg-slate-50 rounded-lg shadow-lg lg:w-[320px] sm:w-[100px] mx-auto border-2 border-cyan-600">
-              <div class="flex items-center justify-between relative  pb-2">        
-                  <h2 class="text-white font-bold text-lg py-1 pl-3 pr-6 rounded-br-3xl bg-cyan-600">{item.title}</h2>
-                  <div class="flex items-center gap-2">
-                      <span class="bg-cyan-600 text-white rounded-full w-6 h-6 flex items-center justify-center">{item.people.length}</span>
-                      <button class="bg-cyan-600 flex items-center px-3 mr-5 rounded-l-full rounded-r-full text-white">
+            <div className="bg-slate-50 rounded-lg shadow-lg lg:w-[320px] sm:w-[100px] mx-auto border-2 border-cyan-600">
+              <div className="flex items-center justify-between relative  pb-2">        
+                  <h2 className="text-white font-bold text-lg py-1 pl-3 pr-6 rounded-br-3xl bg-cyan-600">{item.title}</h2>
+                  <div className="flex items-center gap-2">
+                      <span className="bg-cyan-600 text-white rounded-full w-6 h-6 flex items-center justify-center">{item.people.length}</span>
+                      <div className="bg-cyan-600 flex items-center px-3 mr-5 rounded-l-full rounded-r-full text-white">
                           <HierarchtList data={item} />
-                      </button>
+                      </div>
                   </div>
               </div>
-              <div class="flex items-center justify-around my-4 mx-3">
-                {item.people.slice(0, 2).map((item2)=>(
-                  <div class="text-center">
-                    <img src={item2.image} alt="Selim GÜRSES" class="rounded-full w-20 h-20 mx-auto"/>
-                    <p class="mt-2 text-sm font-medium">{item2.name}</p>
+              <div className="flex items-center justify-around my-4 mx-3">
+                {item.people.slice(0, 2).map((item2, index)=>(
+                  <div key={index} className="text-center">
+                    <img src={item2.image} alt="Selim GÜRSES" className="rounded-full w-20 h-20 mx-auto"/>
+                    <p className="mt-2 text-sm font-medium">{item2.name}</p>
                   </div>              
                 ))}                                   
               </div>

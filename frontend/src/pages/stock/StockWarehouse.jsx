@@ -75,9 +75,9 @@ const StockWarehouse = () => {
                     tbody={data.results && data.results.map(row => [
                         <button type='button' onClick={()=> createModal("tranfer-product", row)}>{capitalizeWords(row.stock_name)}</button>,
                         row.stock_buyed,
+                        row.stock_haved,
                         formatDateToShow(row.stock_ut),
                         formatDateToShow(row.stock_skt),
-                        row.stock_haved,
                         capitalizeWords(row.stock_pozition),
                         capitalizeWords(row.stcok_group)
                     ])}
