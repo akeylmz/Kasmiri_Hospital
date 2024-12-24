@@ -6,7 +6,7 @@ export const formatDateToShow = (dateString) => {
 export const formatISODate = (tarih) => {
     // "2024-12-15T00:00:00Z"
 
-    if (!tarih) return "" 
+    if (!tarih) return "-" 
     const tarihObj = new Date(tarih)
 
     const gun = tarihObj.getDate().toString().padStart(2, '0')
@@ -21,7 +21,7 @@ export const formatISODate = (tarih) => {
 
 export const formatISODateUTC = (tarih) => {
     // "2025-02-09T04:19:00Z"
-    if (!tarih) return ""
+    if (!tarih) return "-"
     const tarihObj = new Date(tarih)
 
     const gun = tarihObj.getUTCDate().toString().padStart(2, '0')

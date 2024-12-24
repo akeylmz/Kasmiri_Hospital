@@ -9,7 +9,14 @@ const patientAPI = createApi({
         // --------- PATİENTS -------------
 
         getPatients: builder.query({
-            query: ({ page = 1 , filters="" }) => `patientcard/?page=${page}&first_name=${filters}`,
+            query: ({ page = 1 , filters, orderValue }) => ({
+                url: 'patientcard/',
+                params: {
+                    page,
+                    default_filter: filters,
+                    ordering: orderValue
+                },
+            }),
             providesTags: (result) => {
                 if (!result || !result.data) {
                   return [{ type: 'Patient', id: 'LIST' }];
@@ -17,12 +24,10 @@ const patientAPI = createApi({
                 return result.data.map(({ id }) => ({ type: 'Patient', id }));
               },
         }),
-
         getPatientId: builder.query({
              query: (selectedPatientId) => `patientcard/${selectedPatientId}`,
              providesTags: (result, error, id) => [{ type: 'Patient', id }],
         }),
-
         createPatient: builder.mutation({
             query: ({newPatient}) => ({
                 url: 'patientcard/',
@@ -31,7 +36,6 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'Patient', id: 'LIST' }],
         }),
-
         getPatientFile: builder.query({
             query: ({ page = 1 }) => `patient-files/?page=${page}`,
             providesTags: (result) => {
@@ -41,7 +45,6 @@ const patientAPI = createApi({
                 return result.data.map(({ id }) => ({ type: 'PatientFile', id }));
               },
         }),
-
         getFileSize: builder.query({
             query: (fileUrl) => ({
               url: fileUrl,
@@ -52,7 +55,6 @@ const patientAPI = createApi({
               return size ? (size / 1024).toFixed(1) : null; // KB'ye çevir
             },
         }),
-
         createPatientFile: builder.mutation({
             query: (newFile) => ({
                 url: 'patient-files/',
@@ -61,7 +63,6 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'PatientFile', id: 'LIST' }],
         }),
-
         updatePatient: builder.mutation({
             query: ({ newPatient, patientID }) => ({
                 url: `patientcard/${patientID}/`,
@@ -75,7 +76,6 @@ const patientAPI = createApi({
                 ];
             }
         }),
-
         deletePatient: builder.mutation({
             query: (patientId) => ({
                 url: `patientcard/${patientId}/`,
@@ -88,7 +88,6 @@ const patientAPI = createApi({
                 ];
             }
         }),
-
         createPtientPhoto: builder.mutation({
             query: (newPhoto)=> ({
                 url: "patient-photo/",
@@ -110,7 +109,14 @@ const patientAPI = createApi({
         // --------- STOCK ORDER -------------
         
         getStockOrders: builder.query({
-            query: ({page = 1}) => `order/?page=${page}`,
+            query: ({page = 1, filters, orderValue}) => ({
+                url: 'order/',
+                params: {
+                    page,
+                    default_filter: filters,
+                    ordering: orderValue
+                },
+            }),
             providesTags: (result) => {
                 if (!result || !result.data) {
                   return [{ type: 'Order', id: 'LIST' }];
@@ -118,12 +124,10 @@ const patientAPI = createApi({
                 return result.data.map(({ id }) => ({ type: 'Order', id }));
               },
         }),
-
         getStockOrdersByID: builder.query({
             query: (ID) =>`order/${ID}/`,
             providesTags: (result, error, id) => [{ type: 'Order', id }],
         }),
-
         createStockOrder: builder.mutation({
             query: (newOrder) => ({
                 url: 'order/',
@@ -132,7 +136,6 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'Order', id: 'LIST' }],
         }),
-
         updateStockOrder: builder.mutation({
             query: ({ newOrder, orderID }) => ({
                 url: `order/${orderID}/`,
@@ -144,6 +147,35 @@ const patientAPI = createApi({
         
         // --------- STOCK -------------
         
+        getAllStocks: builder.query({
+            query: ({ page = 1, stock_warehouse, type, filters, orderValue } = {}) => {
+                const params = new URLSearchParams({ page, default_filter: filters, ordering: orderValue })    
+                switch (type) {
+                    case "total":
+                        return {
+                            url: 'stock-total-summary/',
+                            params: params.toString()
+                        }     
+                    case "warehouse":
+                        params.append("stock_warehouse", stock_warehouse);
+                        return {
+                            url: 'stock-warehouse-summary/',
+                            params: params.toString()
+                        }        
+                    case "skt":
+                        return {
+                            url: 'stock-summary/',
+                            params: params.toString()
+                        }        
+                    default:
+                        params.append("stock_warehouse", stock_warehouse);
+                        return {
+                            url: 'stock/',
+                            params: params.toString()
+                        }
+                }
+            }
+        }),
         createStock: builder.mutation({
             query: (newStock) => ({
                 url: 'stock/',
@@ -157,29 +189,7 @@ const patientAPI = createApi({
                 method: 'PATCH',
                 body: newStock
             })
-        }),
-
-        getAllStocks: builder.query({
-            query: ({ page = 1, stock_warehouse, type } = {}) => {                
-                let params = new URLSearchParams({ page });
-                switch (type) {
-                    case "total":
-                        return `stock-total-summary/?${params.toString()}`
-
-                    case "warehouse":
-                        params.append("stock_warehouse", stock_warehouse);
-                        return `stock-warehouse-summary/?${params.toString()}`;
-
-                    case "skt":
-                        return `stock-summary/?${params.toString()}`
-
-                    default:      
-                        params.append("stock_warehouse", stock_warehouse);                  
-                        return `stock/?${params.toString()}`
-                }
-                
-            }
-        }),
+        }),        
 
         // --------- WAREHOUSE -------------
 

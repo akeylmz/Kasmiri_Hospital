@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TableComp2 from '../../UI/TableComp2';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
@@ -6,31 +6,43 @@ import { useGetAllStocksQuery, useGetWarehouseQuery } from '../../store/patient2
 import { createModal } from '../../components/Utils/Modal';
 import { formatDateToShow } from '../../components/Utils/DateFormat';
 import Loading from '../../components/tools/Loading';
+import { capitalizeWords } from '../../components/Utils/capitalizeWords';
 
 const StockWarehouse = () => {
     const { t } = useTranslation()
     const [ activeWarehouse, setActiveWarehouse ] = useState(1)
-
+    const [searchable, setSearchable] = useState(''); 
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    const [orderingValue, setOrderingValue] = useState('stock_name');  
     const thead = [
         { name: "none"},
-        { name: t("PRODUCT"), sortable: true },
-        { name: t("QUANTITY PURCHASED"), sortable: true },
-        { name: t("MANUFACTURING DATE"), sortable: true },
-        { name: t("EXPIRY DATE"), sortable: true },
-        // { name: t("POSITION"), sortable: true },
-        { name: t("AVAILABLE"), sortable: true },
+        { name: t("PRODUCT"), sortable: true, value: "stock_name" },
+        { name: t("QUANTITY PURCHASED"), sortable: true, value: "stock_buyed" },
+        { name: t("AVAILABLE"), sortable: true, value: "stock_haved" },
+        { name: t("MANUFACTURING DATE"), sortable: true, value: "stock_ut" },
+        { name: t("EXPIRY DATE"), sortable: true, value: "stock_skt" },
+        { name: t("POSITION"), sortable: true },
+        { name: t("PRODUCT GROUP"), sortable: true },
     ]
 
-    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1, stock_warehouse: activeWarehouse })
+    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1, stock_warehouse: activeWarehouse, filters: debouncedSearchTerm, orderValue: orderingValue })
     const { data: warehouses, error: wareError, isloading: wareLoading} = useGetWarehouseQuery() 
     //console.log(data);
     //console.log(warehouses);
+
+    useEffect
+      (() => {
+        const handler = setTimeout(() => {
+          setDebouncedSearchTerm(searchable);
+        }, 500);
     
-    if(isLoading || wareLoading){
-        return <Loading />
-    }if(!data || !warehouses){
-        return <div>Hata Oluştu...</div>
-    }
+        return () => {
+          clearTimeout(handler);
+        };
+    }, [searchable])    
+    
+    if(isLoading || wareLoading) return <Loading />
+    if(error || !data || !warehouses || wareError) return <p>Hata Oluştu...</p>
 
     return (
         <div className="flex h-full items-center pb-4">
@@ -61,15 +73,20 @@ const StockWarehouse = () => {
                 <TableComp2
                     thead={thead}
                     tbody={data.results && data.results.map(row => [
-                        <button type='button' onClick={()=> createModal("tranfer-product", row)}>{row.stock_name}</button>,
+                        <button type='button' onClick={()=> createModal("tranfer-product", row)}>{capitalizeWords(row.stock_name)}</button>,
                         row.stock_buyed,
                         formatDateToShow(row.stock_ut),
                         formatDateToShow(row.stock_skt),
-                        row.stock_haved
+                        row.stock_haved,
+                        capitalizeWords(row.stock_pozition),
+                        capitalizeWords(row.stcok_group)
                     ])}
-                    searchable={true}
+                    searchable = {searchable}
+                    setSearchable = {setSearchable}
                     tableTitle={"SİPARİŞLER"}  
-                    modal={'stock'}          
+                    modal={'stock'}  
+                    orderingValue={orderingValue}
+                    setOrderingValue={setOrderingValue}        
                 />
             </motion.div>
         </div>

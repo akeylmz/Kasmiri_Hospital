@@ -14,46 +14,57 @@ import { capitalizeWords } from '../../components/Utils/capitalizeWords';
 const Patients = () => {
    
     const navigate = useNavigate()
-    const [searchable, setSearchable] = useState(''); 
     const { t } = useTranslation()
     const [deletePatient ] = useDeletePatientMutation()
+
+    const [searchable, setSearchable] = useState(''); 
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    const [orderingValue, setOrderingValue] = useState('first_name');         
     const [ activePage, setActivePage] = useState(1)
-    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage, filters: searchable})
-    //console.log(patients)
-    
     const [firstLoad, setFirstLoad] = useState(false);
     const [editToggle, setEditToggle] = useState(false);
     const [selectedPatientId, setSelectedPatientId] = useState(null);
-    const { data: patient, isLoading: patientLoading } = useGetPatientIdQuery(selectedPatientId, {
-        skip: !selectedPatientId,
-    });
+    const thead = [
+        { name: t('name'), sortable: true, value: "first_name", minWidth: 180 },
+        { name: t('surname'), sortable: true, value: "last_name", minWidth: 130 },
+        { name: t("Attending Doctor"), sortable: true, value: "relevant_worker", minWidth: 160 },                               
+        { name: t('phone') },
+        { name: t('email') },
+        { name: t('location'), sortable: true, value: "city" },
+        { name: t('tcPassport') },
+        { name: t("Patient Department"), sortable: true, value: "patient_part" },
+        { name: t("Registrar"), sortable: true, value: "start_worker" },
+        { name: t("Approving Doctor"), sortable: true, value: "check_worker" },
+        { name: t("Entry Date/Time"), sortable: true, value: "created_at" },
+        { name: t("Discharge Date/Time"), sortable: true, value: "discharge_date" },
+        { name: t("Insurance"), sortable: true, value: "insurance_info" },
+        { name: t('actions'), action: true},
+        { name: "none"},
+    ]
+    const { data: patients, error, isLoading, refetch } = useGetPatientsQuery({page: activePage, filters: debouncedSearchTerm, orderValue: orderingValue})
+    const { data: patient, isLoading: patientLoading } = useGetPatientIdQuery(selectedPatientId, { skip: !selectedPatientId, });
     
+    //console.log(patients)
+
     useEffect(() => {
         if (!isLoading && firstLoad && patient) { 
             createModal("patient", patient, true, selectedPatientId);
             setFirstLoad(false)
         }
     }, [patient, patientLoading, editToggle]);
-  
+    useEffect
+      (() => {
+        const handler = setTimeout(() => {
+          setDebouncedSearchTerm(searchable);
+        }, 500);
     
+        return () => {
+          clearTimeout(handler);
+        };
+    }, [searchable]);
 
-     const thead = [
-        { name: t('name'), sortable: true, minWidth: 180 },
-        { name: t('surname'), sortable: true, minWidth: 130 },
-        { name: t("Attending Doctor"), sortable: true, minWidth: 160 },                               
-        { name: t('phone') },
-        { name: t('email'), sortable: true },
-        { name: t('location'), sortable: true },
-        { name: t('tcPassport') },
-        { name: t("Patient Department"), sortable: true },
-        { name: t("Registrar"), sortable: true },
-        { name: t("Approving Doctor"), sortable: true },
-        { name: t("Entry Date/Time"), sortable: true },
-        { name: t("Discharge Date/Time"), sortable: true },
-        { name: t("Insurance"), sortable: true },
-        { name: t('actions'), action: true},
-        { name: "none"},
-    ]
+    if(isLoading) return <Loading />
+    if(error || !patients) return <p>Hata Oluştu...</p>
 
     return (
         <motion.div
@@ -78,14 +89,14 @@ const Patients = () => {
                     capitalizeWords(user.relevant_worker),       
                     user.mobile_phone1, 
                     user.email,
-                    user.city,                 
+                    capitalizeWords(user.city),                 
                     user.national_id || '',   
-                    user.patient_part || '',
+                    capitalizeWords(user.patient_part) || '',
                     capitalizeWords(user.start_worker) || '',   
                     capitalizeWords(user.check_worker) || '', 
                     formatISODate(user.created_at) || '',  
                     formatISODateUTC(user.discharge_date) || '',  
-                    user.insurance_info || '',   
+                    capitalizeWords(user.insurance_info) || '',   
                     <div className='flex gap-x-2'>
                         <button 
                             key="edit" 
@@ -116,6 +127,8 @@ const Patients = () => {
                 page = {patients.count}
                 activePage = {activePage}
                 setActivePage = {setActivePage}
+                orderingValue={orderingValue}
+                setOrderingValue={setOrderingValue}
             />
            </div>}
         </motion.div>

@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useGetPatientIdQuery } from '../../../store/patient2';
 import { createModal } from '../../../components/Utils/Modal';
-import { formatDateToShow } from '../../../components/Utils/DateFormat';
+import { formatDateToShow, formatISODateUTC } from '../../../components/Utils/DateFormat';
 import { calculateAge } from '../../../components/Utils/calculateAge';
 
 const PatientOverwiev = () => {
@@ -139,11 +139,11 @@ console.log(patient);
                         <div>
                             <div className='flex flex-col items-center'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("discharge_date")}</p>
-                                <p className='text-gray-700 font-semibold text-lg text-center'>12.12.2022</p>
+                                <p className='text-gray-700 font-semibold text-lg text-center'>{formatISODateUTC(patient.discharge_date)}</p>
                             </div>
                             <div className='flex flex-col items-center mt-4'>
                                 <p className='text-gray-500 font-semibold mb-1'>{t("flight_date")}</p>
-                                <p className='text-gray-700 font-semibold text-lg text-center'>12.12.2022</p>
+                                <p className='text-gray-700 font-semibold text-lg text-center'>{formatISODateUTC(patient.flight_date)}</p>
                             </div>
                         </div>
                     </div>

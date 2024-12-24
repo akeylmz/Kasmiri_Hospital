@@ -9,28 +9,13 @@ import { FaSortAmountDown } from "react-icons/fa";
 import PaginationBar from './pagination/PaginationBar';
 
 const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backButton, billing, scroll, printDiv,
-  setActivePage, activePage, setSearchable
+  setActivePage, activePage, setSearchable, orderingValue, setOrderingValue
+
  }) => {
   const navigate = useNavigate();
    const [sorting, setSorting] = useState({});
-   const [search, setSearch] = useState('');  
+  //  const [search, setSearch] = useState('');  
   
-  // const filteredData = tbody
-  //   .filter((items) =>
-  //     items.some((item) =>
-  //       item.toString().toLocaleLowerCase('TR').includes(search.toLocaleLowerCase())
-  //     )
-  //   )
-  //   .sort((a, b) => {
-  //     if (sorting?.orderBy === 'asc') {
-  //       return a[sorting.key].toString().localeCompare(b[sorting.key]);
-  //     }
-  //     if (sorting?.orderBy === 'dsc') {
-  //       return b[sorting.key].toString().localeCompare(a[sorting.key]);
-  //     }
-  //     return 0;
-  //   });
-
   return (
     <div className='w-full h-full flex flex-col bg-gray-200 rounded-xl'>
       <div className='w-full h-full p-6 bg-white shadow-lg rounded-xl flex flex-col relative'>
@@ -74,16 +59,7 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
               type='text'
               placeholder={t("search")}
               className='h-10 outline-none bg-gray-100 text-sm px-4 w-full border-gray-300 rounded-lg'
-              // onKeyDown={(e) => {
-              //   if (e.key === "Enter") {
-              //     setSearchable(search)                  
-              //   }
-              // }}
             />
-            <button
-            type='button'
-              onClick={()=> setSearchable(search)}
-            >ARA</button>
           </div>
         )}
 
@@ -114,17 +90,11 @@ const TableComp2 = ({ thead, tbody, searchable, tableTitle, modal, page, backBut
                           <button
                             className='ml-2 flex items-center'
                             onClick={() => {
-                              if (sorting?.key === key) {
-                                setSorting({
-                                  key,
-                                  orderBy: sorting.orderBy === 'asc' ? 'dsc' : 'asc',
-                                });
-                              } else {
-                                setSorting({
-                                  key,
-                                  orderBy: 'asc',
-                                });
-                              }
+                              if(orderingValue === h.value){
+                                setOrderingValue("-" + h.value)
+                              }else{
+                                setOrderingValue(h.value)
+                              }                              
                             }}
                           >
                             <ChevronsUpDown className='w-4 h-4 text-gray-500' />

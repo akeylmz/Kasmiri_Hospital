@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TableComp2 from '../../UI/TableComp2';
 import { motion } from 'framer-motion';
 import { useGetStockOrdersQuery } from '../../store/patient2';
@@ -11,26 +11,44 @@ import Loading from '../../components/tools/Loading';
 const StockOrder = () => {
     const { t } = useTranslation()
 
+    const [searchable, setSearchable] = useState(''); 
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+    const [orderingValue, setOrderingValue] = useState('order_name');    
     const [ activePage, setActivePage] = useState(1)
-    const {data, isLoading} = useGetStockOrdersQuery(activePage)
-    //console.log(data);
-    
-
     const thead = [
-        // { name: '', sortable: false, width: 30 },
-        { name: t("PRODUCT"), sortable: true },
-        { name: t("QUANTITY PURCHASED"), sortable: true },
-        { name: t("DATE"), sortable: true },
-        { name: t("WAREHOUSE"), sortable: true },
-        { name: t("POSITION"), sortable: true },
-        { name: t("PRODUCT GROUP"), sortable: true },
-        { name: t("STATUS"), sortable: false, width: 120 }
-    ];
+        { name: t("PRODUCT"), sortable: true, value: "order_name" },
+        { name: t("QUANTITY PURCHASED"), sortable: true, value: "order_number" },
+        { name: t("DATE"), sortable: true, value: "order_startdate" },
+        { name: t("WAREHOUSE"), sortable: true, value: "order_warehouse" },
+        { name: t("POSITION"), sortable: true, value: "order_pozition" },
+        { name: t("PRODUCT GROUP"), sortable: true, value: "order_group" },
+        { name: t("STATUS"), sortable: true, value: "order_stuation", width: 120 }
+    ]
+    const warehouseNames = {
+        1: "ANA DEPO",
+        2: "DEPO-1",
+        3: "DEPO-2",
+        4: "DEPO-3",
+        5: "DEPO-4",
+        6: "DEPO-5",
+        7: "DEPO-6",
+    }
+    const {data, isLoading, error} = useGetStockOrdersQuery({page: activePage, filters: debouncedSearchTerm, orderValue: orderingValue})
+     console.log(data);
+     
+    useEffect
+    (() => {
+      const handler = setTimeout(() => {
+        setDebouncedSearchTerm(searchable);
+      }, 500);
+  
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [searchable]);
 
-    
-    if(isLoading){
-        return <Loading />
-      }
+  if(isLoading) return <Loading />
+  if(error || !data) return <p>Hata Oluştu...</p>
 
   return (
     <motion.div 
@@ -44,7 +62,7 @@ const StockOrder = () => {
                 order?.order_name || "",
                 order?.order_number || "",
                 order?.order_startdate ? formatDateToShow(order.order_startdate) : "",
-                order?.order_wharehouse || "",
+                warehouseNames[order?.order_warehouse] || "",
                 order?.order_pozition || "",
                 order?.order_group || "",
                 <button      
@@ -60,12 +78,15 @@ const StockOrder = () => {
                     {order?.order_stuation}
                 </button>
             ])}
-            searchable={true}
+            searchable = {searchable}
+            setSearchable = {setSearchable}
             tableTitle={"SATIN ALMA TALEPLERİ"}   
             modal={"stockOrder"} 
             page={data.count}  
             activePage={activePage} 
-            setActivePage={setActivePage}     
+            setActivePage={setActivePage}    
+            orderingValue={orderingValue}
+            setOrderingValue={setOrderingValue} 
         />
     </motion.div>
   )
