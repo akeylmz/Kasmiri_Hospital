@@ -6,13 +6,14 @@ import { stockFormSchemas } from "../../../schemas/stockFormSchemas";
 import FaceSchema from "../../../assets/icons/FaceSchema";
 import BodySchema from "../../../assets/icons/BodySchema";
 import ToothSchema from "../../../assets/icons/ToothSchema";
-import { useGetPatientIdQuery, useUpdatePatientMutation } from "../../../store/patient2";
+import { useCreateStockUseMutation, useGetAllStocksQuery, useGetPatientIdQuery, useUpdatePatientMutation } from "../../../store/patient2";
 import { useParams } from "react-router-dom";
 import { capitalizeWords } from "../../../components/Utils/capitalizeWords";
 import { formatDateToShow, formatISODate, formatISODateUTC } from "../../../components/Utils/DateFormat";
 import { calculateAge } from "../../../components/Utils/calculateAge";
 import Loading from "../../../components/tools/Loading";
 import { destroyModal } from "../../../components/Utils/Modal";
+import CustomCombobox from "../../../components/tools/CustomCombobox";
 
 
 const PatientEpikriz = () => {
@@ -166,21 +167,39 @@ const TethForm = ({ values, patient }) => {
     )    
 }
 const BodyForm = ({ values, patient }) => {
-
+    console.log(values);
+    // console.log(patient);
+    
     const [updatePatient] = useUpdatePatientMutation()
+    const [createStockUse] = useCreateStockUseMutation()
+
     const [ dischardDate, setDischardDate ] = useState("")
-      
-    const submit = async () => {
-          //console.log(JSON.stringify(values, null, 2))   
-           console.log(dischardDate);
-          
-          const formData = new FormData()
-          formData.append("discharge_date", dischardDate)
-          await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
-    }
-   
     const [faceImgLoad, setFaceImgLoad] = useState(false)
     const [bodyImgLoad, setBodyImgLoad] = useState(false)
+    const [stockID, setStockID] = useState("")
+
+    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1})
+
+    const stocks = data?.results.map(stock => ({
+        id: stock.id,
+        name: stock.stock_name,
+        // image: worker.worker_image
+    }))
+      
+    const submit = async () => {
+        //console.log(JSON.stringify(values, null, 2))   
+         console.log(dischardDate);
+        
+        const formData = new FormData()
+        formData.append("discharge_date", dischardDate)
+        //await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
+
+        const stockUseData = new FormData()
+        stockUseData.append("patient_used", patient.id)
+        stockUseData.append("stock_used", patient.id)
+        stockUseData.append("number_used", patient.id)
+    }   
+    
     
     return(
         <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
@@ -204,7 +223,7 @@ const BodyForm = ({ values, patient }) => {
                 </div>   
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 h-[720px] ">
                 <div className="overflow-y-scroll">
                     <div className="ml-3">
                         <div className="flex items-center">
@@ -264,6 +283,31 @@ const BodyForm = ({ values, patient }) => {
                             </p>
                         </div>                 
                     </div>
+                    <div>
+                        <ul>                            
+                            <li className=" mt-5 border-b border-gray-300 pt-3 flex items-center justify-between">
+                                <div className="flex flex-col items-center">
+                                    <label htmlFor="">İlaç Adı</label>
+                                    <CustomCombobox
+                                        value={stockID} 
+                                        onChange={(id) => console.log(id) } 
+                                        customers={stocks} 
+                                    />
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <label htmlFor="">Kullanılan Adet</label>
+                                    <input type="number" />
+                                </div>
+                            </li>
+                            <li className="w-full flex items-center justify-center mt-4">
+                                <button className="bg-cyan-600 text-white text-lg rounded-lg px-6 py-1">Kaydet</button>
+                            </li>
+                            <li className="flex items-center justify-between"><span>ilaç 1</span><span>10 adet</span></li>
+                            <li>test 2</li>
+                            <li>test 3</li>
+                        </ul>
+
+                    </div>
                 </div>
                 <div className="flex flex-col items-end pr-5">                   
                     <div className="w-auto h-[650px] overflow-y-scroll mx-auto">
@@ -283,7 +327,7 @@ const BodyForm = ({ values, patient }) => {
                 </div>
             </div>
 
-            <div className="flex justify-between pt-2">
+            <div className="flex justify-between">
                 {!patient.discharge_date && 
                     <button
                         type="button"

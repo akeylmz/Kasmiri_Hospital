@@ -12,7 +12,7 @@ const PatientDetail = () => {
     skip: !patientId,
   });
 
-  console.log(patient);
+  //console.log(patient);
   
 
   return (

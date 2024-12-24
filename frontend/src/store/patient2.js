@@ -146,7 +146,7 @@ const patientAPI = createApi({
         // --------- STOCK -------------
         
         getAllStocks: builder.query({
-            query: ({ page = 1, stock_warehouse, type, filters, orderValue } = {}) => {
+            query: ({ page = 1, stock_warehouse="", type, filters="", orderValue } = {}) => {
                 const params = new URLSearchParams({ page, default_filter: filters, ordering: orderValue })    
                 switch (type) {
                     case "total":
@@ -187,7 +187,14 @@ const patientAPI = createApi({
                 method: 'PATCH',
                 body: newStock
             })
-        }),        
+        }),  
+        createStockUse: builder.mutation({
+            query: ({newStock}) => ({
+                url: `used-stock/`,
+                method: 'POST',
+                body: newStock
+            })
+        }),   
 
         // --------- WAREHOUSE -------------
 
@@ -307,7 +314,8 @@ export const {  useGetPatientsQuery,
                 useGetFileSizeQuery,
                 useCreateTaskCheckMutation,
                 useUpdateStockMutation,
-                useGetAllWorkerLeavesQuery
+                useGetAllWorkerLeavesQuery,
+                useCreateStockUseMutation
                 
            } = patientAPI; 
 export default patientAPI;
