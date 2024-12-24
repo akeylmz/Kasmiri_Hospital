@@ -2,6 +2,9 @@
 *.ake_env
 akenv
 ake_env
+*.ysfworld
+ysfworld
+*ysfworld
 # Logs
 logs
 *.log
