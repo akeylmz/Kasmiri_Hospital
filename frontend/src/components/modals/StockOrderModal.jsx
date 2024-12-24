@@ -30,7 +30,7 @@ console.log(data);
     initialValues: {
       order_name: '',
       order_number: '',
-      order_wharehouse: '',
+      order_warehouse: '',
       order_pozition: '',
       order_group: '',
       order_stuation: 'Bekliyor',
@@ -90,8 +90,8 @@ console.log(data);
                 <label className="block text-sm font-medium text-gray-500">Depo</label>
                 <select 
                   className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-                  name="order_wharehouse"
-                  value={values.order_wharehouse}
+                  name="order_warehouse"
+                  value={values.order_warehouse}
                   onChange={handleChange}
                 >
                   <option value="" disabled selected>Depo Seç</option>

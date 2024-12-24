@@ -18,10 +18,6 @@ const WorkerHoursAddModal = () => {
         name: `${worker.first_name} ${worker.last_name}`,
         image: worker.worker_image
     }))
-    
-    if(isLoading){
-    return <div>Yükleniyor...</div>
-    }
 
     const calculateWeeklyHours = (startTime, endTime, workingDays) => {
       const [startHour, startMinute] = startTime.split(":").map(Number);
@@ -65,6 +61,9 @@ const WorkerHoursAddModal = () => {
       },
       onSubmit: submit,
     })
+    if(isLoading){
+      return <div></div>
+    }
       
     return (
       <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[650px]">
@@ -121,16 +120,6 @@ const WorkerHoursAddModal = () => {
                 className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
               />
             </div>
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-500">Çalışma Günleri</label>
-              <input
-                type="text"
-                name="working_days"
-                value={values.working_days}
-                onChange={handleChange}
-                className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
-              />
-            </div>             */}
             <div>
               <label className="block text-sm font-medium text-gray-500">Çalışma Günleri</label>
                 <DaySelector value={values.working_days} setFieldValue={setFieldValue} name={"working_days"} />

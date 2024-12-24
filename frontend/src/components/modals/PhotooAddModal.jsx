@@ -3,8 +3,10 @@ import { destroyModal } from '../Utils/Modal'
 import { useFormik } from 'formik'
 import { t } from 'i18next'
 import { useCreatePtientPhotoMutation } from '../../store/patient2'
+import CustomerCombobox from '../tools/CustomCombobox'
 
 const PhotooAddModal = ({data}) => {
+//console.log(data);
 
     const [ createPatientPhoto ] = useCreatePtientPhotoMutation()
 
@@ -54,6 +56,14 @@ const PhotooAddModal = ({data}) => {
                     />
                 </div>
             </div>
+            {/* <div>
+            <label className="block text-sm font-medium text-gray-500">Çalışan</label>
+                <CustomerCombobox 
+                    value={values.person} 
+                    onChange={(id) => setFieldValue('person', id)} 
+                    customers={leaves} 
+                />
+            </div> */}
             <div className='w-full flex items-center justify-center mt-5'>
                 <button type='submit' className='bg-cyan-600 text-white rounded-lg px-8 py-2'>Kaydet</button>
             </div>

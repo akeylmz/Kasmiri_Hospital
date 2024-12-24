@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 const ToothSchema = ({values, setFieldValue}) => {
-  console.log(values);
+  //console.log(values);
   
   return (
     <svg className='ml-16' xmlSpace="http://www.w3.org/2000/svg" version="1.1" width="100%" height="600px" viewBox="0 0 350 350">     

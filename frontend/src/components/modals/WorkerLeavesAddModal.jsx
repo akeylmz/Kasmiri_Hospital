@@ -19,11 +19,6 @@ const WorkerLeavesAddModal = () => {
         name: `${worker.first_name} ${worker.last_name}`,
         image: worker.worker_image
     }))
-    
-    if(isLoading){
-    return <div>Yükleniyor...</div>
-    }
-    
     const submit = async (values, actions) => {
           console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
           console.log(calculateLeaveDays(state[0].startDate, state[0].endDate));
@@ -70,6 +65,10 @@ const WorkerLeavesAddModal = () => {
       setFieldValue("leave_days", calculateLeaveDays(state[0].startDate, state[0].endDate));
 
     }, [state])    
+
+    if(isLoading){
+      return <div>Yükleniyor...</div>
+    }
 
     return (
       <div className="add-modal z-50 absolute top-0 right-0 min-w-[350px] h-screen">

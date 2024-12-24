@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useFormik } from 'formik';
 import { t } from "i18next";
 import { Check, ArrowRight, ArrowLeft } from "lucide-react";
 import { destroyModal } from "../Utils/Modal";
 
 const YabancıModal = () => {
+  
   return (
     <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
       <div className="bg-lightGray rounded-lg shadow-lg w-full max-w-4xl p-8">

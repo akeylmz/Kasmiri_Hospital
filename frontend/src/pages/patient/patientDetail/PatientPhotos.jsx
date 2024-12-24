@@ -8,15 +8,36 @@ import { useGetPatientIdQuery } from '../../../store/patient2'
 const PatientPhotos = () => {
 
   const {patientId} = useParams()
-    const { data: patient, isLoading, refetch } = useGetPatientIdQuery(patientId, {
-        skip: !patientId,
-    });
+    // const { data: patient, isLoading, refetch } = useGetPatientIdQuery(patientId, {
+    //     skip: !patientId,
+    // });
 
-    if (!patient) {
-      return <div>{"Bir sorun oluştu..."}</div>;
-    }else if (isLoading){
-        return <div>Veri Yükleniyor</div>
+    // if (!patient) {
+    //   return <div>{"Bir sorun oluştu..."}</div>;
+    // }else if (isLoading){
+    //     return <div>Veri Yükleniyor</div>
+    // }
+
+    const patient_photos = [
+      {
+        "id": 9,
+        "file_name": null,
+        "file": "http://127.0.0.1:8000/media/images/patient_photos/Ads%C4%B1z.png",
+        "person": 10
+    },
+    {
+        "id": 10,
+        "file_name": null,
+        "file": "http://127.0.0.1:8000/media/images/patient_photos/Linkedinyenibir_yommz2p.jpg",
+        "person": 10
+    },
+    {
+        "id": 11,
+        "file_name": null,
+        "file": "http://127.0.0.1:8000/media/images/patient_photos/images.jpg",
+        "person": 10
     }
+    ]
 
   return (
     <div className='bg-gray-200 w-[calc(100%-15%)] h-full flex justify-evenly items-center'>
@@ -31,7 +52,7 @@ const PatientPhotos = () => {
           </div>
           <div className='p-3 w-full h-[calc(100%-5.3rem)] overflow-auto'>
             <div className="grid grid-cols-3 gap-4">
-              {patient.patient_photos.map((photo, index)=> (
+              {patient_photos?.map((photo, index)=> (
                 <div key={index} className="relative group shadow-md flex items-center justify-center rounded-lg p-2">
                   <img
                     src={photo.file}

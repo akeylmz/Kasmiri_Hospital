@@ -3,26 +3,29 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const patientAPI = createApi({
     reducerPath: 'patientAPI', 
     baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api' }),
-    tagTypes: ['Patient', 'Stock', 'Order', 'Worker', "PatientFile"],
+    tagTypes: ['Patient', 'Stock', 'Order', 'Worker', 'Leave', "PatientFile"],
     endpoints: (builder) => ({
 
         // --------- PATİENTS -------------
 
         getPatients: builder.query({
-            query: ({ page = 1 , filters="" }) => `patientcard/?page=${page}&first_name=${filters}`,
-            providesTags: (result) => {
-                if (!result || !result.data) {
-                  return [{ type: 'Patient', id: 'LIST' }];
-                }
-                return result.data.map(({ id }) => ({ type: 'Patient', id }));
-              },
+            query: ({ page = 1 , filters, orderValue }) => ({
+                url: 'patientcard/',
+                params: {
+                    page,
+                    default_filter: filters,
+                    ordering: orderValue
+                },
+            }),
+            providesTags: () => {
+                return [{ type: 'Patient', id: 'LIST' }]
+                // return result.results.map(({ id }) => ({ type: 'Patient', id }))
+            },
         }),
-
         getPatientId: builder.query({
              query: (selectedPatientId) => `patientcard/${selectedPatientId}`,
              providesTags: (result, error, id) => [{ type: 'Patient', id }],
         }),
-
         createPatient: builder.mutation({
             query: ({newPatient}) => ({
                 url: 'patientcard/',
@@ -31,7 +34,6 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'Patient', id: 'LIST' }],
         }),
-
         getPatientFile: builder.query({
             query: ({ page = 1 }) => `patient-files/?page=${page}`,
             providesTags: (result) => {
@@ -41,7 +43,6 @@ const patientAPI = createApi({
                 return result.data.map(({ id }) => ({ type: 'PatientFile', id }));
               },
         }),
-
         getFileSize: builder.query({
             query: (fileUrl) => ({
               url: fileUrl,
@@ -52,7 +53,6 @@ const patientAPI = createApi({
               return size ? (size / 1024).toFixed(1) : null; // KB'ye çevir
             },
         }),
-
         createPatientFile: builder.mutation({
             query: (newFile) => ({
                 url: 'patient-files/',
@@ -61,7 +61,6 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'PatientFile', id: 'LIST' }],
         }),
-
         updatePatient: builder.mutation({
             query: ({ newPatient, patientID }) => ({
                 url: `patientcard/${patientID}/`,
@@ -75,7 +74,6 @@ const patientAPI = createApi({
                 ];
             }
         }),
-
         deletePatient: builder.mutation({
             query: (patientId) => ({
                 url: `patientcard/${patientId}/`,
@@ -88,7 +86,6 @@ const patientAPI = createApi({
                 ];
             }
         }),
-
         createPtientPhoto: builder.mutation({
             query: (newPhoto)=> ({
                 url: "patient-photo/",
@@ -110,7 +107,14 @@ const patientAPI = createApi({
         // --------- STOCK ORDER -------------
         
         getStockOrders: builder.query({
-            query: ({page = 1}) => `order/?page=${page}`,
+            query: ({page = 1, filters, orderValue}) => ({
+                url: 'order/',
+                params: {
+                    page,
+                    default_filter: filters,
+                    ordering: orderValue
+                },
+            }),
             providesTags: (result) => {
                 if (!result || !result.data) {
                   return [{ type: 'Order', id: 'LIST' }];
@@ -118,12 +122,10 @@ const patientAPI = createApi({
                 return result.data.map(({ id }) => ({ type: 'Order', id }));
               },
         }),
-
         getStockOrdersByID: builder.query({
             query: (ID) =>`order/${ID}/`,
             providesTags: (result, error, id) => [{ type: 'Order', id }],
         }),
-
         createStockOrder: builder.mutation({
             query: (newOrder) => ({
                 url: 'order/',
@@ -132,7 +134,6 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'Order', id: 'LIST' }],
         }),
-
         updateStockOrder: builder.mutation({
             query: ({ newOrder, orderID }) => ({
                 url: `order/${orderID}/`,
@@ -144,6 +145,35 @@ const patientAPI = createApi({
         
         // --------- STOCK -------------
         
+        getAllStocks: builder.query({
+            query: ({ page = 1, stock_warehouse, type, filters, orderValue } = {}) => {
+                const params = new URLSearchParams({ page, default_filter: filters, ordering: orderValue })    
+                switch (type) {
+                    case "total":
+                        return {
+                            url: 'stock-total-summary/',
+                            params: params.toString()
+                        }     
+                    case "warehouse":
+                        params.append("stock_warehouse", stock_warehouse);
+                        return {
+                            url: 'stock-warehouse-summary/',
+                            params: params.toString()
+                        }        
+                    case "skt":
+                        return {
+                            url: 'stock-summary/',
+                            params: params.toString()
+                        }        
+                    default:
+                        params.append("stock_warehouse", stock_warehouse);
+                        return {
+                            url: 'stock/',
+                            params: params.toString()
+                        }
+                }
+            }
+        }),
         createStock: builder.mutation({
             query: (newStock) => ({
                 url: 'stock/',
@@ -151,27 +181,13 @@ const patientAPI = createApi({
                 body: newStock
             })
         }),
-
-        getAllStocks: builder.query({
-            query: ({ page = 1, stock_warehouse, type } = {}) => {                
-                let params = new URLSearchParams({ page });
-                switch (type) {
-                    case "total":
-                        return `stock-total-summary/?${params.toString()}`
-
-                    case "warehouse":
-                        params.append("stock_warehouse", stock_warehouse);
-                        return `stock-warehouse-summary/?${params.toString()}`;
-
-                    case "skt":
-                        return `stock-summary/?${params.toString()}`
-
-                    default:                        
-                       
-                }
-                
-            }
-        }),
+        updateStock: builder.mutation({
+            query: ({newStock, stockID}) => ({
+                url: `stock/${stockID}/`,
+                method: 'PATCH',
+                body: newStock
+            })
+        }),        
 
         // --------- WAREHOUSE -------------
 
@@ -181,33 +197,40 @@ const patientAPI = createApi({
 
         // --------- KPI -------------
 
-
         getAllWorker: builder.query({
-            query: ({ type, value, page = 1 }) => {
-                const params = new URLSearchParams({
-                  page,
-                  [type]: value,
-                });
-              console.log(`worker/?${params.toString()}`);
-              
-                return `worker/?${params.toString()}`;
-              } 
-        }),
-
+            query: ({ page = 1, filters, orderValue }) => ({
+                url: 'worker/',
+                params: {
+                    page,
+                    default_filter: filters,
+                    ordering: orderValue
+                },
+            }),
+            providesTags: () => [{ type: 'Worker', id: 'LIST' }],
+        }),        
         getWorkerById: builder.query({
             query: ( workerID ) => `worker/${workerID}/`,
             providesTags: (result, error, id) => [{ type: 'Worker', id }],
-        }),
-        
-
+        }),  
+        getAllWorkerLeaves: builder.query({
+            query: ({ page = 1, filters, orderValue }) => ({
+                url: 'leave/',
+                params: {
+                    page,
+                    default_filter: filters,
+                    ordering: orderValue
+                },
+            }),
+            providesTags: () => [{ type: 'Leave', id: 'LIST' }],
+        }),      
         createWorker: builder.mutation({
             query: (newWorker) => ({
                 url: 'worker/',
                 method: 'POST',
                 body: newWorker
-            })
+            }),
+            invalidatesTags: [{ type: 'Worker', id: 'LIST' }],
         }),
-
         createWorkerFile: builder.mutation({
             query: (files) => ({
                 url: `worker-file/`,
@@ -215,23 +238,22 @@ const patientAPI = createApi({
                 body: files,
             })
         }),
-
         createWorkerLeaves: builder.mutation({
             query: (newLeave) => ({
                 url: "leave/",
                 method: "POST",
                 body: newLeave
-            })
+            }),
+            invalidatesTags: [{ type: 'Worker', id: 'LIST' }],
         }),
-
         createWorkerHours: builder.mutation({
             query: (newHours) => ({
                 url: "working-hours/",
                 method: "POST",
                 body: newHours
-            })
+            }),
+            invalidatesTags: [{ type: 'Worker', id: 'LIST' }],
         }),
-
         createWorkerTask: builder.mutation({
             query: (newTask)=> ({
                 url: "task-assignment/",
@@ -244,7 +266,6 @@ const patientAPI = createApi({
                 ];
             }
         }),
-
         createTaskCheck: builder.mutation({
             query: (newCheck) => ({
                 url: "task-check/",
@@ -255,9 +276,6 @@ const patientAPI = createApi({
                 return [{ type: 'Worker', id: result.person }]
             }
         }),
-
-        
-
     }),      
     keepUnusedDataFor: 30,
     refetchOnMountOrArgChange: 5
@@ -288,6 +306,8 @@ export const {  useGetPatientsQuery,
                 useGetPatientFileQuery,
                 useGetFileSizeQuery,
                 useCreateTaskCheckMutation,
+                useUpdateStockMutation,
+                useGetAllWorkerLeavesQuery
                 
            } = patientAPI; 
 export default patientAPI;

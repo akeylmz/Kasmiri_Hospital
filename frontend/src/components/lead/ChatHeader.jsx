@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { IoLogoWhatsapp } from 'react-icons/io';
 import { Link, useParams } from 'react-router-dom'
 
-const ChatHeader = ({user, detailIsShow, setDetailIsShow }) => {
+const ChatHeader = ({user }) => {
 
   const { chatId } = useParams();
   useEffect(() => {
@@ -15,7 +15,7 @@ const ChatHeader = ({user, detailIsShow, setDetailIsShow }) => {
         <span className='flex items-center gap-x-4'>
             {/* <img src={user.avatar} className='w-12 h-12 rounded-full object-cover' /> */}
             <IoLogoWhatsapp size={35} color='blue' />
-            <button onClick={() => setDetailIsShow(prevState => !prevState)} className='text-base font-semibold'>{user.name}</button >
+            <p className='text-base font-semibold'>{user.name}</p >
         </span>
     </header>
   )

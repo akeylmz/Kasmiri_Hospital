@@ -1,33 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { t } from "i18next";
 import { Check } from "lucide-react";
 import { destroyModal } from "../Utils/Modal";
-import { useDispatch } from "react-redux";
 import { useFormik } from 'formik';
-import { addMedicine } from "../../store/medicine";
-import { stockFormSchemas } from "../../schemas/stockFormSchemas";
+import { useCreateStockMutation, useGetWarehouseQuery, useUpdateStockMutation } from "../../store/patient2";
+import CustomerCombobox from "../tools/CustomCombobox"
 
 const TransferProductModal = ({data}) => {
-    console.log(data);
     
-  const submit = (values, actions) => {
-    console.log(JSON.stringify(values, null, 2))      
-    destroyModal()
+    const {data: warehouses, isLoading, error } = useGetWarehouseQuery()
+    const [ updateStock ] = useUpdateStockMutation()
+    const [ createStock ] = useCreateStockMutation()
+    // console.log(warehouses);
+    // console.log(data);
+    
+    
+  const submit = async (values, actions) => {
+    // console.log(JSON.stringify(values, null, 2))      
+    const formData = new FormData();
+    Object.keys(values).forEach((key) => {
+      formData.append(key, values[key])
+    });
+    formData.append("stock_haved", values.stock_buyed)
+    await createStock(formData)
+    const updateFormData = new FormData()
+    updateFormData.append("stock_haved", data.stock_haved - values.stock_buyed)
+    updateFormData.append("stock_buyed", data.stock_buyed - values.stock_buyed)
+    await updateStock({newStock: updateFormData, stockID: data.id})
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
+    //destroyModal()
   }
-  const { values, errors, handleChange, handleSubmit} = useFormik({
+  
+  const warehousesForInput = warehouses?.results.map(item => ({
+    id: item.id,
+    name: item.wh_name,
+  }))
+  const { values, errors, handleChange, handleSubmit, setFieldValue, setValues } = useFormik({
     initialValues: {
-      id: "",
-      stock_buyed: null,
-      stock_haved: 10,
-      stock_ut: null,
-      stock_skt: null,
-      stock_wharehouse: "",
-      stock_position: "",
-      stock_group: ""
+      stock_buyed: "",
+      stock_haved: "",
+      stock_ut: "",
+      stock_skt: "",
+      stock_warehouse: "",
+      stock_pozition: "",
+      stcok_group: ""
     },
-    validationSchema : stockFormSchemas,
     onSubmit: submit
   });
+
+  useEffect(() => {
+    if (data) {
+      setValues({
+        stock_name: data.stock_name || '',
+        stock_ut: data.stock_ut || '',
+        stock_skt: data.stock_skt || '',
+        stock_pozition: data.stock_pozition || '',
+        stcok_group: data.stcok_group || ''
+      });
+    }
+  }, [data]);
 
   return (
     <div className="add-modal z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
@@ -58,12 +91,10 @@ const TransferProductModal = ({data}) => {
       <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6">
         <div>
           <label className="block text-sm font-medium text-gray-500">Depo Adı</label>
-          <input
-            type="text"
-            name="stock_name"
-            value={values.stock_name}
-            onChange={handleChange} 
-            className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
+          <CustomerCombobox 
+              value={values.stock_warehouse} 
+              onChange={(id) => setFieldValue('stock_warehouse', id)} 
+              customers={warehousesForInput} 
           />
         </div>
 

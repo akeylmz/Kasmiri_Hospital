@@ -4,10 +4,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const chatApi = createApi({
     reducerPath: 'chatApi',
     baseQuery: fetchBaseQuery({
-      baseUrl: 'https://api10.unipile.com:14022/api/v1', 
+      baseUrl: 'https://api9.unipile.com:13947/api/v1', 
       prepareHeaders: (headers) => {
         headers.set('accept', 'application/json');
-        headers.set('X-API-KEY', 'kCThBP0Y.ekJeRP5fDf50Y/jiO+j5c38Waz4PxbQ5oUTkpWtWYIE=')
+        headers.set('X-API-KEY', '/z6kMXv3.dodhzU0jvFH0ParP7Z7ttRmg+9y+lB7LNDcmlaqIEl0=')
         return headers;
       },
     }),

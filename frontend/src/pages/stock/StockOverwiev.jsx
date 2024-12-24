@@ -23,19 +23,18 @@ const StockOverwiev = () => {
             translateY: 0
         }
     }
-    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1, type: "total", })
+    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1, type: "total", filters: "" })
     //console.log(data);
 
-    if(isLoading){
-        return <Loading />
-    }
+    if(isLoading) return <Loading />
+    if(error || !data) return <p>Hata Oluştu...</p>
 
   return (
     <motion.div 
         variants={containerMotion}
         initial={"hidden"}   
         animate={"visible"}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">      
+        className="grid grid-cols-1 max-h-full md:grid-cols-2 lg:grid-cols-4 overflow-y-scroll gap-4">      
       {!isLoading && data.results && data.results.map((item, index) => (
         <motion.div
             key={index}
@@ -49,6 +48,7 @@ const StockOverwiev = () => {
             />
         </motion.div>
       ))}
+      
     </motion.div>
   )
 }

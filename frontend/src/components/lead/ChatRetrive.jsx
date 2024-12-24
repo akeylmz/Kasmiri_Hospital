@@ -1,44 +1,21 @@
 import classNames from 'classnames'
 import React, { useEffect, useRef, useState } from 'react'
-import { IoLogoWhatsapp } from 'react-icons/io'
+import { IoLogoInstagram, IoLogoWhatsapp } from 'react-icons/io'
 import { NavLink } from 'react-router-dom'
 import { MdOutlinePhotoCamera } from "react-icons/md";
 import  { ALL_URL, ALL_KEYS} from "../../constants"
 import { UnipileClient } from "unipile-node-sdk"
 import { parseMessage } from './parseMessage';
+import { useGetChatQuery } from '../../store/unipileClient';
+import { RiInstagramFill } from "react-icons/ri";
 
-const ChatRetrive = (chat) => {
-
-    chat = chat.chat
+const ChatRetrive = ({chat}) => {  
     //console.log(chat);
     
-    const chat_id = chat.id
+  const { data: chatDetails, error, isLoading } = useGetChatQuery({ chat_id: chat.id });
+  //console.log(chatDetails);    
     
-
-    const [response, setResponse] = useState([])
-    const [loading, setLoading] = useState(true)
-    const previousResponse = useRef(null)    
-    
-    const fetchData = async () => {    
-      try {
-        const client = new UnipileClient(ALL_URL.UNIPILE_URL, ALL_KEYS.UNIPILE_API_KEY)  
-        const newResponse = await client.messaging.getChat(chat_id);
-
-        if (JSON.stringify(newResponse) !== JSON.stringify(previousResponse.current)) {
-         setResponse(newResponse);    
-        //  console.log(newResponse);         
-          previousResponse.current = newResponse;
-        }        
-        setLoading(false)
-      } catch (error) {
-        setLoading(false)
-      }  
-    }
-    useEffect(() => {
-      fetchData();
-    },[])
-    
-const x = parseMessage(response?.lastMessage, false)
+  const x = parseMessage(chatDetails?.lastMessage, false)
   return (
     <NavLink 
         className={classNames({
@@ -49,7 +26,8 @@ const x = parseMessage(response?.lastMessage, false)
         key={chat.id} 
         to={`/lead/${chat.id}`}
     >
-        <IoLogoWhatsapp size={35} color='#25d366' />
+        {chat.account_type === "WHATSAPP" && <IoLogoWhatsapp size={35} color='#25d366' />}
+        {chat.account_type === "INSTAGRAM" && <IoLogoInstagram  size={35} color='#F56040'/>}
         <div>
           <h6 className='text-sm'>
             { 
@@ -58,7 +36,7 @@ const x = parseMessage(response?.lastMessage, false)
             }
           </h6>
           <p className={`text-sm ${chat.unread_count === 0 && "text-[#8e8e8e]"}`}>
-            {loading ? (
+            {isLoading ? (
               <span className="loading-placeholder"></span>
             ) : (
               x
