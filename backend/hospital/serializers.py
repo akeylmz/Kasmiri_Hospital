@@ -4,6 +4,9 @@ from hospital.models import  Note, PatientCard, CommunicationCard, PatientFiles,
 from django.db.models import Max, Count
 from datetime import datetime
 
+
+
+
 class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note

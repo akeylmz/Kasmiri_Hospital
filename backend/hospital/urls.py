@@ -56,4 +56,6 @@ urlpatterns = [
     path('warehouse/', views.WareHouseListCreateAPIView.as_view(), name='warehouse-list'),
     path('warehouse/<int:pk>/', views.WareHouseDetailAPIView.as_view(), name='warehouse-detail'),
     path('webhook/', views.webhook, name='webhook'),
+
 ]
+
