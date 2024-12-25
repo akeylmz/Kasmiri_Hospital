@@ -7,13 +7,17 @@ import { ImBoxRemove } from "react-icons/im";
 import { createModal } from '../../components/Utils/Modal';
 import { useTranslation } from 'react-i18next';
 import Loading from '../../components/tools/Loading';
+import ProtectedRoute from '../../ProtectedRoute';
+import { useNavigate } from 'react-router-dom';
 
 const StockOrder = () => {
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
-    const [searchable, setSearchable] = useState(''); 
-    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
-    const [orderingValue, setOrderingValue] = useState('order_name');    
+    const [searchable, setSearchable] = useState('') 
+    const [skipError, setSkipError] = useState(false)
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('')
+    const [orderingValue, setOrderingValue] = useState('order_name');   
     const [ activePage, setActivePage] = useState(1)
     const thead = [
         { name: t("PRODUCT"), sortable: true, value: "order_name" },
@@ -47,48 +51,56 @@ const StockOrder = () => {
       };
     }, [searchable]);
 
+    useEffect(() => {
+      if (error && error.status === 401) {
+        setSkipError(true);
+      }
+  }, [error, navigate]);
+
   if(isLoading) return <Loading />
-  if(error || !data) return <p>Hata Oluştu...</p>
+  if(!skipError && (error || !data)) return <p>Hata Oluştu...</p>
 
   return (
-    <motion.div 
-        initial={{opacity:0}}   
-        animate={{opacity:1}}
-        className="w-full h-[99%]">
-        <TableComp2
-            thead={thead}
-            tbody={data.results.map(order => [
-                // <button ><ImBoxRemove size={20} color='#0093ad' /></button>,
-                order?.order_name || "",
-                order?.order_number || "",
-                order?.order_startdate ? formatDateToShow(order.order_startdate) : "",
-                warehouseNames[order?.order_warehouse] || "",
-                order?.order_pozition || "",
-                order?.order_group || "",
-                <button      
-                disabled={order?.order_stuation === "Tamamlandı"}              
-                    onClick={()=>{
-                        createModal("stock", order.id)
-                    }}
-                    className={` text-white px-2 py-1 rounded-lg 
-                        ${order?.order_stuation === "Bekliyor" && "bg-yellow-600"}
-                        ${order?.order_stuation === "Tamamlandı" && "bg-green-600"}
-                    `}
-                >
-                    {order?.order_stuation}
-                </button>
-            ])}
-            searchable = {searchable}
-            setSearchable = {setSearchable}
-            tableTitle={"SATIN ALMA TALEPLERİ"}   
-            modal={"stockOrder"} 
-            page={data.count}  
-            activePage={activePage} 
-            setActivePage={setActivePage}    
-            orderingValue={orderingValue}
-            setOrderingValue={setOrderingValue} 
-        />
-    </motion.div>
+    <ProtectedRoute>
+      <motion.div 
+          initial={{opacity:0}}   
+          animate={{opacity:1}}
+          className="w-full h-[99%]">
+          {data && <TableComp2
+              thead={thead}
+              tbody={data.results.map(order => [
+                  // <button ><ImBoxRemove size={20} color='#0093ad' /></button>,
+                  order?.order_name || "",
+                  order?.order_number || "",
+                  order?.order_startdate ? formatDateToShow(order.order_startdate) : "",
+                  warehouseNames[order?.order_warehouse] || "",
+                  order?.order_pozition || "",
+                  order?.order_group || "",
+                  <button      
+                  disabled={order?.order_stuation === "Tamamlandı"}              
+                      onClick={()=>{
+                          createModal("stock", order.id)
+                      }}
+                      className={` text-white px-2 py-1 rounded-lg 
+                          ${order?.order_stuation === "Bekliyor" && "bg-yellow-600"}
+                          ${order?.order_stuation === "Tamamlandı" && "bg-green-600"}
+                      `}
+                  >
+                      {order?.order_stuation}
+                  </button>
+              ])}
+              searchable = {searchable}
+              setSearchable = {setSearchable}
+              tableTitle={"SATIN ALMA TALEPLERİ"}   
+              modal={"stockOrder"} 
+              page={data.count || 0}  
+              activePage={activePage} 
+              setActivePage={setActivePage}    
+              orderingValue={orderingValue}
+              setOrderingValue={setOrderingValue} 
+          />}
+      </motion.div>
+    </ProtectedRoute>
   )
 }
 

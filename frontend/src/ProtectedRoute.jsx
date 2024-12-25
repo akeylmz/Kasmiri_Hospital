@@ -10,12 +10,17 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const { token, refreshToken  } = useSelector(state => state.auth);
   const role = useSelector(state => state.auth.role);
   const [refreshTokenRequest, { isLoading, error }] = useRefreshTokenMutation();
+  console.log("xxx");
   
   useEffect(() => {
     const getNewAccessToken = async () => {
+      console.log("koda girdi");
+      
       if (!refreshToken) return;
 
       try {
+        console.log("refresh çalıştı");
+        
         const response = await refreshTokenRequest(refreshToken).unwrap();
         
         if (response) {

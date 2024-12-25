@@ -312,14 +312,16 @@ const BodyForm = ({ values, patient }) => {
                             </p>
                         </div>                 
                     </div>
-                    <div>
-                        <ul>
-                            {values.used_stocks?.map((item)=>(
-                                <li className="flex items-center justify-between"><span>{}</span><span>{} adet</span></li>
-                            ))}       
-                            
+                    <div className="mt-10">
+                        <h2 className="block font-medium text-gray-700 pl-3 mb-1 pb-1 border-b border-gray-300">Kullanılan İlaçlar</h2>
+                        <ul className="mt-4">
+                            {values.used_stocks?.map((item, index)=>(
+                                <li key={index} className="flex items-center justify-between border-b border-gray-300 mb-2">
+                                    <span className="text-gray-600 text-lg ml-3">{} ürün</span>
+                                    <span className="text-gray-600 text-lg mr-3">{} 3 adet</span>
+                                </li>
+                            ))}      
                         </ul>
-
                     </div>
                 </div>
                 <div className="flex flex-col items-end pr-5">                   

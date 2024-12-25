@@ -43,7 +43,7 @@ const StockOverwiev = () => {
         >
             <StatCard
             key={index}
-            percentage={(item.total_haved / item.total_buyed)*100}
+            percentage={((item.total_haved / item.total_buyed) * 100).toFixed(1)}
             title={item.stock_name}
             />
         </motion.div>

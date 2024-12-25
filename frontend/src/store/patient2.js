@@ -170,7 +170,7 @@ const patientAPI = createApi({
         // --------- STOCK -------------
         
         getAllStocks: builder.query({
-            query: ({ page = 1, stock_warehouse="", type, filters="", orderValue } = {}) => {
+            query: ({ page = 1, stock_warehouse="", type, filters="", orderValue="" } = {}) => {
                 const params = new URLSearchParams({ page, default_filter: filters, ordering: orderValue })    
                 switch (type) {
                     case "total":
