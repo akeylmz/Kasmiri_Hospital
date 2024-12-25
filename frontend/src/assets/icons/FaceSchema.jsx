@@ -3,7 +3,7 @@ import React from 'react'
 const FaceSchema = ({values, setFieldValue}) => {
 
   return (
-    <svg width="450" height="562" viewBox="0 0 740 925" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
+    <svg width="100%" height="100%" viewBox="0 0 740 925" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
         <rect id="face 1" width="740" height="925" fill="none"/>
         <path 
             id="Vector 18" d="M229.5 753.5L223.5 711C244.081 724.672 256.302 733.748 282 758C306.578 777.002 321.664 783.159 350.5 787.5C364.763 789.891 376.363 786.523 396.5 785C416.637 783.477 441.17 773.472 516 708.5C510.792 729.514 507.82 742.372 509.5 758C521.382 818.749 531.701 844.554 561 866C409.594 905.572 324.986 911.123 175 866C206.275 839.62 219.683 817.577 229.5 753.5Z" 

@@ -2,6 +2,8 @@ import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
 import { useContext, createContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import i18n from "../i18n";
+import { useDispatch } from "react-redux";
+import { logout } from "../store/authSlice";
 
 const SidebarContext = createContext();
 
@@ -10,6 +12,17 @@ export default function Sidebar({ children, setExpanded, expanded }) {
   const langHandle = async lang => {
     await i18n.changeLanguage(lang)
   }
+
+
+
+  const dispatch = useDispatch()
+  const handleLogout = () => {
+    dispatch(logout())
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    navigate("/login");
+  }
+
 
   return (
     <aside className={`h-screen transition-all`}>
@@ -58,7 +71,9 @@ export default function Sidebar({ children, setExpanded, expanded }) {
               <h4 className="font-semibold text-white">Süleyman TAŞ</h4>
               <span className="text-xs text-gray-200">s.tas@gmail.com</span>
             </div>
-            <MoreVertical size={20} color="white" />
+            <button onClick={() => handleLogout()}>
+              <MoreVertical size={20} color="white" />
+            </button>
           </div>
         </div>
       </nav>

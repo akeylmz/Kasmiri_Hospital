@@ -2,6 +2,7 @@ import { Combobox, ComboboxButton, ComboboxInput, ComboboxOption, ComboboxOption
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { capitalizeWords } from '../Utils/capitalizeWords';
 
 export default function CustomCombobox({ customers, value, onChange, placeholder = 'Select a customer' }) {
   const [query, setQuery] = useState('');
@@ -49,23 +50,28 @@ export default function CustomCombobox({ customers, value, onChange, placeholder
                 value={customer}
                 className={({ active }) =>
                   clsx(
-                    'relative cursor-default select-none py-2 pl-4 pr-4 flex items-center gap-3',
+                    'relative cursor-default select-none py-2 pl-4 pr-4 flex items-center justify-between gap-3',
                     active ? 'bg-indigo-600 text-white' : 'text-gray-900'
                   )
                 }
               >
                 {({ selected, active }) => (
-                  <>
-                    {customer.image && <img
-                      src={customer.image}
-                      alt={customer.name}
-                      className="h-8 w-8 rounded-full border border-gray-300 object-cover"
-                    />}
-                    <span className="block truncate">{customer.name}</span>
+                  <>                    
+                    <span
+                      title={customer.title}
+                      className="flex items-center gap-x-2 truncate"
+                    >
+                      {customer.image && <img
+                        src={customer.image}
+                        alt={customer.name}
+                        className="h-8 w-8 rounded-full border border-gray-300 object-cover"
+                      />}
+                      {capitalizeWords(customer.name)}
+                    </span>
                     {selected && (
                       <span
                         className={clsx(
-                          'absolute inset-y-0 left-0 flex items-center pl-3',
+                          'inset-y-0 left-0 flex items-center pl-3',
                           active ? 'text-white' : 'text-indigo-600'
                         )}
                       >

@@ -420,13 +420,13 @@ const BodyForm = ({ setAnket, data }) => {
                 <div className="flex flex-col items-end pr-5">                    
                     <div className="w-auto h-[650px] overflow-y-scroll mx-auto">
                         <div className="relative select-none">
-                            {faceImgLoad && <div className="absolute left-0 top-0">
+                            {faceImgLoad && <div className="absolute left-0 top-0 w-full h-full">
                                 <FaceSchema values={values} setFieldValue={setFieldValue} />
                             </div>}
                             <img className="w-[450px]" src="/img/face.png" alt="" onLoad={() => setFaceImgLoad(true)} />
                         </div>   
                         <div className="relative select-none">
-                            {bodyImgLoad && <div className="absolute left-0 top-0">
+                            {bodyImgLoad && <div className="absolute left-0 top-0 w-full h-full">
                                 <BodySchema values={values} setFieldValue={setFieldValue} />
                             </div>}
                             <img className="w-[450px] mt-3" src="/img/anatomi.png" alt="" onLoad={() => setBodyImgLoad(true)} />

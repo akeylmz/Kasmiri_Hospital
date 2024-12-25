@@ -2,8 +2,9 @@ import { configureStore } from "@reduxjs/toolkit";
 import patient from "./patient";
 import modal from "./modal";
 import CalendarSlice from "./calendarSlice";
-import patientAPI from "./patient2";
 import { chatApi } from "./chatAPI";
+import patientAPI from "./patient2";
+import authSlice from "./authSlice";
 import { apiSlice } from "./unipileClient";
 
 
@@ -11,6 +12,7 @@ const store = configureStore({
     reducer: {
         patient,
         modal,
+        auth: authSlice,
         calendar: CalendarSlice,
         [patientAPI.reducerPath]: patientAPI.reducer, 
         [chatApi.reducerPath]: chatApi.reducer,

@@ -177,14 +177,17 @@ const BodyForm = ({ values, patient }) => {
     const [faceImgLoad, setFaceImgLoad] = useState(false)
     const [bodyImgLoad, setBodyImgLoad] = useState(false)
     const [stockID, setStockID] = useState("")
+    const [stockUnit, setStockUnit] = useState("")
 
     const { data, error, isLoading } = useGetAllStocksQuery({ page: 1})
 
     const stocks = data?.results.map(stock => ({
         id: stock.id,
         name: stock.stock_name,
+        title: `Stok: ${stock.stock_haved}\nDepo: ${stock.stock_warehouse}\nÜ.T.: ${formatDateToShow(stock.stock_ut)}\nS.K.T.: ${formatDateToShow(stock.stock_skt)}`,
         // image: worker.worker_image
     }))
+
       
     const submit = async () => {
         //console.log(JSON.stringify(values, null, 2))   
@@ -196,18 +199,44 @@ const BodyForm = ({ values, patient }) => {
 
         const stockUseData = new FormData()
         stockUseData.append("patient_used", patient.id)
-        stockUseData.append("stock_used", patient.id)
-        stockUseData.append("number_used", patient.id)
+        stockUseData.append("stock_used", stockID)
+        stockUseData.append("number_used", stockUnit)
+
+        await createStockUse({ newStock: stockUseData }).unwrap()
     }   
     
+    if(isLoading) return <Loading />
+    if(error || !data) return <p>Hata Oluştu...</p>
     
     return(
-        <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
+        <form className="bg-lightGray rounded-lg shadow-lg w-[98%] h-[98%] p-8">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>
                 <div className="flex flex-col justify-center items-center gap-x-4 mr-3">
                     <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
                     <p className="mt-1">{patient.check_worker || ""}</p>
+                </div>
+                <div className=" flex items-center justify-between gap-x-5">
+                    <div className="flex flex-col items-center">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">İlaç Adı</label>
+                        <CustomCombobox
+                            value={stockID} 
+                            onChange={(id) => setStockID(id) } 
+                            customers={stocks} 
+                        />
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                        <label className="block text-sm font-medium text-nowrap mr-16 text-gray-500">Adet</label>
+                        <div className="flex items-center gap-x-2">
+                            <input 
+                                type="number" 
+                                onChange={(e)=> setStockUnit(e.target.value)}
+                                value={stockUnit}
+                                className="max-w-20 mt-1 rounded-md border border-gray-200 bg-white pr-2 pl-3 sm:text-sm py-2 text-gray-900 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500" 
+                            />
+                            <button onClick={()=> submit()} type="button" className="bg-cyan-600 max-w-28 text-white rounded-lg px-2 py-1">Kaydet</button>
+                        </div>
+                    </div>
                 </div>
                 <div className="flex flex-col justify-between items-center gap-x-4 mr-3">
                     <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
@@ -284,27 +313,11 @@ const BodyForm = ({ values, patient }) => {
                         </div>                 
                     </div>
                     <div>
-                        <ul>                            
-                            <li className=" mt-5 border-b border-gray-300 pt-3 flex items-center justify-between">
-                                <div className="flex flex-col items-center">
-                                    <label htmlFor="">İlaç Adı</label>
-                                    <CustomCombobox
-                                        value={stockID} 
-                                        onChange={(id) => console.log(id) } 
-                                        customers={stocks} 
-                                    />
-                                </div>
-                                <div className="flex flex-col items-center">
-                                    <label htmlFor="">Kullanılan Adet</label>
-                                    <input type="number" />
-                                </div>
-                            </li>
-                            <li className="w-full flex items-center justify-center mt-4">
-                                <button className="bg-cyan-600 text-white text-lg rounded-lg px-6 py-1">Kaydet</button>
-                            </li>
-                            <li className="flex items-center justify-between"><span>ilaç 1</span><span>10 adet</span></li>
-                            <li>test 2</li>
-                            <li>test 3</li>
+                        <ul>
+                            {values.used_stocks?.map((item)=>(
+                                <li className="flex items-center justify-between"><span>{}</span><span>{} adet</span></li>
+                            ))}       
+                            
                         </ul>
 
                     </div>
@@ -312,13 +325,13 @@ const BodyForm = ({ values, patient }) => {
                 <div className="flex flex-col items-end pr-5">                   
                     <div className="w-auto h-[650px] overflow-y-scroll mx-auto">
                         <div className="relative select-none">
-                            {faceImgLoad && <div className="absolute left-0 top-0">
+                            {faceImgLoad && <div className="absolute left-0 top-0 w-full h-full">
                                 <FaceSchema values={values} />
                             </div>}
                             <img className="w-[450px]" src="/img/face.png" alt="" onLoad={() => setFaceImgLoad(true)} />
                         </div>   
                         <div className="relative select-none">
-                            {bodyImgLoad && <div className="absolute left-0 top-0">
+                            {bodyImgLoad && <div className="absolute left-0 top-0 w-full h-full">
                                 <BodySchema values={values} />
                             </div>}
                             <img className="w-[450px] mt-3" src="/img/anatomi.png" alt="" onLoad={() => setBodyImgLoad(true)} />

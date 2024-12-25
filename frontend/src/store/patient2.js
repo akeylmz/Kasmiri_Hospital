@@ -2,9 +2,33 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const patientAPI = createApi({
     reducerPath: 'patientAPI', 
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://127.0.0.1:8000/api' }),
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: 'http://127.0.0.1:8000/api',
+        prepareHeaders: (headers, { getState }) => {
+            const token = getState().auth?.token; // Tokeni Redux state'ten al
+            if (token) {
+                headers.set('Authorization', `Bearer ${token}`);
+            }
+            return headers;
+        },
+    }),
     tagTypes: ['Patient', 'Stock', 'Order', 'Worker', 'Leave', "PatientFile"],
     endpoints: (builder) => ({
+
+        login: builder.mutation({
+            query: (credentials) => ({
+                url: 'token/',
+                method: 'POST',
+                body: credentials,
+            }),
+        }),
+        refreshToken: builder.mutation({
+            query: (refreshToken) => ({
+                url: 'token/',
+                method: 'POST',
+                body: { refresh: refreshToken },
+            }),
+        }),
 
         // --------- PATİENTS -------------
 
@@ -193,7 +217,8 @@ const patientAPI = createApi({
                 url: `used-stock/`,
                 method: 'POST',
                 body: newStock
-            })
+            }),
+            invalidatesTags: (result, error, id) =>  result ? [{ type: 'Patient', id: result.patient_used }] : [],
         }),   
 
         // --------- WAREHOUSE -------------
@@ -315,7 +340,9 @@ export const {  useGetPatientsQuery,
                 useCreateTaskCheckMutation,
                 useUpdateStockMutation,
                 useGetAllWorkerLeavesQuery,
-                useCreateStockUseMutation
+                useCreateStockUseMutation,
+                useLoginMutation,
+                useRefreshTokenMutation
                 
            } = patientAPI; 
 export default patientAPI;

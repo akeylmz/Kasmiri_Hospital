@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { formatISODate, formatISODateUTC } from '../../components/Utils/DateFormat';
 import Loading from '../../components/tools/Loading';
 import { capitalizeWords } from '../../components/Utils/capitalizeWords';
+import ProtectedRoute from '../../ProtectedRoute';
 
 
 const Patients = () => {
@@ -67,71 +68,73 @@ const Patients = () => {
     if(error || !patients) return <p>Hata Oluştu...</p>
 
     return (
-        <motion.div
-            initial={{opacity:0}}   
-            animate={{opacity:1}}
-            className='w-full h-full flex flex-col items-center justify-evenly'>       
-            {isLoading && 
-               <Loading />
-            }
-           {patients && !isLoading && <div className='w-[95%] h-[95%]'>
-                <TableComp2
-                    thead={thead}
-                    tbody={patients.results.map((user) => [        
-                    <button 
-                        type='button' 
-                        onClick={ () => navigate(`/patients/${user.id}`) }
-                        className='flex items-center gap-x-3 w-full'>
-                        <img src={user.patient_image} alt={`${user.first_name} avatar`} className="w-10 h-10 rounded-full" />
-                        <p>{capitalizeWords(user.first_name)}</p>
-                    </button>,              
-                    capitalizeWords(user.last_name),        
-                    capitalizeWords(user.relevant_worker),       
-                    user.mobile_phone1, 
-                    user.email,
-                    capitalizeWords(user.city),                 
-                    user.national_id || '',   
-                    capitalizeWords(user.patient_part) || '',
-                    capitalizeWords(user.start_worker) || '',   
-                    capitalizeWords(user.check_worker) || '', 
-                    formatISODate(user.created_at) || '',  
-                    formatISODateUTC(user.discharge_date) || '',  
-                    capitalizeWords(user.insurance_info) || '',   
-                    <div className='flex gap-x-2'>
+        <ProtectedRoute>
+            <motion.div
+                initial={{opacity:0}}   
+                animate={{opacity:1}}
+                className='w-full h-full flex flex-col items-center justify-evenly'>       
+                {isLoading && 
+                <Loading />
+                }
+            {patients && !isLoading && <div className='w-[95%] h-[95%]'>
+                    <TableComp2
+                        thead={thead}
+                        tbody={patients.results.map((user) => [        
                         <button 
-                            key="edit" 
-                            onClick={() => {    
-                                setFirstLoad(true)                              
-                                setSelectedPatientId(user.id)  
-                                setTimeout(()=>{setEditToggle(prev => !prev)}, 200)                   
-                            }}
-                            className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
-                            {t('edit')}
-                        </button>
-                        <button 
-                            key="delete" 
-                            onClick={async () => { 
-                                await deletePatient(user.id) 
-                                refetch()
-                            }}
-                            className='h-8 px-4 flex items-center rounded bg-orange-500 text-white'>
-                            {t('delete')}
-                        </button>
-                    </div>                        
-                ])}
-                searchable = {searchable}
-                setSearchable = {setSearchable}
-                tableTitle = {t('patientList')}
-                modal = {'patient'}
-                scroll = {true}
-                page = {patients.count}
-                activePage = {activePage}
-                setActivePage = {setActivePage}
-                orderingValue={orderingValue}
-                setOrderingValue={setOrderingValue}
-            />
-           </div>}
-        </motion.div>
+                            type='button' 
+                            onClick={ () => navigate(`/patients/${user.id}`) }
+                            className='flex items-center gap-x-3 w-full'>
+                            <img src={user.patient_image} alt={`${user.first_name} avatar`} className="w-10 h-10 rounded-full" />
+                            <p>{capitalizeWords(user.first_name)}</p>
+                        </button>,              
+                        capitalizeWords(user.last_name),        
+                        capitalizeWords(user.relevant_worker),       
+                        user.mobile_phone1, 
+                        user.email,
+                        capitalizeWords(user.city),                 
+                        user.national_id || '',   
+                        capitalizeWords(user.patient_part) || '',
+                        capitalizeWords(user.start_worker) || '',   
+                        capitalizeWords(user.check_worker) || '', 
+                        formatISODate(user.created_at) || '',  
+                        formatISODateUTC(user.discharge_date) || '',  
+                        capitalizeWords(user.insurance_info) || '',   
+                        <div className='flex gap-x-2'>
+                            <button 
+                                key="edit" 
+                                onClick={() => {    
+                                    setFirstLoad(true)                              
+                                    setSelectedPatientId(user.id)  
+                                    setTimeout(()=>{setEditToggle(prev => !prev)}, 200)                   
+                                }}
+                                className='h-8 px-4 flex items-center rounded bg-cyan-500 text-white'>
+                                {t('edit')}
+                            </button>
+                            <button 
+                                key="delete" 
+                                onClick={async () => { 
+                                    await deletePatient(user.id) 
+                                    refetch()
+                                }}
+                                className='h-8 px-4 flex items-center rounded bg-orange-500 text-white'>
+                                {t('delete')}
+                            </button>
+                        </div>                        
+                    ])}
+                    searchable = {searchable}
+                    setSearchable = {setSearchable}
+                    tableTitle = {t('patientList')}
+                    modal = {'patient'}
+                    scroll = {true}
+                    page = {patients.count}
+                    activePage = {activePage}
+                    setActivePage = {setActivePage}
+                    orderingValue={orderingValue}
+                    setOrderingValue={setOrderingValue}
+                />
+            </div>}
+            </motion.div>
+        </ProtectedRoute>
     );
 }
 
