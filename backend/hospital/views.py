@@ -36,6 +36,7 @@ from rest_framework.permissions import IsAuthenticated
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
+@csrf_exempt
 def webhook(request):
     if request.method == 'POST':
         # Gelen JSON verisini al
