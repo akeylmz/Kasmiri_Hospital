@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 const Deneme = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-  const wsUrl = "ws://localhost:8000/ws/messages/"; // Backend WebSocket URL'si
+  const wsUrl = "ws://127.0.0.1:8001/ws/messages/";
 
   useEffect(() => {
     // WebSocket bağlantısını oluştur

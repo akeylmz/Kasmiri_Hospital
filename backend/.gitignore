@@ -5,6 +5,9 @@ ake_env
 *.ysfworld
 ysfworld
 *ysfworld
+*.ysfenv
+ysfenv
+*ysfenv
 # Logs
 logs
 *.log
