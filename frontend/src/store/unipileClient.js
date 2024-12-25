@@ -22,7 +22,7 @@ export const apiSlice = createApi({
     getAllChats: builder.query({
       queryFn: async ({ account_type }) => {  
         try {
-          const url = `https://api9.unipile.com:13947/api/v1/chats?account_type=${account_type}`;
+          const url = `https://api9.unipile.com:13961/api/v1/chats?account_type=${account_type}`;
           const response = await fetch(url, {
             method: 'GET',
             headers: { 'X-API-KEY': ALL_KEYS.UNIPILE_API_KEY }

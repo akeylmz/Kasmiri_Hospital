@@ -5,6 +5,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useModals } from '../components/Utils/Modal'
 import Modal from '../components/modals'
+import { ToastContainer } from 'react-toastify'
 
 
 const RootLayout = () => {
@@ -71,6 +72,7 @@ const RootLayout = () => {
             expanded ? "w-[88%]" : "!w-[calc(100%-64px)]"           
         }`}>
             <Outlet />
+            <ToastContainer />
         </div>
     </div>
   )

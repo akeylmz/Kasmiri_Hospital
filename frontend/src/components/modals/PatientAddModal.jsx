@@ -7,21 +7,21 @@ import { useCreatePatientMutation, useGetPatientsQuery, useUpdatePatientMutation
 import fetchImageAsFile from "../Utils/fetchImageAsFile.js"
 import { patientFormSchemas } from "../../schemas/patientFormSchemas.jsx";
 import { IoMdResize } from "react-icons/io";
+import { Bounce, ToastContainer, toast } from 'react-toastify';
 
 import { t } from "i18next";
 
 const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
+
   const { t } = useTranslation()
-  //console.log(isEdit);  
-   //console.log("data:", selectedPatient);
- 
   const [createPatient, { isLoading, isError, error}] = useCreatePatientMutation()
   const [updatePatient, {}] = useUpdatePatientMutation()
-  const nextStep = () => setStep(step + 1);
-  const prevStep = () => setStep(step - 1);
+  
+  const nextStep = async () => setStep(step + 1)
+  const prevStep = () => setStep(step - 1)
   const [step, setStep] = useState(1)
-  const [isCitizen, setIsCitizen] = useState(true); 
-  const [openModal, setOpenModal] = useState(false); 
+  const [isCitizen, setIsCitizen] = useState(true);
+  const [openModal, setOpenModal] = useState(false) 
 
 
   const handleCheckboxChange = () => {
@@ -79,7 +79,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
     }
   }
 
-  const {values, errors, handleChange, handleSubmit, setFieldValue, handleBlur, setValues, touched } = useFormik({
+  const {values, errors, handleChange, handleSubmit, setFieldValue, handleBlur, setValues, touched, validateForm} = useFormik({
     initialValues: {
       patient_number: "",
       national_id: "",
@@ -128,7 +128,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
       stayed_hotel: "",
       tour_operator: ""
     }, 
-    //validationSchema: patientFormSchemas,
+    validationSchema: patientFormSchemas,
     validateOnMount:false, 
     validateOnBlur:true,
     validateOnChange:true, 
@@ -267,7 +267,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
           {step === 1 && (
             <>
               <div className="row-span-3">
-                <label className={`block text-sm font-medium ${errors.patient_image && touched.patient_image ? "text-red-500" : "text-gray-500"}`}>{t("Image")} {errors.patient_image && touched.patient_image && <span>{errors.patient_image}</span>}</label>
+                <label className={`block text-sm font-medium ${errors.patient_image && touched.patient_image ? "text-red-500" : "text-gray-500"}`}>{t("Image")}</label>
                 <div className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2">
                   <div className={`w-32 h-32 bg-gray-100 border border-gray-200 rounded-md overflow-hidden`}>
                     {values.patient_image && (
@@ -298,7 +298,7 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
                 </div>
               </div>
               <div>
-                <label className={`block text-sm font-medium ${errors.first_name && touched.first_name ? "text-red-500" : "text-gray-500"}`}>{t("name")}{errors.first_name && touched.first_name && <span>{errors.first_name}</span>}</label>
+                <label className={`block text-sm font-medium ${errors.first_name && touched.first_name ? "text-red-500" : "text-gray-500"}`}>{t("name")}</label>
                 <input
                   type="text"
                   name="first_name"
@@ -311,7 +311,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.last_name && touched.last_name ? "text-red-500" : "text-gray-500"}`}>
                   {t("surname")}
-                  {errors.last_name && touched.last_name && <span>{errors.last_name}</span>}
                 </label>
                 <input
                   type="text"
@@ -325,7 +324,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                   <label className={`flex items-center text-sm font-medium ${errors.national_id && touched.national_id ? "text-red-500" : "text-gray-500"}`}>
                     {t("tcPassport")} 
-                    {errors.national_id && touched.national_id && <span>{errors.national_id}</span>}
                     <input 
                       className="ml-8 mr-2" 
                       type="checkbox" 
@@ -358,7 +356,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.place_of_birth && touched.place_of_birth ? "text-red-500" : "text-gray-500"}`}>
                   {t("birth_place")}
-                  {errors.place_of_birth && touched.place_of_birth && <span>{errors.place_of_birth}</span>}
                 </label>
                 <input
                   type="text"
@@ -373,7 +370,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.date_of_birth && touched.date_of_birth ? "text-red-500" : "text-gray-500"}`}>
                   {t("birth_date")}
-                  {errors.date_of_birth && touched.date_of_birth && <span>{errors.date_of_birth}</span>}
                 </label>
                 <input
                   type="date"
@@ -388,7 +384,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.gender && touched.gender ? "text-red-500" : "text-gray-500"}`}>
                   {t("Gender")}
-                  {errors.gender && touched.gender && <span>{errors.gender}</span>}
                 </label>
                 <input
                   type="text"
@@ -403,7 +398,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.nationality && touched.nationality ? "text-red-500" : "text-gray-500"}`}>
                   {t("Nationality")}
-                  {errors.nationality && touched.nationality && <span>{errors.nationality}</span>}
                 </label>
                 <input
                   type="text"
@@ -418,7 +412,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.mother_name && touched.mother_name ? "text-red-500" : "text-gray-500"}`}>
                   {t("Mother's Name")}
-                  {errors.mother_name && touched.mother_name && <span>{errors.mother_name}</span>}
                 </label>
                 <input
                   type="text"
@@ -433,7 +426,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.father_name && touched.father_name ? "text-red-500" : "text-gray-500"}`}>
                   {t("Father's Name")}
-                  {errors.father_name && touched.father_name && <span>{errors.father_name}</span>}
                 </label>
                 <input
                   type="text"
@@ -448,7 +440,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.mobile_phone1 && touched.mobile_phone1 ? "text-red-500" : "text-gray-500"}`}>
                   {t("Mobile Phone")} 1
-                  {errors.mobile_phone1 && touched.mobile_phone1 && <span>{errors.mobile_phone1}</span>}
                 </label>
                 <input
                   type="text"
@@ -463,7 +454,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.mobile_phone2 && touched.mobile_phone2 ? "text-red-500" : "text-gray-500"}`}>
                   {t("Mobile Phone")} 2
-                  {errors.mobile_phone2 && touched.mobile_phone2 && <span>{errors.mobile_phone2}</span>}
                 </label>
                 <input
                   type="text"
@@ -478,7 +468,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.email && touched.email ? "text-red-500" : "text-gray-500"}`}>
                   E-Mail
-                  {errors.email && touched.email && <span>{errors.email}</span>}
                 </label>
                 <input
                   type="email"
@@ -493,7 +482,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.instagram_username && touched.instagram_username ? "text-red-500" : "text-gray-500"}`}>
                   {t("Instagram Username")}
-                  {errors.instagram_username && touched.instagram_username && <span>{errors.instagram_username}</span>}
                 </label>
                 <input
                   type="text"
@@ -508,7 +496,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.patient_type && touched.patient_type ? "text-red-500" : "text-gray-500"}`}>
                   {t("patient_type")}
-                  {errors.patient_type && touched.patient_type && <span>{errors.patient_type}</span>}
                 </label>
                 <input
                   type="text"
@@ -523,7 +510,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.country && touched.country ? "text-red-500" : "text-gray-500"}`}>
                   {t("country")}
-                  {errors.country && touched.country && <span>{errors.country}</span>}
                 </label>
                 <input
                   type="text"
@@ -538,7 +524,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.city && touched.city ? "text-red-500" : "text-gray-500"}`}>
                   {t("city")}
-                  {errors.city && touched.city && <span>{errors.city}</span>}
                 </label>
                 <input
                   type="text"
@@ -552,7 +537,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.patient_part && touched.patient_part ? "text-red-500" : "text-gray-500"}`}>
                   {t("Patient's Department")}
-                  {errors.patient_part && touched.patient_part && <span>{errors.patient_part}</span>}
                 </label>
                 <input
                   type="text"
@@ -566,7 +550,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.relevant_worker && touched.relevant_worker ? "text-red-500" : "text-gray-500"}`}>
                   {t("Doctor's Name")}
-                  {errors.relevant_worker && touched.relevant_worker && <span>{errors.relevant_worker}</span>}
                 </label>
                 <input
                   type="text"
@@ -581,7 +564,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div className="col-span-3">
                 <label className={`block text-sm font-medium ${errors.address && touched.address ? "text-red-500" : "text-gray-500"}`}>
                   {t("address")}
-                  {errors.address && touched.address && <span>{errors.address}</span>}
                 </label>
                 <input
                   type="text"
@@ -599,7 +581,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.seans_number && touched.seans_number ? "text-red-500" : "text-gray-500"}`}>
                   {t("Session")}
-                  {errors.seans_number && touched.seans_number && <span>{errors.seans_number}</span>}
                 </label>
                 <input
                   type="text"
@@ -614,7 +595,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.device_name && touched.device_name ? "text-red-500" : "text-gray-500"}`}>
                   {t("Device Name")}
-                  {errors.device_name && touched.device_name && <span>{errors.device_name}</span>}
                 </label>
                 <input
                   type="text"
@@ -666,7 +646,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.education_status && touched.education_status ? "text-red-500" : "text-gray-500"}`}>
                   Öğrenim Durumu
-                  {errors.education_status && touched.education_status && <span>{errors.education_status}</span>}
                 </label>
                 <input
                   type="text"
@@ -680,7 +659,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.occupation && touched.occupation ? "text-red-500" : "text-gray-500"}`}>
                   Meslek
-                  {errors.occupation && touched.occupation && <span>{errors.occupation}</span>}
                 </label>
                 <input
                   type="text"
@@ -695,7 +673,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.current_employer && touched.current_employer ? "text-red-500" : "text-gray-500"}`}>
                   Çalışılan Kurum
-                  {errors.current_employer && touched.current_employer && <span>{errors.current_employer}</span>}
                 </label>
                 <input
                   type="text"
@@ -710,7 +687,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.marital_status && touched.marital_status ? "text-red-500" : "text-gray-500"}`}>
                   Medeni Durum
-                  {errors.marital_status && touched.marital_status && <span>{errors.marital_status}</span>}
                 </label>
                 <input
                   type="text"
@@ -725,7 +701,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.children_count && touched.children_count ? "text-red-500" : "text-gray-500"}`}>
                   Çocuk Sayısı
-                  {errors.children_count && touched.children_count && <span>{errors.children_count}</span>}
                 </label>
                 <input
                   type="number"
@@ -740,7 +715,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.referee && touched.referee ? "text-red-500" : "text-gray-500"}`}>
                   Refere Eden
-                  {errors.referee && touched.referee && <span>{errors.referee}</span>}
                 </label>
                 <input
                   type="text"
@@ -755,7 +729,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.institution_type && touched.institution_type ? "text-red-500" : "text-gray-500"}`}>
                   Kurum Tipi
-                  {errors.institution_type && touched.institution_type && <span>{errors.institution_type}</span>}
                 </label>
                 <input
                   type="text"
@@ -770,7 +743,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.applied_department && touched.applied_department ? "text-red-500" : "text-gray-500"}`}>
                   Başvurduğu Birim
-                  {errors.applied_department && touched.applied_department && <span>{errors.applied_department}</span>}
                 </label>
                 <input
                   type="text"
@@ -785,7 +757,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.applied_operation && touched.applied_operation ? "text-red-500" : "text-gray-500"}`}>
                   Başvurduğu İşlem
-                  {errors.applied_operation && touched.applied_operation && <span>{errors.applied_operation}</span>}
                 </label>
                 <input
                   type="text"
@@ -800,7 +771,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.insurance_info && touched.insurance_info ? "text-red-500" : "text-gray-500"}`}>
                   Sigorta Bilgisi
-                  {errors.insurance_info && touched.insurance_info && <span>{errors.insurance_info}</span>}
                 </label>
                 <input
                   type="text"
@@ -815,7 +785,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div className="col-span-2">
                 <label className={`block text-sm font-medium ${errors.complaints && touched.complaints ? "text-red-500" : "text-gray-500"}`}>
                   Şikayetler
-                  {errors.complaints && touched.complaints && <span>{errors.complaints}</span>}
                 </label>
                 <input
                   type="text"
@@ -833,7 +802,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.medications && touched.medications ? "text-red-500" : "text-gray-500"}`}>
                   Sürekli kullandığınız ilaç var mı?
-                  {errors.medications && touched.medications && <span>{errors.medications}</span>}
                 </label>
                 <input
                   type="text"
@@ -848,7 +816,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.existing_conditions && touched.existing_conditions ? "text-red-500" : "text-gray-500"}`}>
                   Mevcut bir hastalığınız var mı?
-                  {errors.existing_conditions && touched.existing_conditions && <span>{errors.existing_conditions}</span>}
                 </label>
                 <input
                   type="text"
@@ -883,7 +850,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.past_surgeries && touched.past_surgeries ? "text-red-500" : "text-gray-500"}`}>
                   Daha önce geçirdiğiniz operasyonlar
-                  {errors.past_surgeries && touched.past_surgeries && <span>{errors.past_surgeries}</span>}
                 </label>
                 <input
                   type="text"
@@ -898,7 +864,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.allergies && touched.allergies ? "text-red-500" : "text-gray-500"}`}>
                   Alerjiniz var mı?
-                  {errors.allergies && touched.allergies && <span>{errors.allergies}</span>}
                 </label>
                 <input
                   type="text"
@@ -913,7 +878,6 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
               <div>
                 <label className={`block text-sm font-medium ${errors.post_surgery_address && touched.post_surgery_address ? "text-red-500" : "text-gray-500"}`}>
                   Ameliyat sonrası kalacağınız adres
-                  {errors.post_surgery_address && touched.post_surgery_address && <span>{errors.post_surgery_address}</span>}
                 </label>
                 <input
                   type="text"
@@ -952,6 +916,17 @@ const PatientAddModal = ({ data: selectedPatient, isEdit, patientID }) => {
           {step === 4 && (
             <button
               type="submit"
+              onClick={ async () =>{
+                const errors = await validateForm(values);
+                    console.log(errors);
+                    
+                    if (Object.keys(errors).length > 0) {
+                      Object.values(errors).forEach(error => {
+                        toast.error(error);
+                      });
+                      return;
+                    }
+              }}  
               className="ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500"
             >
               <Check className="mr-1" size={20} />
