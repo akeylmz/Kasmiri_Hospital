@@ -183,9 +183,18 @@ class StockSummaryView(APIView):
         if not filterset.is_valid():
             return Response(filterset.errors, status=400)
 
+        # Filtrelenmiş queryset'i al
+        filtered_qs = filterset.qs
+
+        # Ordering'i uygula
+        ordering = request.GET.get('ordering')  # Örneğin, ?ordering=stock_name
+        if ordering:
+            # "-" işareti varsa ters sıralama yap
+            filtered_qs = filtered_qs.order_by(ordering)
+
         # Filtrelenmiş verilerle gruplama ve hesaplama yap
         stock_data = (
-            filterset.qs
+            filtered_qs
             .values('stock_name', 'stock_skt', 'stcok_group')
             .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
         )
@@ -202,19 +211,29 @@ class StockSummaryView(APIView):
 
 class StockWarehouseSummaryView(APIView):
     def get(self, request):
-        # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
+        # Filtreyi uygula
         filterset = StockFilter(request.GET, queryset=Stock.objects.all())
         
         if not filterset.is_valid():
             return Response(filterset.errors, status=400)
-        
+
+        # Filtrelenmiş queryset'i al
+        filtered_qs = filterset.qs
+
+        # Ordering'i uygula
+        ordering = request.GET.get('ordering')  # Örneğin, ?ordering=stock_name
+        if ordering:
+            # "-" işareti varsa ters sıralama yap
+            filtered_qs = filtered_qs.order_by(ordering)
+
+        # Filtrelenmiş verilerle gruplama ve hesaplama yap
         stock_data = (
-            filterset.qs
+            filtered_qs
             .values('stock_name', 'stock_skt', 'stock_ut', 'stock_warehouse')
             .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
         )
         
-        # Serializer aracılığıyla veriyi JSON formatına dönüştür
+        # Sayfalama işlemini yap
         paginator = PageNumberPagination()
         paginator.page_size = 10  # Her sayfa için 10 kayıt döndür
         
@@ -223,22 +242,32 @@ class StockWarehouseSummaryView(APIView):
         
         # Sayfalı veriyi döndür
         return paginator.get_paginated_response(paginated_data)
-
+    
 class StockTotalSummaryView(APIView):
     def get(self, request):
-        # Stokları `stk` ve `ut` alanlarına göre grupla ve `buyed` ile `haved` alanlarını topla
+        # Filtreyi uygula
         filterset = StockFilter(request.GET, queryset=Stock.objects.all())
         
         if not filterset.is_valid():
             return Response(filterset.errors, status=400)
-        
+
+        # Filtrelenmiş queryset'i al
+        filtered_qs = filterset.qs
+
+        # Ordering'i uygula
+        ordering = request.GET.get('ordering')  # Örneğin, ?ordering=stock_name
+        if ordering:
+            # "-" işareti varsa ters sıralama yap
+            filtered_qs = filtered_qs.order_by(ordering)
+
+        # Filtrelenmiş verilerle gruplama ve hesaplama yap
         stock_data = (
-            filterset.qs
+            filtered_qs
             .values('stock_name')
             .annotate(total_buyed=Sum('stock_buyed'), total_haved=Sum('stock_haved'))
         )
         
-        # Serializer aracılığıyla veriyi JSON formatına dönüştür
+        # Sayfalama işlemini yap
         paginator = PageNumberPagination()
         paginator.page_size = 10  # Her sayfa için 10 kayıt döndür
         
@@ -247,7 +276,6 @@ class StockTotalSummaryView(APIView):
         
         # Sayfalı veriyi döndür
         return paginator.get_paginated_response(paginated_data)
-
 #Views
 
 class NoteListCreateAPIView(generics.ListCreateAPIView):
@@ -304,7 +332,7 @@ class OrderListCreateAPIView(generics.ListCreateAPIView):
     ordering_fields = [field.name for field in Order._meta.fields]  # Tüm alanlar
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+
 class OrderDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset= Order.objects.all()
     serializer_class=OrderSerializer
