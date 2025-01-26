@@ -1,131 +1,272 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import "./HrHierarchy.css"
 import { GiHamburgerMenu } from "react-icons/gi";
-import HierarchtList from './hrComponents/HierarchtList';
-
-
+import { OrgChart } from './OrgChart';
 
 const HrHierarchy = () => {
-  const [data, setData] = useState([
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [scale, setScale] = useState(1);
+  const containerRef = useRef(null);
+  const [data, setData] = useState(sampleData);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+      const delta = e.deltaY;
+      const zoomFactor = delta > 0 ? 0.9 : 1.1;
+      const newScale = Math.min(Math.max(0.5, scale * zoomFactor), 2);
+      setScale(newScale);
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+    };
+  }, [scale]);
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
     
-    {
-      title: 'MUHASEBE',
-      people: [
-        { 
-          name: 'Seçkin SEYMEN', 
-          image: '/img/4.jpg' 
-        },
-        { 
-          name: 'Ahmet KAPAKÇI', 
-          image: '/img/7.jpg' 
-        },
-        { 
-          name: 'Yalçın SELİMOĞLU', 
-          image: '/img/9.jpg' 
-        },
-      ],
-      extra: 5,
-    },
-    {
-      title: 'PAZARLAMA',
-      people: [
-        { 
-          name: 'Nazan SATIŞOĞLU', 
-          image: '/img/2.jpg' 
-        },
-        { 
-          name: 'Alper ÜNLÜ', 
-          image: '/img/6.jpg' 
-        },
-      ],
-    },
-    {
-      title: 'SATIŞ',
-      people: [
-        { 
-          name: 'Aylin GÜMÜŞÇÜ', 
-          image: '/img/3.jpg' 
-        },
-        { name: 'Selin TAŞ', 
-          image: '/img/8.jpg' 
-        },
-        { name: 'Buğra YAĞUŞ', 
-          image: '/img/6.jpg' 
-        },   
-        { 
-          name: 'Ayça ÖZEFE', 
-          image: '/img/3.jpg' 
-        },
-        { name: 'Sümeyye EROĞLU', 
-          image: '/img/2.jpg' 
-        },
-        { name: 'Recep MEHMETOĞLU', 
-          image: '/img/6.jpg' 
-        },    
-      ],
-    },
-    {
-      title: 'VEZNE',
-      people: [
-        { 
-          name: 'Tuğçe DAMLALI', 
-          image: '/img/5.jpg' 
+    const newX = e.clientX - dragStart.x;
+    const newY = e.clientY - dragStart.y;
+    
+    setPosition({ x: newX, y: newY });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleAddEmployee = (parentId) => {
+    const newEmployee = {
+      id: Date.now(),
+      name: "Yeni Çalışan",
+      title: "Pozisyon",
+      email: "yeni@sirket.com",
+      phone: "+90 555 000 0000"
+    };
+
+    const addEmployeeToParent = (employee) => {
+      if (employee.id === parentId) {
+        employee.children = employee.children || [];
+        employee.children.push(newEmployee);
+        return true;
+      }
+      if (employee.children) {
+        for (let child of employee.children) {
+          if (addEmployeeToParent(child)) {
+            return true;
+          }
         }
-      ],
-    },
-  ])
+      }
+      return false;
+    };
+
+    const newData = { ...data };
+    addEmployeeToParent(newData);
+    setData(newData);
+  };
+
+  const moveEmployee = (draggedId, targetId) => {
+    if (draggedId === -1 && targetId === -1) {
+      setIsDragging(false);
+      return;
+    }
+
+    const newData = { ...data };
+    let draggedEmployee = null;
+    let draggedParent = null;
+
+    const findEmployee = (employee, parent = null) => {
+      if (employee.id === draggedId) {
+        draggedEmployee = employee;
+        draggedParent = parent;
+        return true;
+      }
+      if (employee.children) {
+        for (let i = 0; i < employee.children.length; i++) {
+          if (findEmployee(employee.children[i], employee)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    findEmployee(newData);
+
+    if (!draggedEmployee) return;
+
+    if (draggedParent) {
+      draggedParent.children = draggedParent.children?.filter(
+        child => child.id !== draggedId
+      );
+    }
+
+    const addToTarget = (employee) => {
+      if (employee.id === targetId) {
+        employee.children = employee.children || [];
+        employee.children.push(draggedEmployee);
+        return true;
+      }
+      if (employee.children) {
+        for (let child of employee.children) {
+          if (addToTarget(child)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    addToTarget(newData);
+    setData(newData);
+    setIsDragging(false);
+  };
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      className="tree"
-    >    	
-    <ul>
-      <li className='text-nowrap'>
-        <div className="level-1 rectangle bg-slate-50 rounded-lg shadow-lg max-w-72 mx-auto border-2 border-cyan-600">
-          <div className="flex items-center justify-between relative  pb-2">        
-              <h2 className="text-white font-bold text-lg py-1 pl-3 pr-6 rounded-br-3xl bg-cyan-600">YÖNETİCİ</h2>          
-          </div>
-          <div className="flex items-center justify-around my-4 mx-3">
-              <div className="text-center">
-                  <img src="/img/1.jpg" alt="Selim GÜRSES" className="rounded-full w-20 h-20 mx-auto"/>
-                  <p className="mt-2 text-sm font-medium">Selim GÜRSES</p>
-              </div>
-          </div>
+    <div className="app-container">
+      <div
+        ref={containerRef}
+        className="chart-wrapper"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+      >
+        <div 
+          className="chart-container" 
+          style={{ 
+            transform: `translate(${position.x}px, ${position.y}px) scale(${scale})`,
+            transformOrigin: 'center center'
+          }}
+        >
+          <OrgChart data={data} onDrop={moveEmployee} onAddEmployee={handleAddEmployee} />
         </div>
-        <ul>
-        { data.map((item, index)=> (
-          <li key={index}>
-            <div className="bg-slate-50 rounded-lg shadow-lg lg:w-[320px] sm:w-[100px] mx-auto border-2 border-cyan-600">
-              <div className="flex items-center justify-between relative  pb-2">        
-                  <h2 className="text-white font-bold text-lg py-1 pl-3 pr-6 rounded-br-3xl bg-cyan-600">{item.title}</h2>
-                  <div className="flex items-center gap-2">
-                      <span className="bg-cyan-600 text-white rounded-full w-6 h-6 flex items-center justify-center">{item.people.length}</span>
-                      <div className="bg-cyan-600 flex items-center px-3 mr-5 rounded-l-full rounded-r-full text-white">
-                          <HierarchtList data={item} />
-                      </div>
-                  </div>
-              </div>
-              <div className="flex items-center justify-around my-4 mx-3">
-                {item.people.slice(0, 2).map((item2, index)=>(
-                  <div key={index} className="text-center">
-                    <img src={item2.image} alt="Selim GÜRSES" className="rounded-full w-20 h-20 mx-auto"/>
-                    <p className="mt-2 text-sm font-medium">{item2.name}</p>
-                  </div>              
-                ))}                                   
-              </div>
-            </div>      
-          </li>
-          ))      
-        }   
-        </ul>
-      </li>
-    </ul>	
-
-    </motion.div>
+      </div>
+    </div>
   );
+};
+
+const sampleData = {
+  id: 1,
+  name: "Ahmet Yılmaz",
+  title: "CEO",
+  email: "ahmet.yilmaz@sirket.com",
+  phone: "+90 555 111 0001",
+  children: [
+    {
+      id: 2,
+      name: "Mehmet Demir",
+      title: "CTO",
+      email: "mehmet.demir@sirket.com",
+      phone: "+90 555 111 0002",
+      children: [
+        {
+          id: 4,
+          name: "Ali Kaya",
+          title: "Yazılım Mühendisi",
+          email: "ali.kaya@sirket.com",
+          phone: "+90 555 111 0004",
+          children: [
+            {
+              id: 8,
+              name: "Deniz Yıldız",
+              title: "Frontend Geliştirici",
+              email: "deniz.yildiz@sirket.com",
+              phone: "+90 555 111 0008"
+            },
+            {
+              id: 9,
+              name: "Burak Şahin",
+              title: "Backend Geliştirici",
+              email: "burak.sahin@sirket.com",
+              phone: "+90 555 111 0009"
+            }
+          ]
+        },
+        {
+          id: 5,
+          name: "Ayşe Yıldız",
+          title: "UX Tasarımcısı",
+          email: "ayse.yildiz@sirket.com",
+          phone: "+90 555 111 0005",
+          children: [
+            {
+              id: 10,
+              name: "Zeynep Kara",
+              title: "UI Tasarımcısı",
+              email: "zeynep.kara@sirket.com",
+              phone: "+90 555 111 0010"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: "Fatma Öztürk",
+      title: "CFO",
+      email: "fatma.ozturk@sirket.com",
+      phone: "+90 555 111 0003",
+      children: [
+        {
+          id: 6,
+          name: "Can Şahin",
+          title: "Finans Analisti",
+          email: "can.sahin@sirket.com",
+          phone: "+90 555 111 0006",
+          children: [
+            {
+              id: 11,
+              name: "Ece Demir",
+              title: "Muhasebeci",
+              email: "ece.demir@sirket.com",
+              phone: "+90 555 111 0011"
+            },
+            {
+              id: 12,
+              name: "Mert Yılmaz",
+              title: "Finans Uzmanı",
+              email: "mert.yilmaz@sirket.com",
+              phone: "+90 555 111 0012"
+            }
+          ]
+        },
+        {
+          id: 7,
+          name: "Elif Arslan",
+          title: "İK Müdürü",
+          email: "elif.arslan@sirket.com",
+          phone: "+90 555 111 0007",
+          children: [
+            {
+              id: 13,
+              name: "Selin Ak",
+              title: "İK Uzmanı",
+              email: "selin.ak@sirket.com",
+              phone: "+90 555 111 0013"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 };
 
 export default HrHierarchy;

@@ -1,6 +1,6 @@
-
 import { elements } from "chart.js";
 import BodroAddModal from "./components/modals/BodroAddModal";
+import ExpenseModal from "./components/modals/ExpenseModal";
 import InvoiceModal from "./components/modals/InvoiceModal";
 import PatientAddModal from "./components/modals/PatientAddModal";
 import ProductAddModal from "./components/modals/ProductAddModal";
@@ -18,6 +18,8 @@ import WarehouseAddModal from "./components/modals/WarehouseAddModal";
 import ShowPhotosModal from "./components/modals/ShowPhotosModal";
 import PhotooAddModal from "./components/modals/PhotooAddModal";
 import PatientFileAddModal from "./components/modals/PatientFileAddModal";
+import InvoiceDetailModal from "./components/modals/InvoiceDetailModal";
+import ProformaAddModal from "./components/modals/ProformaAddModal";
 
 const modals = [
     {
@@ -91,6 +93,18 @@ const modals = [
     {
         name: "patient-file-modal",
         element: PatientFileAddModal
+    },
+    {
+        name: "expense",
+        element: ExpenseModal
+    },
+    {
+        name: "invoice-detail",
+        element: InvoiceDetailModal
+    },
+    {
+        name: "proforma-invoice-modal",
+        element: ProformaAddModal
     }
 ]
 

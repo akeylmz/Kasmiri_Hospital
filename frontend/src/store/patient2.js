@@ -117,6 +117,14 @@ const patientAPI = createApi({
                 body: newPhoto
             })
         }),
+        createPatientPoll: builder.mutation({
+            query: ({newPoll, patientID}) => ({
+                url: "poll/",
+                method: "POST",
+                body: newPoll
+            }),
+            providesTags: ({patientID}) => [{ type: 'Patient', id: patientID }],
+        }),
 
         // --------- Doctor Note -------------
 
@@ -127,6 +135,16 @@ const patientAPI = createApi({
                 body: newNote
             })
         }),
+        updateDoctorNote: builder.mutation({
+            query: ({newNote, noteID})=> ({
+                url: `patientnote/${noteID}/`,
+                method: "PATCH",
+                body: newNote
+            }),
+            invalidatesTags: ({ patientId }) => {
+                return [{ type: 'Patient', id: patientId }]
+            },
+        }),        
  
         // --------- STOCK ORDER -------------
         
@@ -263,6 +281,14 @@ const patientAPI = createApi({
             }),
             invalidatesTags: [{ type: 'Worker', id: 'LIST' }],
         }),
+        updateWorker: builder.mutation({
+            query: ({newWorker, workerID}) => ({
+                url: `worker/${workerID}/`,
+                method: 'PATCH',
+                body: newWorker
+            }),
+            invalidatesTags: ({workerID}) => [{ type: 'Worker', id: workerID }],
+        }),
         createWorkerFile: builder.mutation({
             query: (files) => ({
                 url: `worker-file/`,
@@ -308,6 +334,7 @@ const patientAPI = createApi({
                 return [{ type: 'Worker', id: result.person }]
             }
         }),
+
     }),      
     keepUnusedDataFor: 30,
     refetchOnMountOrArgChange: 5
@@ -342,7 +369,10 @@ export const {  useGetPatientsQuery,
                 useGetAllWorkerLeavesQuery,
                 useCreateStockUseMutation,
                 useLoginMutation,
-                useRefreshTokenMutation
+                useRefreshTokenMutation,
+                useUpdateDoctorNoteMutation,
+                useUpdateWorkerMutation,
+                useCreatePatientPollMutation
                 
            } = patientAPI; 
 export default patientAPI;

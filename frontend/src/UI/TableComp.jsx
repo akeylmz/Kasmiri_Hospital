@@ -87,10 +87,9 @@ const TableComp = ({ thead, tbody, searchable, tableTitle, modal, detail, page, 
                       key={key}
                       style={{
                         width: h?.width || "auto",
-                        display: 'block',
                         padding: '8px',
-                        fontSize: '0.875rem', // Yazı boyutunu küçült
-                        lineHeight: '1.2rem', // Satır yüksekliğini ayarla   
+                        fontSize: '0.875rem',
+                        lineHeight: '1.2rem',
                         display: h.name === "none" ? 'none' : 'table-cell',  
                         overflow: "hidden"     
                       }}

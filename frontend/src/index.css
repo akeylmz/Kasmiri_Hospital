@@ -2,9 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply font-sans;
+@layer base {
+  html {
+    font-size: 14.5px;
+  }
 }
+
+  body {
+    @apply font-sans;
+  }
 
 ::-webkit-scrollbar {
     width: 0;

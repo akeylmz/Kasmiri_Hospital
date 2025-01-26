@@ -1,11 +1,9 @@
 
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { IoChevronBack } from 'react-icons/io5';
 import { TiArrowBack } from "react-icons/ti";
 import { useNavigate, useParams } from 'react-router-dom';
-import { useCreateWorkerFileMutation, useCreateWorkerMutation, useGetWorkerByIdQuery } from '../../store/patient2';
-import { Label } from 'recharts';
+import { useCreateWorkerFileMutation, useGetWorkerByIdQuery, useUpdateWorkerMutation } from '../../store/patient2';
 import { fetchFileDetails } from '../../components/Utils/fetchFileDetails';
 import { FaDownload } from "react-icons/fa6";
 
@@ -26,7 +24,7 @@ const HrSummaryFile = () => {
   const navigate = useNavigate();
   const { workerID } = useParams()
   
-  const [ createWorker ] = useCreateWorkerMutation()
+  const [ updateWorker ] = useUpdateWorkerMutation()
   const [ createWorkerFile ] = useCreateWorkerFileMutation()
   const { data, isLoading, error } = useGetWorkerByIdQuery(workerID)
   const [files, setFiles] = useState([])
@@ -37,14 +35,14 @@ const HrSummaryFile = () => {
   const submit = async (values, actions) => {
 
     const formData = new FormData()
-    formData.append("worker_image", values.worker_image)
+    // formData.append("worker_image", values.worker_image)
     Object.keys(values).forEach((key) => {
         if (key !== "worker_image") { 
           formData.append(key, values[key]);
         }
     });
 
-    await createWorker(formData).unwrap()
+    await updateWorker({ newWorker: formData, workerID: data.id }).unwrap();
   }
   useEffect(() => {
     if (data) {

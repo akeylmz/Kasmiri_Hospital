@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom'
 import { useRefreshTokenMutation } from './store/patient2';
 import { useEffect } from 'react';
 import { setAuth } from './store/authSlice';
+import { jwtDecode } from "jwt-decode";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
     const dispatch = useDispatch();
@@ -11,6 +12,19 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   const role = useSelector(state => state.auth.role);
   const [refreshTokenRequest, { isLoading, error }] = useRefreshTokenMutation();
   console.log("xxx");
+  try {
+    
+    
+    console.log();
+    console.log();
+    
+    const decodedToken = jwtDecode(token); // Tokeni decode et.
+    console.log(decodedToken);
+    const userRole = decodedToken.role; // Role bilgisini al.
+    console.log("Kullanıcı Rolü:", userRole);
+  } catch (error) {
+    console.error("Geçersiz token:", error.message);
+  }
   
   useEffect(() => {
     const getNewAccessToken = async () => {

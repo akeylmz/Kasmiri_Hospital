@@ -151,5 +151,18 @@
 
 
 
+.chart-container {
+  position: absolute;
+  top: 0;
+  left: -20%;
+  transform: translateX(-50%);
+  will-change: transform;
+  padding: 40px;
+}
+
+
+
+
+
 
 

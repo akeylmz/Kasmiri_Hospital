@@ -40,11 +40,21 @@ import ENabiz from './pages/ENabiz'
 import Reports from './pages/Reports'
 import SettingsPage from './pages/SettingsPage'
 import Deneme from './UI/Deneme'
-import Anket from './pages/Anket'
 import Bodro from './pages/Bodro'
 import PatientEpikriz from './pages/patient/patientDetail/PatientEpikriz'
 import PatientPhotos from './pages/patient/patientDetail/PatientPhotos'
 import LoginPage from './pages/LoginPage'
+import PatientPoll from './pages/patient/patientDetail/PatientPoll'
+import BillingDetail from './pages/billing/BillingDetail'
+import BillingLayout from './pages/billing/BillingLayout'
+import PatientListBill from './pages/billing/PatientListBill'
+import BillingExpense from './pages/billing/BillingExpense'
+import Fatura from './pages/billing/Fatura'
+import ProformaFatura from './pages/billing/ProformaFatura'
+import NabizLayout from './pages/enabiz/NabizLayout'
+import NabizNotFound from './pages/enabiz/NotFound'
+import NabizPatient from './pages/enabiz/NabizPatient'
+import Test from './pages/enabiz/Test'
 
 function App() {  
 
@@ -70,7 +80,7 @@ function App() {
                 { path: "files", element: <PatientFiles /> },
                 { path: "bill", element: <PatientBill /> },
                 { path: "photos", element: <PatientPhotos /> },
-                { path: "poll", element: <Anket />},
+                { path: "poll", element: <PatientPoll />},
                 { index: true, element: <Navigate to="overview" replace /> }
               ]
             },
@@ -114,12 +124,36 @@ function App() {
             { index: true, element: <Navigate to="hierarchy" replace /> }
           ]
         },
-        { path: "billing", element: <Billing />},
-        { path: "e-nabiz", element: <ENabiz />},
+        { path: "billing", 
+          element: <BillingLayout />,
+          children:[
+            { path: "patient-list", element: <PatientListBill />},
+            { path: "expenses", element: <BillingExpense />},
+            { path: "bill", element: <Fatura />},
+            { path: "proforma", element: <ProformaFatura />},
+            { index: true, element: <Navigate to="patient-list" replace /> }
+          ]
+        },
+        { path: "billing/:billNo", element: <BillingDetail />},
+        { path: "e-nabiz", 
+          element: <NabizLayout />,
+          children: [
+            { path: "patient", element: <NabizPatient />},
+            { path: "receipt", element: <NabizNotFound />},
+            { path: "report", element: <NabizNotFound />},
+            { path: "analysis", element: <NabizNotFound />},
+            { path: "radiology", element: <NabizNotFound />},
+            { path: "pathology", element: <NabizNotFound />},
+            { path: "epikriz", element: <NabizNotFound />},
+            { path: "body-points", element: <Test />},
+            { path: "*", element: <NabizNotFound />},
+            { index: true, element: <Navigate to="patient" replace /> }
+          ]        
+        },
         { path: "reporting", element: <Reports />},
         { path: "settings", element: <SettingsPage />},
         { path: "bodro", element: <Bodro />},   
-        { path: "deneme", element: <Deneme />},          
+        { path: "deneme", element: <Test />},          
       ]
     },
     { path: "login", element: <LoginPage/>}   

@@ -25,10 +25,10 @@ const Chat = (  ) => {
 
   return (
     <div className='flex w-[76%] h-[calc(100%-32px)] my-4 ml-4 bg-white rounded-xl border border-gray-300'>
-        { <div className='h-full w-full flex flex-col '>
+        {chatId && allMessages && <div className='h-full w-full flex flex-col '>
           {/* <ChatHeader user={{name: allMessages[0].chat_provider_id.split('@')[0]}} /> */}
           <ChatHeader user={{name: "test"}} />
-          <Messages /> 
+          //<Messages messages={allMessages} /> 
           <Reply />
           { detailIsShow && <ChatUserDetail setDetailIsShow={setDetailIsShow} detailIsShow={detailIsShow} />}
         </div>}

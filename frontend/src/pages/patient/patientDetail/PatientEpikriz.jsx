@@ -6,7 +6,7 @@ import { stockFormSchemas } from "../../../schemas/stockFormSchemas";
 import FaceSchema from "../../../assets/icons/FaceSchema";
 import BodySchema from "../../../assets/icons/BodySchema";
 import ToothSchema from "../../../assets/icons/ToothSchema";
-import { useCreateStockUseMutation, useGetAllStocksQuery, useGetPatientIdQuery, useUpdatePatientMutation } from "../../../store/patient2";
+import { useCreateStockUseMutation, useGetAllStocksQuery, useGetPatientIdQuery, useUpdateDoctorNoteMutation, useUpdatePatientMutation } from "../../../store/patient2";
 import { useParams } from "react-router-dom";
 import { capitalizeWords } from "../../../components/Utils/capitalizeWords";
 import { formatDateToShow, formatISODate, formatISODateUTC } from "../../../components/Utils/DateFormat";
@@ -46,25 +46,79 @@ export default PatientEpikriz
 const TethForm = ({ values, patient }) => {
 
     const [updatePatient] = useUpdatePatientMutation()
+    const [createStockUse] = useCreateStockUseMutation()
+    const [updateDoctorNote] = useUpdateDoctorNoteMutation()
     const [ dischardDate, setDischardDate ] = useState("")
+    const [stockID, setStockID] = useState("")
+    const [stockUnit, setStockUnit] = useState("")
+    const [surgeryDate, setSurgeryDate] = useState("")
+    const [controlDate1, setControlDate1] = useState("")
+    const [controlDate2, setControlDate2] = useState("")
+
+    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1})
+
+    const stocks = data?.results.map(stock => ({
+        id: stock.id,
+        name: stock.stock_name,
+        title: `Stok: ${stock.stock_haved}\nDepo: ${stock.stock_warehouse}\nÜ.T.: ${formatDateToShow(stock.stock_ut)}\nS.K.T.: ${formatDateToShow(stock.stock_skt)}`,
+        // image: worker.worker_image
+    }))
       
     const submit = async () => {
         //console.log(JSON.stringify(values, null, 2))   
-         console.log(dischardDate);
         
-        const formData = new FormData()
-        formData.append("discharge_date", dischardDate)
-        await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
-    }
+        if(dischardDate) {
+            const patientForm = new FormData()
+            patientForm.append("discharge_date", dischardDate)            
+            await updatePatient({ newPatient: patientForm, patientID: patient.id }).unwrap()
+        }
+        if(stockID && stockUnit){
+            const stockUseForm = new FormData()
+            stockUseForm.append("patient_used", patient.id)
+            stockUseForm.append("stock_used", stockID)
+            stockUseForm.append("number_used", stockUnit)    
+            await createStockUse({ newStock: stockUseForm }).unwrap()
+        }
+        if(surgeryDate || controlDate1 || controlDate2){
+            const patientNoteForm = new FormData()
+            if(surgeryDate) patientNoteForm.append("surgery_date", surgeryDate)
+            if(controlDate1) patientNoteForm.append("control_1_date", controlDate1)
+            if(controlDate2) patientNoteForm.append("control_2_date", controlDate2) 
+            await updateDoctorNote ({newNote: patientNoteForm, noteID: values.id, patientId: values.patientId}).unwrap()
+        }
+    } 
+
+    if(isLoading) return <Loading />
+    if(error || !data) return <p>Hata Oluştu...</p>
 
     return(
-        <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8 relative">
-            {/* <div className="absolute bg-white border border-cyan-600 border-r-0  rounded-l-md top-4 -left-0 transform -translate-x-full ">Diş</div> */}
+        <form className="bg-lightGray rounded-lg shadow-lg w-[98%] h-[98%] p-8 relative">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>      
                 <div className="flex flex-col justify-center items-center gap-x-4 mr-3">
                     <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
                     <p className="mt-1">{patient.check_worker || ""}</p>
+                </div>
+                <div className=" flex items-center justify-between gap-x-5">
+                    <div className="flex flex-col items-center">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">İlaç Adı</label>
+                        <CustomCombobox
+                            value={stockID} 
+                            onChange={(id) => setStockID(id) } 
+                            customers={stocks} 
+                        />
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">Adet</label>
+                        <div className="flex items-center">
+                            <input 
+                                type="number" 
+                                onChange={(e)=> setStockUnit(e.target.value)}
+                                value={stockUnit}
+                                className="max-w-20 mt-1 rounded-md border border-gray-200 bg-white pr-2 pl-3 sm:text-sm py-2 text-gray-900 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500" 
+                            />                            
+                        </div>
+                    </div>
                 </div>
                 <div className="flex flex-col justify-between items-center gap-x-4 mr-3">
                     <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
@@ -120,7 +174,51 @@ const TethForm = ({ values, patient }) => {
                             <p className="text-gray-600 ml-2">{formatISODate(patient.created_at)}</p>
                         </div>
                     </div>
-                    <div>                        
+                    <div>     
+                        <div className="mt-7 flex w-full items-center justify-between">
+                            <div className="flex flex-col items-center">
+                                <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Ameliyat Tarihi</label>
+                                {!values.surgery_date ? 
+                                    <input 
+                                        className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                        type="date" 
+                                        value={surgeryDate}
+                                        onChange={(e) => setSurgeryDate(e.target.value)}
+                                    />:
+                                    <p className="p-2 text-lg text-gray-700 w-full">
+                                        {values.surgery_date}
+                                    </p>
+                                }
+                            </div>    
+                            <div className="flex flex-col items-center">
+                                <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Kontrol 1</label>
+                                {!values.control_1_date ? 
+                                    <input 
+                                        className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                        type="date" 
+                                        value={controlDate1}
+                                        onChange={(e) => setControlDate1(e.target.value)}
+                                    />:
+                                    <p className="p-2 text-lg text-gray-700 w-full">
+                                        {values.control_1_date}
+                                    </p>
+                                }
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Kontrol 2</label>
+                                {!values.control_2_date ? 
+                                    <input 
+                                        className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                        type="date" 
+                                        value={controlDate2}
+                                        onChange={(e) => setControlDate2(e.target.value)}
+                                    />:
+                                    <p className="p-2 text-lg text-gray-700 w-full">
+                                        {values.control_2_date}
+                                    </p>
+                                }
+                            </div>                      
+                        </div>                    
                         <div className="mt-7">
                             <label className="block font-medium text-gray-700 ml-3 mb-1">Yapılacak Ameliyatlar</label>
                             <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
@@ -149,35 +247,34 @@ const TethForm = ({ values, patient }) => {
             </div>
 
             <div className="flex justify-between pt-2">
-                {!patient.discharge_date && 
-                    <button
-                        type="button"
-                        disabled={dischardDate === ""}
-                        onClick={() => submit()}
-                        className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none ${
-                            dischardDate === "" ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
-                        }`}
-                    >
-                        <Check className="mr-1" size={20} />
-                        {t("save")}
-                    </button>
-                }
+                <button
+                    type="button"
+                    onClick={() => submit()}
+                    className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none`}
+                >
+                    <Check className="mr-1" size={20} />
+                    {t("save")}
+                </button>
             </div>
         </form>
     )    
 }
 const BodyForm = ({ values, patient }) => {
-    console.log(values);
-    // console.log(patient);
+    console.log(values)
+    //console.log(patient)
     
     const [updatePatient] = useUpdatePatientMutation()
     const [createStockUse] = useCreateStockUseMutation()
+    const [updateDoctorNote] = useUpdateDoctorNoteMutation()
 
     const [ dischardDate, setDischardDate ] = useState("")
     const [faceImgLoad, setFaceImgLoad] = useState(false)
     const [bodyImgLoad, setBodyImgLoad] = useState(false)
     const [stockID, setStockID] = useState("")
     const [stockUnit, setStockUnit] = useState("")
+    const [surgeryDate, setSurgeryDate] = useState("")
+    const [controlDate1, setControlDate1] = useState("")
+    const [controlDate2, setControlDate2] = useState("")
 
     const { data, error, isLoading } = useGetAllStocksQuery({ page: 1})
 
@@ -191,18 +288,26 @@ const BodyForm = ({ values, patient }) => {
       
     const submit = async () => {
         //console.log(JSON.stringify(values, null, 2))   
-         console.log(dischardDate);
         
-        const formData = new FormData()
-        formData.append("discharge_date", dischardDate)
-        //await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
-
-        const stockUseData = new FormData()
-        stockUseData.append("patient_used", patient.id)
-        stockUseData.append("stock_used", stockID)
-        stockUseData.append("number_used", stockUnit)
-
-        await createStockUse({ newStock: stockUseData }).unwrap()
+        if(dischardDate) {
+            const patientForm = new FormData()
+            patientForm.append("discharge_date", dischardDate)            
+            await updatePatient({ newPatient: patientForm, patientID: patient.id }).unwrap()
+        }
+        if(stockID && stockUnit){
+            const stockUseForm = new FormData()
+            stockUseForm.append("patient_used", patient.id)
+            stockUseForm.append("stock_used", stockID)
+            stockUseForm.append("number_used", stockUnit)    
+            await createStockUse({ newStock: stockUseForm }).unwrap()
+        }
+        if(surgeryDate || controlDate1 || controlDate2){
+            const patientNoteForm = new FormData()
+            if(surgeryDate) patientNoteForm.append("surgery_date", surgeryDate)
+            if(controlDate1) patientNoteForm.append("control_1_date", controlDate1)
+            if(controlDate2) patientNoteForm.append("control_2_date", controlDate2) 
+            await updateDoctorNote ({newNote: patientNoteForm, noteID: values.id, patientId: values.patientId}).unwrap()
+        }
     }   
     
     if(isLoading) return <Loading />
@@ -226,15 +331,14 @@ const BodyForm = ({ values, patient }) => {
                         />
                     </div>
                     <div className="flex flex-col items-center justify-center">
-                        <label className="block text-sm font-medium text-nowrap mr-16 text-gray-500">Adet</label>
-                        <div className="flex items-center gap-x-2">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">Adet</label>
+                        <div className="flex items-center">
                             <input 
                                 type="number" 
                                 onChange={(e)=> setStockUnit(e.target.value)}
                                 value={stockUnit}
                                 className="max-w-20 mt-1 rounded-md border border-gray-200 bg-white pr-2 pl-3 sm:text-sm py-2 text-gray-900 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500" 
-                            />
-                            <button onClick={()=> submit()} type="button" className="bg-cyan-600 max-w-28 text-white rounded-lg px-2 py-1">Kaydet</button>
+                            />                            
                         </div>
                     </div>
                 </div>
@@ -252,7 +356,7 @@ const BodyForm = ({ values, patient }) => {
                 </div>   
             </div>
 
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 h-[720px] ">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 py-6 h-[720px] ">
                 <div className="overflow-y-scroll">
                     <div className="ml-3">
                         <div className="flex items-center">
@@ -292,7 +396,51 @@ const BodyForm = ({ values, patient }) => {
                             <p className="text-gray-600 ml-2">{formatISODate(patient.created_at)}</p>
                         </div>
                     </div>
-                    <div>                        
+                    <div>  
+                        <div className="mt-7 flex w-full items-center justify-between">
+                            <div className="flex flex-col items-center">
+                                <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Ameliyat Tarihi</label>
+                                {!values.surgery_date ? 
+                                    <input 
+                                        className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                        type="date" 
+                                        value={surgeryDate}
+                                        onChange={(e) => setSurgeryDate(e.target.value)}
+                                    />:
+                                    <p className="p-2 text-lg text-gray-700 w-full">
+                                        {values.surgery_date}
+                                    </p>
+                                }
+                            </div>    
+                            <div className="flex flex-col items-center">
+                                <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Kontrol 1</label>
+                                {!values.control_1_date ? 
+                                    <input 
+                                        className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                        type="date" 
+                                        value={controlDate1}
+                                        onChange={(e) => setControlDate1(e.target.value)}
+                                    />:
+                                    <p className="p-2 text-lg text-gray-700 w-full">
+                                        {values.control_1_date}
+                                    </p>
+                                }
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Kontrol 2</label>
+                                {!values.control_2_date ? 
+                                    <input 
+                                        className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                        type="date" 
+                                        value={controlDate2}
+                                        onChange={(e) => setControlDate2(e.target.value)}
+                                    />:
+                                    <p className="p-2 text-lg text-gray-700 w-full">
+                                        {values.control_2_date}
+                                    </p>
+                                }
+                            </div>                      
+                        </div>                       
                         <div className="mt-7">
                             <label className="block font-medium text-gray-700 ml-3 mb-1">Yapılacak Ameliyatlar</label>
                             <p className=" p-3 text-sm border-t border-gray-300 text-gray-700 w-full">
@@ -343,19 +491,14 @@ const BodyForm = ({ values, patient }) => {
             </div>
 
             <div className="flex justify-between">
-                {!patient.discharge_date && 
-                    <button
-                        type="button"
-                        disabled={dischardDate === ""}
-                        onClick={() => submit()}
-                        className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none ${
-                            dischardDate === "" ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
-                        }`}
-                    >
-                        <Check className="mr-1" size={20} />
-                        {t("save")}
-                    </button>
-                }
+                <button
+                    type="button"
+                    onClick={() => submit()}
+                    className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none`}
+                >
+                    <Check className="mr-1" size={20} />
+                    {t("save")}
+                </button>
             </div>
     </form>
     )    
@@ -368,24 +511,80 @@ const HeadForm = ({values, patient}) => {
         Diger: "Diğer",
     }
     const [updatePatient] = useUpdatePatientMutation()
+    const [createStockUse] = useCreateStockUseMutation()
+    const [updateDoctorNote] = useUpdateDoctorNoteMutation()
+
     const [ dischardDate, setDischardDate ] = useState("")
-      
+    const [stockID, setStockID] = useState("")
+    const [stockUnit, setStockUnit] = useState("")
+    const [surgeryDate, setSurgeryDate] = useState("")
+    const [controlDate1, setControlDate1] = useState("")
+    const [controlDate2, setControlDate2] = useState("")
+
+    const { data, error, isLoading } = useGetAllStocksQuery({ page: 1})
+
+    const stocks = data?.results.map(stock => ({
+        id: stock.id,
+        name: stock.stock_name,
+        title: `Stok: ${stock.stock_haved}\nDepo: ${stock.stock_warehouse}\nÜ.T.: ${formatDateToShow(stock.stock_ut)}\nS.K.T.: ${formatDateToShow(stock.stock_skt)}`,
+        // image: worker.worker_image
+    }))
+
     const submit = async () => {
         //console.log(JSON.stringify(values, null, 2))   
-         console.log(dischardDate);
         
-        const formData = new FormData()
-        formData.append("discharge_date", dischardDate)
-        await updatePatient({ newPatient: formData, patientID: patient.id }).unwrap()
-    }
+        if(dischardDate) {
+            const patientForm = new FormData()
+            patientForm.append("discharge_date", dischardDate)            
+            await updatePatient({ newPatient: patientForm, patientID: patient.id }).unwrap()
+        }
+        if(stockID && stockUnit){
+            const stockUseForm = new FormData()
+            stockUseForm.append("patient_used", patient.id)
+            stockUseForm.append("stock_used", stockID)
+            stockUseForm.append("number_used", stockUnit)    
+            await createStockUse({ newStock: stockUseForm }).unwrap()
+        }
+        if(surgeryDate || controlDate1 || controlDate2){
+            const patientNoteForm = new FormData()
+            if(surgeryDate) patientNoteForm.append("surgery_date", surgeryDate)
+            if(controlDate1) patientNoteForm.append("control_1_date", controlDate1)
+            if(controlDate2) patientNoteForm.append("control_2_date", controlDate2) 
+            await updateDoctorNote ({newNote: patientNoteForm, noteID: values.id, patientId: values.patientId}).unwrap()
+        }
+    } 
+
+    if(isLoading) return <Loading />
+    if(error || !data) return <p>Hata Oluştu...</p>
     
     return(
-        <form className="bg-lightGray rounded-lg shadow-lg w-[1200px] p-8">
+        <form className="bg-lightGray rounded-lg shadow-lg w-[98%] h-[98%] p-8">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-cyan-500">Doktor Notu</h2>
                 <div className="flex flex-col justify-center items-center gap-x-4 mr-3">
                     <label className="block text-sm font-medium text-nowrap text-gray-500">Onaylayan Doktor</label>
                     <p className="mt-1">{patient.check_worker || ""}</p>
+                </div>
+                <div className=" flex items-center justify-between gap-x-5">
+                    <div className="flex flex-col items-center">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">İlaç Adı</label>
+                        <CustomCombobox
+                            value={stockID} 
+                            onChange={(id) => setStockID(id) } 
+                            customers={stocks} 
+                        />
+                    </div>
+                    <div className="flex flex-col items-center justify-center">
+                        <label className="block text-sm font-medium text-nowrap text-gray-500">Adet</label>
+                        <div className="flex items-center">
+                            <input 
+                                type="number" 
+                                onChange={(e)=> setStockUnit(e.target.value)}
+                                value={stockUnit}
+                                className="max-w-20 mt-1 rounded-md border border-gray-200 bg-white pr-2 pl-3 sm:text-sm py-2 text-gray-900 focus:outline-none focus:ring-cyan-500 focus:border-cyan-500" 
+                            />                            
+                        </div>
+                    </div>
                 </div>
                 <div className="flex flex-col justify-between items-center gap-x-4 mr-3">
                     <label className="block text-sm font-medium text-nowrap text-gray-500">Taburcu Tarihi</label>
@@ -441,6 +640,50 @@ const HeadForm = ({values, patient}) => {
                             <p className="text-gray-600 ml-2">{formatISODate(patient.created_at)}</p>
                         </div>
                     </div>
+                    <div className="mt-7 flex w-full items-center justify-between">
+                        <div className="flex flex-col items-center">
+                            <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Ameliyat Tarihi</label>
+                            {!values.surgery_date ? 
+                                <input 
+                                    className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                    type="date" 
+                                    value={surgeryDate}
+                                    onChange={(e) => setSurgeryDate(e.target.value)}
+                                />:
+                                <p className="p-2 text-lg text-gray-700 w-full">
+                                    {values.surgery_date}
+                                </p>
+                            }
+                        </div>    
+                        <div className="flex flex-col items-center">
+                            <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Kontrol 1</label>
+                            {!values.control_1_date ? 
+                                <input 
+                                    className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                    type="date" 
+                                    value={controlDate1}
+                                    onChange={(e) => setControlDate1(e.target.value)}
+                                />:
+                                <p className="p-2 text-lg text-gray-700 w-full">
+                                    {values.control_1_date}
+                                </p>
+                            }
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <label className="block font-medium text-gray-700 border-b w-full text-center border-gray-300 mb-1">Kontrol 2</label>
+                            {!values.control_2_date ? 
+                                <input 
+                                    className="outline-none border border-gray-300 rounded-lg px-2 py-1 mt-1"
+                                    type="date" 
+                                    value={controlDate2}
+                                    onChange={(e) => setControlDate2(e.target.value)}
+                                />:
+                                <p className="p-2 text-lg text-gray-700 w-full">
+                                    {values.control_2_date}
+                                </p>
+                            }
+                        </div>                      
+                    </div> 
                     <div className="grid grid-cols-2 gap-x-6 gap-y-4 my-10">   
                         <div className="mt-7">
                             <label className="block font-medium text-sm text-gray-700 w-full text-center">İlk Mürcaat Tarihi</label>
@@ -519,19 +762,15 @@ const HeadForm = ({values, patient}) => {
                 </div>
             </div>
 
-            <div className="flex justify-between pt-2">
-                {!patient.discharge_date && 
+            <div className="flex justify-between">
                 <button
                     type="button"
-                    disabled={dischardDate === ""}
                     onClick={() => submit()}
-                    className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none ${
-                        dischardDate === "" ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
-                    }`}
+                    className={`ml-auto bg-cyan-500 flex items-center justify-around text-white rounded-md pr-6 pl-5 py-2 shadow-sm hover:bg-cyan-600 focus:outline-none`}
                 >
                     <Check className="mr-1" size={20} />
                     {t("save")}
-                </button>}
+                </button>
             </div>
     </form>
     )  
