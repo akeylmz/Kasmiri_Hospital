@@ -43,7 +43,7 @@ const Fatura = () => {
       ],
       subtotal: "125.000,00",
       totalDiscount: "0,00",
-      total: "150.000,00",
+      grandTotal: "150.000,00",
     },
     {
       invoiceType: "SATIŞ",
@@ -81,7 +81,7 @@ const Fatura = () => {
       ],
       subtotal: "85.500,00",
       totalDiscount: "0,00",
-      total: "102.600,00",
+      grandTotal: "102.600,00",
     },
     {
       invoiceType: "SATIŞ",
@@ -119,7 +119,7 @@ const Fatura = () => {
       ],
       subtotal: "167.800,00",
       totalDiscount: "0,00",
-      total: "201.360,00",
+      grandTotal: "201.360,00",
     },
     {
       invoiceType: "SATIŞ",
@@ -157,7 +157,7 @@ const Fatura = () => {
       ],
       subtotal: "93.250,00",
       totalDiscount: "0,00",
-      total: "111.900,00",
+      grandTotal: "111.900,00",
     },
     {
       invoiceType: "SATIŞ",
@@ -195,7 +195,7 @@ const Fatura = () => {
       ],
       subtotal: "145.750,00",
       totalDiscount: "0,00",
-      total: "174.900,00",
+      grandTotal: "174.900,00",
     }
   ];
 
