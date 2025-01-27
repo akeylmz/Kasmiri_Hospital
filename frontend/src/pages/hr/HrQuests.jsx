@@ -12,7 +12,7 @@ const HrQuests = () => {
   const navigate = useNavigate()
   const [ activePage, setActivePage] = useState(1)
   const { data, isLoading, error } = useGetAllWorkerQuery({page: activePage})
-  console.log(data?.results);  
+  
 
   const thead = [
     { name: t("Officer"), sortable: true },
@@ -148,6 +148,9 @@ const HrQuests = () => {
   ];
   if(isLoading){
     return <div>Yükleniyor...</div>
+  }
+  if(error){
+    return <div>Sorun oluştu...</div>
   }
   
   return (

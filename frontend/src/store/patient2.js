@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const patientAPI = createApi({
     reducerPath: 'patientAPI', 
     baseQuery: fetchBaseQuery({ 
-        baseUrl: 'http://127.0.0.1:8000/api',
+        baseUrl: 'https://api.sovotozoglu.net/api',
         prepareHeaders: (headers, { getState }) => {
             const token = getState().auth?.token; // Tokeni Redux state'ten al
             if (token) {
