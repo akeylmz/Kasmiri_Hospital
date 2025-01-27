@@ -3,9 +3,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const patientAPI = createApi({
     reducerPath: 'patientAPI', 
     baseQuery: fetchBaseQuery({ 
-        baseUrl: 'https://api.sovotozoglu.net/api',
+        baseUrl: 'https://api.tascrm.com/api',
         prepareHeaders: (headers, { getState }) => {
-            const token = getState().auth?.token; // Tokeni Redux state'ten al
+            const token = getState().auth?.token;  
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
             }
