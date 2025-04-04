@@ -15,11 +15,9 @@ const SocialAddModal = () => {
   const submit = async (values, actions) => {
     try {
       const formData = new FormData();
-      formData.append("UserName", values.UserName + "@" + values.social_type)
+      formData.append("UserName", values.UserName)
       formData.append("Password", values.Password)
-     
-    
-      console.log("Form verileri gönderiliyor:", JSON.stringify(values, null, 2))
+      formData.append("LeadName", values.LeadName)
       await createSocial(formData).unwrap()
       actions.resetForm()
     } catch (error) {
@@ -29,7 +27,7 @@ const SocialAddModal = () => {
   }
   const { values, errors, handleChange, handleSubmit} = useFormik({
     initialValues: {
-      social_type: "",
+      LeadName: "",
       UserName: "",
       Password: "",
     },
@@ -68,8 +66,8 @@ const SocialAddModal = () => {
           <div>
           <label className="block text-sm font-medium text-gray-500">Sosyal Medya</label>
             <select
-              name="social_type"
-              value={values.social_type}
+              name="LeadName"
+              value={values.LeadName}
               onChange={handleChange}
               className="mt-1 block w-full border border-gray-200 rounded-md shadow-sm focus:ring-cyan-500 focus:border-cyan-500 sm:text-sm px-3 py-2"
             >

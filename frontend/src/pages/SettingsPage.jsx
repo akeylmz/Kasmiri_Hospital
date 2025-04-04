@@ -1,11 +1,14 @@
-import React from 'react'
+import React from "react";
+import ProtectedRoute from "../ProtectedRoute";
 
 const SettingsPage = () => {
   return (
-    <div className='w-full h-full'>
-    <img className='w-full h-full' src="/img/bg.png" alt="" />
-</div>
-  )
-}
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <div className="w-full h-full">
+        <img className="w-full h-full" src="/img/bg.png" alt="" />
+      </div>
+    </ProtectedRoute>
+  );
+};
 
-export default SettingsPage
+export default SettingsPage;

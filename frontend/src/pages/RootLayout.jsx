@@ -35,18 +35,7 @@ const RootLayout = () => {
         };
       }, []);
     const location = useLocation();
-
- {/* <Sidebar expanded={expanded} setExpanded={setExpanded}>
-            <SidebarItem icon={<MessageSquareMore size={20} />} text={"Lead"} active={location.pathname === "/"} path={"/"} />
-                <SidebarItem icon={<Users size={20} />} text={t("patients")} active={location.pathname === "/patients"} path={"/patients"} />
-                <SidebarItem icon={<CalendarDays size={20} />} text={t('calendar')} active={location.pathname === "/calendar"} path={"/calendar"} />
-                <SidebarItem icon={<Package2 size={20} />} text={t('stock')} active={location.pathname === "/stock"} path={"/stock"} />
-                <SidebarItem icon={<HeartPulse size={20} />} text={"E-Nabız"} active={location.pathname === "/enabiz"} path={"/enabiz"} />
-                <SidebarItem icon={<ReceiptText size={20} />} text={t('invoice')} active={location.pathname === "/billing"} path={"/billing"} />
-                <SidebarItem icon={<FileText size={20} />} text={t('reports')} active={location.pathname === "/reporting"} path={"/reporting"} />
-                <SidebarItem icon={<Handshake size={20} />} text={t('HR')} active={location.pathname === "/hr"} path={"/human-resources"} />
-                <SidebarItem icon={<Settings size={20} />} text={t('settings')} active={location.pathname === "/settings"} path={"/settings"} />
-            </Sidebar> */}
+    
   return (    
     <div className='w-screen h-screen flex justify-between overflow-hidden'>
         {modals.length > 0 && <Modal />}
@@ -55,15 +44,15 @@ const RootLayout = () => {
             
         }`}>
             <Sidebar expanded={expanded} setExpanded={setExpanded}>
-            <SidebarItem icon={<MessageSquareMore size={20} />} text={"Lead"} active={location.pathname === "/lead"} path={"/lead"} />
-                <SidebarItem icon={<Users size={20} />} text={t("patients")} active={location.pathname === "/patients"} path={"/patients"} />
-                <SidebarItem icon={<CalendarDays size={20} />} text={t('calendar')} active={location.pathname === "/calendar"} path={"/calendar"} />
-                <SidebarItem icon={<Package2 size={20} />} text={t('stock')} active={location.pathname === "/stock"} path={"/stock"} />
-                <SidebarItem icon={<HeartPulse size={20} />} text={"E-Nabız"} active={location.pathname === "/enabiz"} path={"/e-nabiz"}/>
-                <SidebarItem icon={<ReceiptText size={20} />} text={t('invoice')} active={location.pathname === "/billing"} path={"/billing"}/>
-                <SidebarItem icon={<FileText size={20} />} text={t('reports')} active={location.pathname === "/reporting"} path={"reporting"} />
-                <SidebarItem icon={<Handshake size={20} />} text={t('HR')} active={location.pathname === "/hr"} path={"/human-resources"} />
-                <SidebarItem icon={<Settings size={20} />} text={t('settings')} active={location.pathname === "/settings"} path={"settings"} />
+            <SidebarItem icon={<MessageSquareMore size={20} />} text={"Lead"} active={location.pathname === "/lead"} path={"/lead"} roles={['admin', "leedgroup"]} />
+                <SidebarItem icon={<Users size={20} />} text={t("patients")} active={location.pathname === "/patients"} path={"/patients"} roles={['admin', "patientgroup"]} />
+                <SidebarItem icon={<CalendarDays size={20} />} text={t('calendar')} active={location.pathname === "/calendar"} path={"/calendar"} roles={['admin']} />
+                <SidebarItem icon={<Package2 size={20} />} text={t('stock')} active={location.pathname === "/stock"} path={"/stock"} roles={['admin', "stockgroup"]} />
+                <SidebarItem icon={<HeartPulse size={20} />} text={"E-Nabız"} active={location.pathname === "/enabiz"} path={"/e-nabiz"} roles={['admin']} />
+                <SidebarItem icon={<ReceiptText size={20} />} text={t('invoice')} active={location.pathname === "/billing"} path={"/billing"} roles={['admin', "billgroup"]} />
+                <SidebarItem icon={<FileText size={20} />} text={t('reports')} active={location.pathname === "/reporting"} path={"reporting"} roles={['admin']} />
+                <SidebarItem icon={<Handshake size={20} />} text={t('HR')} active={location.pathname === "/hr"} path={"/human-resources"} roles={['admin', "hrgroup"]} />
+                <SidebarItem icon={<Settings size={20} />} text={t('settings')} active={location.pathname === "/settings"} path={"settings"} roles={['admin']} />
             </Sidebar>
         </div>
        

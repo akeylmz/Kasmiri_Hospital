@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getMonth } from "../../util"; 
+import { getMonth } from "../../util";
 import CalendarHeader from "./CalendarHeader";
 import Sidebar from "./Sidebar";
 import Month from "./Month";
 import EventModal from "./EventModal";
+import ProtectedRoute from "../../ProtectedRoute";
 
 function Calender() {
   const [currenMonth, setCurrentMonth] = useState(getMonth());
@@ -16,17 +17,19 @@ function Calender() {
   }, [monthIndex]);
 
   return (
-    <React.Fragment>
-      {showEventModal && <EventModal />}
+    <ProtectedRoute allowedRoles={["admin"]}>
+      <React.Fragment>
+        {showEventModal && <EventModal />}
 
-      <div className="h-full flex flex-col">
-        <CalendarHeader />
-        <div className="flex flex-1">
-          <Sidebar />
-          <Month month={currenMonth} />
+        <div className="h-full flex flex-col">
+          <CalendarHeader />
+          <div className="flex flex-1">
+            <Sidebar />
+            <Month month={currenMonth} />
+          </div>
         </div>
-      </div>
-    </React.Fragment>
+      </React.Fragment>
+    </ProtectedRoute>
   );
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement } from 'chart.js';
 import { useTranslation } from 'react-i18next';
+import ProtectedRoute from '../ProtectedRoute';
 
 // ChartJS ayarları
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement, LineElement, PointElement);
@@ -81,6 +82,7 @@ const Reports = () => {
   };
 
   return (
+    <ProtectedRoute allowedRoles={["admin"]}>
     <div className="w-full h-full p-4 bg-gray-50 overflow-hidden">
       {/* Genel İstatistik Kartları */}
       <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-4">
@@ -163,6 +165,7 @@ const Reports = () => {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

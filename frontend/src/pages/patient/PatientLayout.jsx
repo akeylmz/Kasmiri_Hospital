@@ -1,12 +1,15 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import { Outlet } from "react-router-dom";
+import ProtectedRoute from "../../ProtectedRoute";
 
 const PatientLayout = () => {
   return (
-    <div className='w-full h-full flex border border-gray-300'>
+    <ProtectedRoute allowedRoles={["admin", "patientgroup"]}>
+      <div className="w-full h-full flex border border-gray-300">
         <Outlet />
-    </div>    
-  )
-}
+      </div>
+    </ProtectedRoute>
+  );
+};
 
-export default PatientLayout
+export default PatientLayout;

@@ -68,7 +68,6 @@ const Patients = () => {
     if(error || !patients) return <p>Hata Oluştu...</p>
 
     return (
-        <ProtectedRoute>
             <motion.div
                 initial={{opacity:0}}   
                 animate={{opacity:1}}
@@ -134,7 +133,6 @@ const Patients = () => {
                 />
             </div>}
             </motion.div>
-        </ProtectedRoute>
     );
 }
 

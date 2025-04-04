@@ -1,14 +1,16 @@
-import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react";
+import { MoreVertical, ChevronLast, ChevronFirst, LogOut } from "lucide-react";
 import { useContext, createContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import i18n from "../i18n";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/authSlice";
+import { jwtDecode } from "jwt-decode";
 
 const SidebarContext = createContext();
 
 export default function Sidebar({ children, setExpanded, expanded }) {
-
+  const navigate = useNavigate()
+  
   const langHandle = async lang => {
     await i18n.changeLanguage(lang)
   }
@@ -72,7 +74,7 @@ export default function Sidebar({ children, setExpanded, expanded }) {
               <span className="text-xs text-gray-200">s.tas@gmail.com</span>
             </div>
             <button onClick={() => handleLogout()}>
-              <MoreVertical size={20} color="white" />
+              <LogOut size={20} color="white" />
             </button>
           </div>
         </div>
@@ -81,8 +83,17 @@ export default function Sidebar({ children, setExpanded, expanded }) {
   );
 }
 
-export function SidebarItem({ icon, text, active, alert, path }) {
+export function SidebarItem({ icon, text, active, alert, path, roles }) {
   const { expanded } = useContext(SidebarContext);
+  const { token, refreshToken } = useSelector(state => state.auth);
+  
+  const decodedToken = jwtDecode(token);
+  const userRole = decodedToken.groups; 
+
+  if (roles && !roles.some(role => userRole.includes(role))) {
+    return null;
+  }
+
 
   return (
     <li
