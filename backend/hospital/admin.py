@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hospital.models import  Note, Order, PatientCard, CommunicationCard, PopulationCard, Stock, WareHouse, Worker, TaskAssignment, Leave, PatientNote, Poll, PatientPhoto
+from hospital.models import  LeadInfo, Note, Order, PatientCard, CommunicationCard, PopulationCard, Stock, WareHouse, Worker, TaskAssignment, Leave, PatientNote, Poll, PatientPhoto
 # Register your models here.
 admin.site.register(PatientCard)
 admin.site.register(PatientNote)
@@ -11,4 +11,6 @@ admin.site.register(TaskAssignment)
 admin.site.register(Leave)
 admin.site.register(Poll)
 admin.site.register(PatientPhoto)
+admin.site.register(LeadInfo)
+
 
