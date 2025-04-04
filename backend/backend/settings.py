@@ -126,15 +126,7 @@ SIMPLE_JWT = {
 }
 
 # CORS settings
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    "https://tascrm.com",
-    "https://api.tascrm.com"
-]
+CORS_ALLOW_ALL_ORIGINS = True 
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://tascrm.com',
-    'https://api.tascrm.com',
-]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

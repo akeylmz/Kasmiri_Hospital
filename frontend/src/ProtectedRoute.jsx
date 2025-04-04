@@ -60,7 +60,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }, [token, refreshToken, dispatch, refreshTokenRequest]);
 
   if (!token && !refreshToken) return <Navigate to="/login" />
-//   if (!role || (allowedRoles && !allowedRoles.includes(role)))  return <Navigate to="/unauthorized" />
+  // if (!role || (allowedRoles && !allowedRoles.includes(role)))  return <Navigate to="/login" />
  
   return children
 }
