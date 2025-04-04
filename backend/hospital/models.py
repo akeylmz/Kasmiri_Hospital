@@ -501,3 +501,7 @@ class UsedStocks(models.Model):
     )
     number_used = models.PositiveIntegerField(default=1)
     used_at = models.DateTimeField(auto_now_add=True, verbose_name="used_at")
+
+class LeadInfo(models.Model):
+    UserName = models.CharField(max_length=255)
+    Password = models.CharField(max_length=255)

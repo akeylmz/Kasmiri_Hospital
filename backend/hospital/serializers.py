@@ -1,6 +1,6 @@
 from django.forms import ValidationError
 from rest_framework import serializers
-from hospital.models import  Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, UsedStocks, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
+from hospital.models import  LeadInfo, Note, PatientCard, CommunicationCard, PatientFiles, PatientPhoto, Poll, PopulationCard, Stock, Order, TaskCheck, UsedStocks, WareHouse, Worker, TaskAssignment, Leave, WorkerFile, WorkingHours, PatientNote
 from django.db.models import Max, Count
 from datetime import datetime
 
@@ -549,3 +549,20 @@ class WareHouseSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+class LeadInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LeadInfo
+        fields = '__all__'
+
+    def create(self, validated_data):
+        # Yeni Stock kaydı oluştur
+        return LeadInfo.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        """
+        Var olan bir Worker nesnesini güncellemek için özelleştirilmiş metot.
+        """
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
