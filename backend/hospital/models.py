@@ -505,3 +505,4 @@ class UsedStocks(models.Model):
 class LeadInfo(models.Model):
     UserName = models.CharField(max_length=255)
     Password = models.CharField(max_length=255)
+    LeadName = models.CharField(max_length=255, blank=True, null=True)
