@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import classNames from 'classnames';
 import ChatList from './ChatList';
 import { FaInstagram, FaWhatsapp, FaFacebookMessenger, FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+import { createModal } from '../Utils/Modal';
 
 
 const SideBar = () => {  
@@ -52,11 +53,14 @@ const SideBar = () => {
           </option>
           <option value="Youtube" className="flex items-center">
              Youtube
-          </option>
+          </option>          
         </select>
         <input type="search" placeholder='Ara...' className='w-full h-2/4 outline-none px-4 border border-gray-200 ' />
       </header>
       <ChatList accountType={accountType} />
+      <button onClick={()=> createModal("social-modal")} className='h-[50px] w-full bg-cyan-700 text-white flex items-center justify-center rounded-b'>
+         + Ekle
+      </button>
     </aside>
   )
 }

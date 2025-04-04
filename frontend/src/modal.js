@@ -20,6 +20,7 @@ import PhotooAddModal from "./components/modals/PhotooAddModal";
 import PatientFileAddModal from "./components/modals/PatientFileAddModal";
 import InvoiceDetailModal from "./components/modals/InvoiceDetailModal";
 import ProformaAddModal from "./components/modals/ProformaAddModal";
+import SocialAddModal from "./components/modals/SocialAddModal";
 
 const modals = [
     {
@@ -105,6 +106,10 @@ const modals = [
     {
         name: "proforma-invoice-modal",
         element: ProformaAddModal
+    },
+    {
+        name: "social-modal",
+        element: SocialAddModal
     }
 ]
 

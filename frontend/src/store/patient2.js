@@ -335,6 +335,16 @@ const patientAPI = createApi({
             }
         }),
 
+        // --------- SOCIAL -------------
+
+        createSocial: builder.mutation({
+            query: (newData)=> ({
+                url: "leadinfo/",
+                method: "POST",
+                body: newData
+            })           
+        }),
+
     }),      
     keepUnusedDataFor: 30,
     refetchOnMountOrArgChange: 5
@@ -372,7 +382,8 @@ export const {  useGetPatientsQuery,
                 useRefreshTokenMutation,
                 useUpdateDoctorNoteMutation,
                 useUpdateWorkerMutation,
-                useCreatePatientPollMutation
+                useCreatePatientPollMutation,
+                useCreateSocialMutation,
                 
            } = patientAPI; 
 export default patientAPI;

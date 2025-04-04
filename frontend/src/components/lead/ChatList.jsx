@@ -12,7 +12,7 @@ const [requestCount, setRequestCount] = useState(0)
 //if (error) return <p>Error: {error}</p>;
 
   return (
-    <section className='h-[calc(100%-100px)] overflow-auto py-3'>
+    <section className='h-[calc(100%-150px)] overflow-auto py-3'>
           <header className='flex items-center justify-between px-5 mb-1'>
             <h6 className='text-base font-semibold'>Messages</h6>
             {/* <button className='text-blue-600 text-sm font-semibold'>{requestCount} request</button> */}
